@@ -1,5 +1,5 @@
 {
-  "name": "bhvr-plus",
+  "name": "suggestify",
   "version": "0.3.1",
   "description": "A monorepo template built with Bun, Hono, Vite, and React",
   "author": "Steve Simkins",
@@ -33,6 +33,7 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
-    "hono": "^4.7.11"
+    "hono": "^4.7.11",
+    "zod": "^3.25.67"
   }
 }

@@ -1,23 +1,17 @@
+// This is the main entry point for the server. RPC should be prioritized over REST.
 import { Hono } from "hono";
 import { cors } from "hono/cors";
+import { postRoute } from "./routes/post";
+import { authRoute } from "./routes/auth";
 
-export const app = new Hono()
-
-  .use(cors())
-
-  .get("/", (c) => {
-    return c.text("Hello Hono!");
-  })
-
-  .get("/hello", async (c) => {
-    const data = {
-      message: "Hello BHVR!",
-      success: true,
-    };
-
-    return c.json(data, { status: 200 });
-  });
-
+// main app instance
+export const app = new Hono();
+app.use(cors());
 export default app;
 
-export const a = "test";
+// define RPC routes for /api
+const apiRoutes = app
+  .basePath("/api")
+  .route("/posts", postRoute)
+  .route("/auth", authRoute);
+export type ApiRoutes = typeof apiRoutes;

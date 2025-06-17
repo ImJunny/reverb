@@ -8,6 +8,7 @@
     "dev": "bun --watch run src/index.ts && tsc --watch"
   },
   "dependencies": {
+    "@hono/zod-validator": "^0.7.0",
     "hono": "^4.7.11"
   },
   "devDependencies": {

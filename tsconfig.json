@@ -1,5 +1,6 @@
 {
   "compilerOptions": {
+    "outDir": "dist", // added to clear error
     // Environment setup & latest features
     "lib": ["ESNext", "DOM", "DOM.Iterable"],
     "target": "ESNext",
