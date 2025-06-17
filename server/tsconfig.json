@@ -21,6 +21,6 @@
     "moduleResolution": "bundler",
     "allowImportingTsExtensions": false
   },
-  "include": ["src/**/*"],
+  "include": ["src/**/*", "src/db/schema.ts", "src/db/index.ts"],
   "exclude": ["node_modules", "dist"]
 }

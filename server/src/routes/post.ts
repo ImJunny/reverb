@@ -2,7 +2,7 @@ import { Hono } from "hono";
 
 const app = new Hono();
 
-export const postRoute = app.get("/", (c) => {
+app.get("/", (c) => {
   return c.json(
     {
       ok: true,
@@ -11,3 +11,5 @@ export const postRoute = app.get("/", (c) => {
     201
   );
 });
+
+export const postRoute = app;
