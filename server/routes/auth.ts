@@ -1,74 +1,40 @@
 import { Hono } from "hono";
-import axios from "axios";
-import { setCookie } from "hono/cookie";
+import { setCookie, getCookie } from "hono/cookie";
 import { db } from "@server/db";
 import { sessionsTable } from "@server/db/schema";
-import path from "path";
-import * as dotenv from "dotenv";
-dotenv.config({
-  path: path.resolve(__dirname, "../../.env"),
-});
+import { eq } from "drizzle-orm";
+import {
+  getAuthorizationUrl,
+  getTokenData,
+  getTopTracks,
+  getUserId,
+} from "@server/lib/spotify-helpers";
 
 const app = new Hono()
+
   // GET to authorize through Spotify API
   .get("/authorize", (c) => {
-    const { SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI } = process.env;
-
-    const scopes = encodeURIComponent(
-      ["user-read-email", "user-read-private"].join(" ")
-    );
-    const authUrl =
-      `https://accounts.spotify.com/authorize?` +
-      `client_id=${SPOTIFY_CLIENT_ID}` +
-      `&response_type=code` +
-      `&redirect_uri=${SPOTIFY_REDIRECT_URI}` +
-      `&scope=${scopes}` +
-      `&show_dialog=true`;
-
+    const authUrl = getAuthorizationUrl();
     return c.redirect(authUrl, 302);
   })
+
   // GET to exchange authorization code for tokens
   .get("/callback", async (c) => {
-    const { SPOTIFY_REDIRECT_URI, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } =
-      process.env;
-
+    console.log("callback COOKIE INIT", getCookie(c, "session"));
     const code = c.req.query("code");
-    if (!code) {
-      return c.text("Authorization code not provided", 400);
-    }
+    if (!code) return c.text("Authorization code not provided", 400);
 
     try {
-      const res = await axios.post(
-        "https://accounts.spotify.com/api/token",
-        new URLSearchParams({
-          grant_type: "authorization_code",
-          code,
-          redirect_uri: SPOTIFY_REDIRECT_URI!,
-        }),
-        {
-          headers: {
-            Authorization:
-              "Basic " +
-              Buffer.from(
-                SPOTIFY_CLIENT_ID + ":" + SPOTIFY_CLIENT_SECRET
-              ).toString("base64"),
-            "Content-Type": "application/x-www-form-urlencoded",
-          },
-        }
-      );
-
-      const tokenData = await res.data;
+      const tokenData = await getTokenData(code);
       const userId = await getUserId(tokenData.access_token);
 
-      // store userId in session cookie
-      await setCookie(c, "session", userId, {
+      setCookie(c, "session", userId, {
         httpOnly: true,
         secure: true,
-        sameSite: "Strict",
+        sameSite: "Lax",
         maxAge: 60 * 60 * 24 * 30,
       });
 
-      // store tokens in database
       await db
         .insert(sessionsTable)
         .values({
@@ -86,24 +52,40 @@ const app = new Hono()
           },
         });
 
-      return c.redirect("http://localhost:5173/", 302);
-      // return c.json({ tokenData, user_id: userId }, 200);
+      return c.redirect("http://127.0.0.1:5173/profile", 302);
     } catch (error: any) {
       return c.json(
         { message: "Failed to exchange code for tokens", error: error.message },
         500
       );
     }
-  });
+  })
 
-async function getUserId(accessToken: string) {
-  const res = await axios.get("https://api.spotify.com/v1/me", {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
+  // GET to fetch top tracks
+  .get("/feed", async (c) => {
+    const sessionCookie = getCookie(c, "session");
+    if (!sessionCookie) return c.text("Unauthorized, no cookie.", 401);
+
+    const session = await db
+      .select()
+      .from(sessionsTable)
+      .where(eq(sessionsTable.user_id, sessionCookie))
+      .limit(1)
+      .then((data) => data[0]);
+    if (!session) return c.text("Unauthorized, no session found.", 401);
+
+    const accessToken = session.access_token;
+    if (!accessToken) return c.text("Unauthorized, no access token", 401);
+
+    try {
+      const data = await getTopTracks(accessToken);
+      return c.json(data, 200);
+    } catch (error: any) {
+      return c.json(
+        { message: "Failed to fetch top tracks", error: error.message },
+        500
+      );
+    }
   });
-  const data = await res.data;
-  return data.id;
-}
 
 export const authRoute = app;

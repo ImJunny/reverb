@@ -4,7 +4,7 @@ import { client } from "./client";
 export const profileQueryOptions = queryOptions({
   queryKey: ["profile"],
   queryFn: async () => {
-    const res = await client.api.posts.$get();
+    const res = await client.api.auth.feed.$get();
     return res.json();
   },
 });

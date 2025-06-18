@@ -1,18 +1,13 @@
-// This is the main entry point for the server. RPC should be prioritized over REST.
-import { Hono } from "hono";
-import { cors } from "hono/cors";
-import { postRoute } from "./routes/post";
-import { authRoute } from "./routes/auth";
+import { serve } from "@hono/node-server";
+import app from "./app";
 
-// main app instance
-const app = new Hono();
-app.use(cors());
+const HOSTNAME = "127.0.0.1";
+const PORT = 3000;
 
-// define RPC routes for /api
-const apiRoutes = app
-  .basePath("/api")
-  .route("/posts", postRoute)
-  .route("/auth", authRoute);
+serve({
+  fetch: app.fetch,
+  port: PORT,
+  hostname: HOSTNAME,
+});
 
-export default app;
-export type ApiRoutes = typeof apiRoutes;
+console.log(`Server running at http://${HOSTNAME}:${PORT}/`);
