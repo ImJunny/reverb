@@ -1,6 +1,6 @@
 import { createFileRoute, Link, Outlet } from "@tanstack/react-router";
 
-export const Route = createFileRoute("/_authenticated")({
+export const Route = createFileRoute("/_protected")({
   component: () => (
     <>
       <div className="p-2 flex gap-2">

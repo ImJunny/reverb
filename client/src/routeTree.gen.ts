@@ -10,55 +10,55 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as SigninRouteImport } from './routes/signin'
-import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
-import { Route as AuthenticatedIndexRouteImport } from './routes/_authenticated/index'
-import { Route as AuthenticatedProfileRouteImport } from './routes/_authenticated/profile'
-import { Route as AuthenticatedAboutRouteImport } from './routes/_authenticated/about'
+import { Route as ProtectedRouteImport } from './routes/_protected'
+import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
+import { Route as ProtectedProfileRouteImport } from './routes/_protected/profile'
+import { Route as ProtectedAboutRouteImport } from './routes/_protected/about'
 
 const SigninRoute = SigninRouteImport.update({
   id: '/signin',
   path: '/signin',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedRoute = AuthenticatedRouteImport.update({
-  id: '/_authenticated',
+const ProtectedRoute = ProtectedRouteImport.update({
+  id: '/_protected',
   getParentRoute: () => rootRouteImport,
 } as any)
-const AuthenticatedIndexRoute = AuthenticatedIndexRouteImport.update({
+const ProtectedIndexRoute = ProtectedIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => AuthenticatedRoute,
+  getParentRoute: () => ProtectedRoute,
 } as any)
-const AuthenticatedProfileRoute = AuthenticatedProfileRouteImport.update({
+const ProtectedProfileRoute = ProtectedProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
-  getParentRoute: () => AuthenticatedRoute,
+  getParentRoute: () => ProtectedRoute,
 } as any)
-const AuthenticatedAboutRoute = AuthenticatedAboutRouteImport.update({
+const ProtectedAboutRoute = ProtectedAboutRouteImport.update({
   id: '/about',
   path: '/about',
-  getParentRoute: () => AuthenticatedRoute,
+  getParentRoute: () => ProtectedRoute,
 } as any)
 
 export interface FileRoutesByFullPath {
   '/signin': typeof SigninRoute
-  '/about': typeof AuthenticatedAboutRoute
-  '/profile': typeof AuthenticatedProfileRoute
-  '/': typeof AuthenticatedIndexRoute
+  '/about': typeof ProtectedAboutRoute
+  '/profile': typeof ProtectedProfileRoute
+  '/': typeof ProtectedIndexRoute
 }
 export interface FileRoutesByTo {
   '/signin': typeof SigninRoute
-  '/about': typeof AuthenticatedAboutRoute
-  '/profile': typeof AuthenticatedProfileRoute
-  '/': typeof AuthenticatedIndexRoute
+  '/about': typeof ProtectedAboutRoute
+  '/profile': typeof ProtectedProfileRoute
+  '/': typeof ProtectedIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
-  '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/_protected': typeof ProtectedRouteWithChildren
   '/signin': typeof SigninRoute
-  '/_authenticated/about': typeof AuthenticatedAboutRoute
-  '/_authenticated/profile': typeof AuthenticatedProfileRoute
-  '/_authenticated/': typeof AuthenticatedIndexRoute
+  '/_protected/about': typeof ProtectedAboutRoute
+  '/_protected/profile': typeof ProtectedProfileRoute
+  '/_protected/': typeof ProtectedIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -67,15 +67,15 @@ export interface FileRouteTypes {
   to: '/signin' | '/about' | '/profile' | '/'
   id:
     | '__root__'
-    | '/_authenticated'
+    | '/_protected'
     | '/signin'
-    | '/_authenticated/about'
-    | '/_authenticated/profile'
-    | '/_authenticated/'
+    | '/_protected/about'
+    | '/_protected/profile'
+    | '/_protected/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  ProtectedRoute: typeof ProtectedRouteWithChildren
   SigninRoute: typeof SigninRoute
 }
 
@@ -88,55 +88,55 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SigninRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated': {
-      id: '/_authenticated'
+    '/_protected': {
+      id: '/_protected'
       path: ''
       fullPath: ''
-      preLoaderRoute: typeof AuthenticatedRouteImport
+      preLoaderRoute: typeof ProtectedRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/_authenticated/': {
-      id: '/_authenticated/'
+    '/_protected/': {
+      id: '/_protected/'
       path: '/'
       fullPath: '/'
-      preLoaderRoute: typeof AuthenticatedIndexRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof ProtectedIndexRouteImport
+      parentRoute: typeof ProtectedRoute
     }
-    '/_authenticated/profile': {
-      id: '/_authenticated/profile'
+    '/_protected/profile': {
+      id: '/_protected/profile'
       path: '/profile'
       fullPath: '/profile'
-      preLoaderRoute: typeof AuthenticatedProfileRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof ProtectedProfileRouteImport
+      parentRoute: typeof ProtectedRoute
     }
-    '/_authenticated/about': {
-      id: '/_authenticated/about'
+    '/_protected/about': {
+      id: '/_protected/about'
       path: '/about'
       fullPath: '/about'
-      preLoaderRoute: typeof AuthenticatedAboutRouteImport
-      parentRoute: typeof AuthenticatedRoute
+      preLoaderRoute: typeof ProtectedAboutRouteImport
+      parentRoute: typeof ProtectedRoute
     }
   }
 }
 
-interface AuthenticatedRouteChildren {
-  AuthenticatedAboutRoute: typeof AuthenticatedAboutRoute
-  AuthenticatedProfileRoute: typeof AuthenticatedProfileRoute
-  AuthenticatedIndexRoute: typeof AuthenticatedIndexRoute
+interface ProtectedRouteChildren {
+  ProtectedAboutRoute: typeof ProtectedAboutRoute
+  ProtectedProfileRoute: typeof ProtectedProfileRoute
+  ProtectedIndexRoute: typeof ProtectedIndexRoute
 }
 
-const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
-  AuthenticatedAboutRoute: AuthenticatedAboutRoute,
-  AuthenticatedProfileRoute: AuthenticatedProfileRoute,
-  AuthenticatedIndexRoute: AuthenticatedIndexRoute,
+const ProtectedRouteChildren: ProtectedRouteChildren = {
+  ProtectedAboutRoute: ProtectedAboutRoute,
+  ProtectedProfileRoute: ProtectedProfileRoute,
+  ProtectedIndexRoute: ProtectedIndexRoute,
 }
 
-const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
-  AuthenticatedRouteChildren,
+const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(
+  ProtectedRouteChildren,
 )
 
 const rootRouteChildren: RootRouteChildren = {
-  AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  ProtectedRoute: ProtectedRouteWithChildren,
   SigninRoute: SigninRoute,
 }
 export const routeTree = rootRouteImport
