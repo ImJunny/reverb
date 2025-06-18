@@ -1,3 +1,5 @@
+import { profileQueryOptions } from "@/lib/api";
+import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_authenticated/profile")({
@@ -5,5 +7,7 @@ export const Route = createFileRoute("/_authenticated/profile")({
 });
 
 function RouteComponent() {
+  const { data } = useQuery(profileQueryOptions);
+  console.log(data);
   return <div>Hello "/profile"!</div>;
 }
