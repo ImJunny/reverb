@@ -54,9 +54,11 @@ export async function getUserId(accessToken: string) {
 }
 
 // get user top tracks from access token
-export async function getTopTracks(accessToken: string) {
+export async function getTopTracks(
+  accessToken: string
+): Promise<SpotifyApi.UsersTopTracksResponse> {
   const res = await axios.get(
-    "https://api.spotify.com/v1/me/top/artists?limit=5",
+    "https://api.spotify.com/v1/me/top/tracks?limit=5",
     {
       headers: {
         Authorization: `Bearer ${accessToken}`,
@@ -68,7 +70,7 @@ export async function getTopTracks(accessToken: string) {
 }
 
 // get new tokens from refresh token
-export async function getNewTokens(refreshToken: string) {
+export async function getNewAccessToken(refreshToken: string) {
   const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } = process.env;
   const res = await axios.post(
     "https://accounts.spotify.com/api/token",
@@ -87,6 +89,19 @@ export async function getNewTokens(refreshToken: string) {
       },
     }
   );
+  const data = await res.data;
+  return data;
+}
+
+// get user profile info from user id
+export async function getCurrentUserProfile(
+  accessToken: string
+): Promise<SpotifyApi.CurrentUsersProfileResponse> {
+  const res = await axios.get("https://api.spotify.com/v1/me", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
   const data = await res.data;
   return data;
 }

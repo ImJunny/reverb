@@ -1,12 +1,12 @@
 // This is the main entry point for the server. RPC should be prioritized over REST.
 import { Hono } from "hono";
 import { cors } from "hono/cors";
-import { postRoute } from "./routes/posts";
 import { authRoute } from "./routes/auth";
-import { tracksRoute } from "./routes/tracks";
+import { usersRoute } from "./routes/users";
 import { logger } from "hono/logger";
 
-// main app instance
+// Main app instance uses logger for debugging and CORS for cross-origin requests,
+// specifically to allow requests from the frontend running on 5173
 const app = new Hono();
 app.use(logger());
 app.use(
@@ -16,12 +16,13 @@ app.use(
   })
 );
 
-// define RPC routes for /api
+// Define RPC routes for /api.
+// auth:      Handles user authentication
+// tracks:    Handles track-related operations | Protected
 const apiRoutes = app
   .basePath("/api")
-  .route("/posts", postRoute)
   .route("/auth", authRoute)
-  .route("/tracks", tracksRoute);
+  .route("/users", usersRoute);
 
 export default app;
 export type ApiRoutes = typeof apiRoutes;
