@@ -4,7 +4,12 @@ import axios from "axios";
 export function getAuthorizationUrl() {
   const { SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI } = process.env;
   const scopes = encodeURIComponent(
-    ["user-read-email", "user-read-private", "user-top-read"].join(" ")
+    [
+      "user-read-email",
+      "user-read-private",
+      "user-top-read",
+      "playlist-read-private",
+    ].join(" ")
   );
   const authUrl =
     `https://accounts.spotify.com/authorize?` +
@@ -102,6 +107,61 @@ export async function getCurrentUserProfile(
       Authorization: `Bearer ${accessToken}`,
     },
   });
+  const data = await res.data;
+  return data;
+}
+
+// get current user playlists
+export async function getCurrentUserPlaylists(
+  accessToken: string
+): Promise<SpotifyApi.ListOfCurrentUsersPlaylistsResponse> {
+  const res = await axios.get("https://api.spotify.com/v1/me/playlists", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const data = await res.data;
+  return data;
+}
+
+// get playlist info
+export async function getPlaylistInfo(
+  accessToken: string,
+  playlistId: string
+): Promise<SpotifyApi.PlaylistObjectFull> {
+  const res = await axios.get(
+    `https://api.spotify.com/v1/playlists/${playlistId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        fields: "id,name,description,images,owner,tracks(total),public",
+      },
+    }
+  );
+  const data = await res.data;
+  return data;
+}
+
+// get playlist tracks
+export async function getPlaylistItems(
+  accessToken: string,
+  playlistId: string
+): Promise<SpotifyApi.PlaylistTrackResponse> {
+  const res = await axios.get(
+    `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      params: {
+        fields: "items(track(id,name,artists(name),album(name,images)))",
+        limit: 10,
+        offset: 0,
+      },
+    }
+  );
   const data = await res.data;
   return data;
 }

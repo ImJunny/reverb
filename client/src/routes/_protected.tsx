@@ -1,16 +1,13 @@
-import { Button } from "@/components/ui/button";
-import { client } from "@/lib/client";
-import {
-  createFileRoute,
-  Link,
-  Outlet,
-  redirect,
-  useRouter,
-} from "@tanstack/react-router";
+import Header from "@/components/header/header";
+import Sidebar from "@/components/sidebar/sidebar";
+import Controller from "@/components/controller/controller";
+import { api } from "@/utils/client";
+import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
 export const Route = createFileRoute("/_protected")({
   beforeLoad: async () => {
-    const res = await client.api.auth.session.$get();
+    const res = await api.auth.session.$get();
     const data = await res.json();
     if (data.userId === null) {
       throw redirect({
@@ -22,35 +19,19 @@ export const Route = createFileRoute("/_protected")({
 });
 
 function RootComponent() {
-  const router = useRouter();
-
-  const handleSignout = async () => {
-    const res = await client.api.auth.signout.$post();
-    if (res.ok) {
-      router.navigate({
-        to: "/signin",
-      });
-    }
-  };
-
   return (
-    <>
-      <div className="flex items-center gap-6 p-2">
-        <Link to="/" className="[&.active]:font-bold">
-          Home
-        </Link>{" "}
-        <Link to="/about" className="[&.active]:font-bold">
-          About
-        </Link>
-        <Link to="/profile" className="[&.active]:font-bold">
-          Profile
-        </Link>
-        <Button className="ml-auto" onClick={handleSignout}>
-          Signout
-        </Button>
+    <div className="flex h-screen flex-col">
+      <Header />
+      <div className="mx-2 flex flex-1 space-x-2 overflow-hidden">
+        <Sidebar />
+        <ScrollArea className="flex flex-1 overflow-hidden rounded-sm">
+          <div className="from-background-variant via-background-variant absolute inset-0 -z-10 bg-gradient-to-t to-zinc-500" />
+          <div className="m-3">
+            <Outlet />
+          </div>
+        </ScrollArea>
       </div>
-      <hr />
-      <Outlet />
-    </>
+      <Controller />
+    </div>
   );
 }
