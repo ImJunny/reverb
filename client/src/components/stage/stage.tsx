@@ -62,7 +62,7 @@ export default function Stage() {
     <Collapsible
       open={open}
       onOpenChange={setOpen}
-      className="absolute right-0 bottom-24 mr-6"
+      className="absolute right-0 bottom-20 mr-6"
     >
       <CollapsibleTrigger>
         <div className="bg-card flex w-72 items-center rounded-t-sm px-3 py-2 text-sm">
@@ -89,7 +89,7 @@ export default function Stage() {
                   <div
                     key={index}
                     className={cn(
-                      "group hover:bg-background-variant/70 flex flex-row items-center gap-2 p-2 pr-4",
+                      "group hover:bg-accent flex flex-row items-center gap-2 p-2 pr-4",
                     )}
                   >
                     <div className="bg-muted h-9 w-9 rounded-xs hover:cursor-pointer" />

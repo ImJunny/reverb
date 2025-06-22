@@ -15,6 +15,7 @@ import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
 import { Route as ProtectedProfileRouteImport } from './routes/_protected/profile'
 import { Route as ProtectedPlaylistsRouteImport } from './routes/_protected/playlists'
 import { Route as ProtectedExploreRouteImport } from './routes/_protected/explore'
+import { Route as ProtectedPostIdRouteImport } from './routes/_protected/post.$id'
 import { Route as ProtectedPlaylistIdRouteImport } from './routes/_protected/playlist.$id'
 
 const SigninRoute = SigninRouteImport.update({
@@ -46,6 +47,11 @@ const ProtectedExploreRoute = ProtectedExploreRouteImport.update({
   path: '/explore',
   getParentRoute: () => ProtectedRoute,
 } as any)
+const ProtectedPostIdRoute = ProtectedPostIdRouteImport.update({
+  id: '/post/$id',
+  path: '/post/$id',
+  getParentRoute: () => ProtectedRoute,
+} as any)
 const ProtectedPlaylistIdRoute = ProtectedPlaylistIdRouteImport.update({
   id: '/playlist/$id',
   path: '/playlist/$id',
@@ -59,6 +65,7 @@ export interface FileRoutesByFullPath {
   '/profile': typeof ProtectedProfileRoute
   '/': typeof ProtectedIndexRoute
   '/playlist/$id': typeof ProtectedPlaylistIdRoute
+  '/post/$id': typeof ProtectedPostIdRoute
 }
 export interface FileRoutesByTo {
   '/signin': typeof SigninRoute
@@ -67,6 +74,7 @@ export interface FileRoutesByTo {
   '/profile': typeof ProtectedProfileRoute
   '/': typeof ProtectedIndexRoute
   '/playlist/$id': typeof ProtectedPlaylistIdRoute
+  '/post/$id': typeof ProtectedPostIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -77,6 +85,7 @@ export interface FileRoutesById {
   '/_protected/profile': typeof ProtectedProfileRoute
   '/_protected/': typeof ProtectedIndexRoute
   '/_protected/playlist/$id': typeof ProtectedPlaylistIdRoute
+  '/_protected/post/$id': typeof ProtectedPostIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -87,8 +96,16 @@ export interface FileRouteTypes {
     | '/profile'
     | '/'
     | '/playlist/$id'
+    | '/post/$id'
   fileRoutesByTo: FileRoutesByTo
-  to: '/signin' | '/explore' | '/playlists' | '/profile' | '/' | '/playlist/$id'
+  to:
+    | '/signin'
+    | '/explore'
+    | '/playlists'
+    | '/profile'
+    | '/'
+    | '/playlist/$id'
+    | '/post/$id'
   id:
     | '__root__'
     | '/_protected'
@@ -98,6 +115,7 @@ export interface FileRouteTypes {
     | '/_protected/profile'
     | '/_protected/'
     | '/_protected/playlist/$id'
+    | '/_protected/post/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -149,6 +167,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedExploreRouteImport
       parentRoute: typeof ProtectedRoute
     }
+    '/_protected/post/$id': {
+      id: '/_protected/post/$id'
+      path: '/post/$id'
+      fullPath: '/post/$id'
+      preLoaderRoute: typeof ProtectedPostIdRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
     '/_protected/playlist/$id': {
       id: '/_protected/playlist/$id'
       path: '/playlist/$id'
@@ -165,6 +190,7 @@ interface ProtectedRouteChildren {
   ProtectedProfileRoute: typeof ProtectedProfileRoute
   ProtectedIndexRoute: typeof ProtectedIndexRoute
   ProtectedPlaylistIdRoute: typeof ProtectedPlaylistIdRoute
+  ProtectedPostIdRoute: typeof ProtectedPostIdRoute
 }
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
@@ -173,6 +199,7 @@ const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedProfileRoute: ProtectedProfileRoute,
   ProtectedIndexRoute: ProtectedIndexRoute,
   ProtectedPlaylistIdRoute: ProtectedPlaylistIdRoute,
+  ProtectedPostIdRoute: ProtectedPostIdRoute,
 }
 
 const ProtectedRouteWithChildren = ProtectedRoute._addFileChildren(

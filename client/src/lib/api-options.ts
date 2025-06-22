@@ -51,3 +51,15 @@ export const playlistItemsQueryOptions = (playlistId: string) =>
       return res.json();
     },
   });
+
+export const trackPreviewQueryOptions = (trackUrl: string) =>
+  queryOptions({
+    queryKey: ["track-preview", trackUrl],
+    queryFn: async () => {
+      const res = await api.tracks.getTrackPreview.$get({
+        query: { url: trackUrl },
+      });
+      if (!res.ok) throw new Error("Failed to fetch track preview");
+      return res.json();
+    },
+  });

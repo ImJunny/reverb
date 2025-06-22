@@ -1,15 +1,15 @@
-import Card from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { createFileRoute, useParams } from "@tanstack/react-router";
+import { useQuery } from "@tanstack/react-query";
 import {
   playlistInfoQueryOptions,
   playlistItemsQueryOptions,
 } from "@/lib/api-options";
-import { useQuery } from "@tanstack/react-query";
-import { createFileRoute, useParams } from "@tanstack/react-router";
-// import { useEffect, useState } from "react";
-// import { FastAverageColor } from "fast-average-color";
-// import { Vibrant } from "node-vibrant/browser";
-import { Separator } from "@/components/ui/separator";
+import { cn } from "@/lib/utils";
+import TracksRender from "@/components/playlist/tracks-render";
+import { useBackgroundColor } from "@/lib/hooks/useBackgroundColor";
+import { useEffect } from "react";
+import BackgroundWrapper from "@/page/background-wrapper";
+import { getAverageColor } from "@/lib/hooks/getAverageColor";
 
 export const Route = createFileRoute("/_protected/playlist/$id")({
   component: RouteComponent,
@@ -19,98 +19,45 @@ function RouteComponent() {
   const { id } = useParams({ from: "/_protected/playlist/$id" });
   const { data: playlistInfo } = useQuery(playlistInfoQueryOptions(id));
   const { data: playlistItems } = useQuery(playlistItemsQueryOptions(id));
-  // const [color, setColor] = useState<string>("#000000");
 
-  // useEffect(() => {
-  //   const fac = new FastAverageColor();
-  //   if (playlistInfo && playlistInfo.images.length > 0) {
-  //     fac
-  //       .getColorAsync(playlistInfo.images[0]?.url as string, {
-  //         algorithm: "sqrt", // Better for vibrant-like results than 'simple'
-  //         mode: "precision", // Increases accuracy
-  //         step: 5, // Increases performance without sacrificing much quality
-  //         ignoredColor: [255, 255, 255, 255, 50], // ignore pure white (Spotify does this too)
-  //       })
-  //       .then((res) => {
-  //         setColor(res.hex);
-  //         console.log("Average color:", res);
-  //       });
-  //   }
-  // }, [playlistInfo]);
+  const { setColor } = useBackgroundColor();
+  useEffect(() => {
+    (async () => {
+      if (playlistInfo?.images[0]?.url) {
+        const avgColor = await getAverageColor(playlistInfo.images[0].url);
+        setColor(avgColor);
+      }
+    })();
+  }, [playlistInfo, setColor]);
 
-  // useEffect(() => {
-  //   if (!playlistInfo || !playlistInfo.images.length) return;
-  //   Vibrant.from(playlistInfo.images[0]!.url!)
-  //     .getPalette()
-  //     .then((palette) => {
-  //       const vibrantColor = palette.Muted?.hex || "#000000";
-  //       setColor(vibrantColor);
-  //     });
-  // }, [playlistInfo]);
+  if (!playlistInfo || !playlistItems) return <></>;
 
-  if (!playlistInfo || !playlistItems)
-    return <div className="flex w-full justify-center">Loading...</div>;
-
-  console.log(playlistItems.items);
   return (
-    <div className="flex w-full justify-center">
-      <Card className="flex w-full max-w-2xl">
-        <div className="overflow-hidden rounded-lg">
-          <div
-            className="flex flex-row space-x-3 p-3"
-            // style={{ backgroundColor: color }}
-          >
-            <img
-              src={playlistInfo.images[0]?.url}
-              alt={playlistInfo.name}
-              className="aspect-square h-32 w-32 rounded-sm object-cover"
-            />
-            <div>
-              <h1 className="text-3xl font-bold">{playlistInfo.name}</h1>
-              <div className="text-foreground/60 flex flex-col text-sm">
-                <p>{playlistInfo.tracks.total} songs</p>
-                <p>{playlistInfo.public ? "Public" : "Private"}</p>
-              </div>
-            </div>
-          </div>
-
+    <BackgroundWrapper gradient moving className="flex-col">
+      <div className="relative mx-3 mt-8 mb-4 flex w-full justify-center">
+        <div className="mx-3 flex w-full max-w-5xl space-x-4">
+          <img
+            src={playlistInfo.images[0]?.url}
+            alt={playlistInfo.name}
+            className={cn("h-40 w-40 object-cover shadow-2xl")}
+          />
           <div>
-            <div className="text-foreground/60 flex space-x-3 px-3 text-sm">
-              <p>#</p>
-              <p>Title</p>
+            <p>{playlistInfo.public ? "Public" : "Private"}</p>
+            <h1 className="text-6xl font-extrabold tracking-wide">
+              {playlistInfo.name}
+            </h1>
+            <div className="text-foreground/60 flex flex-col text-sm">
+              <p>{playlistInfo.tracks.total} songs</p>
             </div>
-            <Separator className="mt-2" />
           </div>
-
-          <ScrollArea className="h-full max-h-96">
-            <div className="mt-3 flex flex-col space-y-3">
-              {playlistItems.items.map((track, idx) => (
-                <div
-                  key={track.track!.id}
-                  className="flex items-center space-x-3 px-3"
-                >
-                  <p className="text-foreground/60 text-sm font-light">
-                    {idx + 1}
-                  </p>
-                  <img
-                    src={track.track?.album.images[0]?.url}
-                    alt="track"
-                    className="h-9 w-9 rounded-xs object-cover"
-                  />
-                  <div>
-                    <p className="text-sm">{track.track!.name}</p>
-                    <p className="text-foreground/60 text-xs">
-                      {track
-                        .track!.artists.map((artist) => artist.name)
-                        .join(", ")}
-                    </p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </ScrollArea>
         </div>
-      </Card>
-    </div>
+      </div>
+
+      <div className="flex w-full justify-center bg-black/10 pb-40">
+        <div className="mx-3 w-full max-w-5xl justify-center">
+          <TracksRender playlistItems={playlistItems} />
+        </div>
+      </div>
+    </BackgroundWrapper>
   );
 }

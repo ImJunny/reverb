@@ -8,6 +8,7 @@ import {
   Users,
 } from "lucide-react";
 import { Separator } from "../ui/separator";
+import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 
 type Option = {
   to: string;
@@ -49,7 +50,7 @@ const sidebar_options = {
     {
       to: "/playlists",
       label: "Playlists",
-      icon: <DiscAlbum />,
+      icon: <DiscAlbum size={20} />,
     },
   ],
 };
@@ -72,13 +73,20 @@ function SidebarCategory({ options }: { options: Option[] }) {
     <ul>
       {options.map((option) => (
         <li key={option.to}>
-          <Link
-            to={option.to}
-            className="[&.active]:bg-accent hover:bg-accent/50 flex items-center gap-4 rounded-sm px-3 py-3 text-sm [&.active]:font-semibold"
-          >
-            {option.icon}
-            <span className="hidden sm:block">{option.label}</span>
-          </Link>
+          <Tooltip>
+            <TooltipTrigger className="w-full">
+              <Link
+                to={option.to}
+                className="[&.active]:bg-accent hover:bg-accent/50 flex items-center gap-4 rounded-sm px-3 py-3 text-sm [&.active]:font-semibold"
+              >
+                {option.icon}
+                <span className="hidden sm:block">{option.label}</span>
+              </Link>
+            </TooltipTrigger>
+            <TooltipContent side="right" className="sm:hidden">
+              <p>{option.label}</p>
+            </TooltipContent>
+          </Tooltip>
         </li>
       ))}
     </ul>

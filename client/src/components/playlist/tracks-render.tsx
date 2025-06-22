@@ -1,0 +1,79 @@
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "../ui/separator";
+import { cn } from "@/lib/utils";
+import { Play, PlusCircle } from "lucide-react";
+import { formatDuration } from "@/lib/scripts/formatDuration";
+
+export default function TracksRender({
+  playlistItems,
+  minimal,
+}: {
+  playlistItems: SpotifyApi.PlaylistTrackResponse;
+  minimal?: boolean;
+}) {
+  if (!playlistItems) return <></>;
+
+  return (
+    <div className="h-full overflow-hidden">
+      <div className="mb-3">
+        <div className="grid grid-cols-2">
+          <div className="text-foreground/70 mt-2 flex space-x-3 px-3 text-xs">
+            <div className="flex w-5 items-center justify-center">
+              <p>#</p>
+            </div>
+            <p>Title</p>
+          </div>
+        </div>
+        <Separator className="mt-2" />
+      </div>
+
+      <ScrollArea className={cn("h-full", minimal && "max-h-66")}>
+        <div className={cn("flex flex-col")}>
+          {playlistItems.items.map((track, idx) => (
+            <div
+              key={track.track!.id}
+              className="group hover:bg-foreground/5 flex h-11 items-center space-x-3 rounded-sm px-3"
+            >
+              <div className="flex w-5 items-center justify-center">
+                <Play
+                  size={16}
+                  className="hover:fill-foreground fill-foreground/70 hidden text-transparent group-hover:block hover:cursor-pointer"
+                />
+                <p className="text-foreground/70 text-sm font-light group-hover:hidden">
+                  {idx + 1}
+                </p>
+              </div>
+
+              {!minimal && (
+                <img
+                  src={track.track?.album.images[0]?.url}
+                  alt="track"
+                  className="h-9 w-9 rounded-xs object-cover"
+                />
+              )}
+              <div
+                className={cn(
+                  "flex text-xs",
+                  minimal ? "flex-row items-center" : "flex-col",
+                )}
+              >
+                <span className="">{track.track!.name}</span>
+                <span className="text-foreground/70 text-xs">
+                  {minimal && <span>&nbsp;• </span>}
+                  {track.track!.artists.map((artist) => artist.name).join(", ")}
+                </span>
+              </div>
+              <PlusCircle
+                size={16}
+                className="text-foreground/70 hover:text-foreground mr-4 ml-auto hidden group-hover:block hover:cursor-pointer"
+              />
+              <span className="text-foreground/70 ml-auto text-xs group-hover:ml-0">
+                {formatDuration(track.track!.duration_ms)}
+              </span>
+            </div>
+          ))}
+        </div>
+      </ScrollArea>
+    </div>
+  );
+}

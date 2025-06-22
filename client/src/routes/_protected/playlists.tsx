@@ -1,5 +1,6 @@
 import Card from "@/components/ui/card";
 import { currentUserPlaylistsQueryOptions } from "@/lib/api-options";
+import BackgroundWrapper from "@/page/background-wrapper";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
@@ -11,16 +12,14 @@ function RouteComponent() {
   const { data } = useQuery(currentUserPlaylistsQueryOptions);
 
   return (
-    <div className="flex w-full justify-center">
-      <div>
-        <h1 className="text-lg font-semibold">Your playlists</h1>
-        <div className="mt-1 flex space-x-2">
-          {data?.items.map((playlist) => (
-            <PlaylistCard key={playlist.id} playlist={playlist} />
-          ))}
-        </div>
+    <BackgroundWrapper className="flex-col p-3">
+      <h1 className="text-lg font-semibold">Your playlists</h1>
+      <div className="mt-1 flex space-x-2">
+        {data?.items.map((playlist) => (
+          <PlaylistCard key={playlist.id} playlist={playlist} />
+        ))}
       </div>
-    </div>
+    </BackgroundWrapper>
   );
 }
 

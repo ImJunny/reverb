@@ -1,9 +1,10 @@
 import Header from "@/components/header/header";
 import Sidebar from "@/components/sidebar/sidebar";
-import Controller from "@/components/controller/controller";
 import { api } from "@/utils/client";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { ScrollArea } from "@/components/ui/scroll-area";
+import { BackgroundColorProvider } from "@/components/bg-provider";
+import { AudioControlsProvider } from "@/components/audio-controls-provider";
+import AudioControls from "@/components/audio-controls/audio-controls";
 
 export const Route = createFileRoute("/_protected")({
   beforeLoad: async () => {
@@ -20,18 +21,17 @@ export const Route = createFileRoute("/_protected")({
 
 function RootComponent() {
   return (
-    <div className="flex h-screen flex-col">
-      <Header />
-      <div className="mx-2 flex flex-1 space-x-2 overflow-hidden">
-        <Sidebar />
-        <ScrollArea className="flex flex-1 overflow-hidden rounded-sm">
-          <div className="from-background-variant via-background-variant absolute inset-0 -z-10 bg-gradient-to-t to-zinc-500" />
-          <div className="m-3">
+    <AudioControlsProvider>
+      <BackgroundColorProvider>
+        <div className="flex h-screen flex-col">
+          <Header />
+          <div className="mx-2 flex flex-1 space-x-2 overflow-hidden">
+            <Sidebar />
             <Outlet />
           </div>
-        </ScrollArea>
-      </div>
-      <Controller />
-    </div>
+          <AudioControls />
+        </div>
+      </BackgroundColorProvider>
+    </AudioControlsProvider>
   );
 }

@@ -1,4 +1,5 @@
 import axios from "axios";
+import * as cheerio from "cheerio";
 
 // get authorization URL
 export function getAuthorizationUrl() {
@@ -147,7 +148,9 @@ export async function getPlaylistInfo(
 // get playlist tracks
 export async function getPlaylistItems(
   accessToken: string,
-  playlistId: string
+  playlistId: string,
+  limit: number = 20,
+  offset: number = 0
 ): Promise<SpotifyApi.PlaylistTrackResponse> {
   const res = await axios.get(
     `https://api.spotify.com/v1/playlists/${playlistId}/tracks`,
@@ -156,12 +159,35 @@ export async function getPlaylistItems(
         Authorization: `Bearer ${accessToken}`,
       },
       params: {
-        fields: "items(track(id,name,artists(name),album(name,images)))",
-        limit: 10,
-        offset: 0,
+        fields:
+          "items(track(id,name,artists(name),album(name,images),duration_ms))",
+        limit,
+        offset,
       },
     }
   );
   const data = await res.data;
   return data;
+}
+
+// get track preview url
+export async function getTrackPreviewUrl(url: string): Promise<string | null> {
+  const response = await axios.get(url);
+  const html = response.data;
+  const $ = cheerio.load(html);
+
+  let previewUrl: string | null = null;
+  $("*").each((i, element) => {
+    if ("attribs" in element && element.attribs) {
+      const attrs = element.attribs;
+      Object.values(attrs).forEach((value) => {
+        if (value && value.includes("p.scdn.co")) {
+          previewUrl = value;
+          return false;
+        }
+      });
+    }
+  });
+
+  return previewUrl;
 }
