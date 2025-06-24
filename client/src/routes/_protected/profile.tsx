@@ -15,7 +15,7 @@ function RouteComponent() {
   const { data } = useQuery(userTopTracksQueryOptions);
   const { data: userData } = useQuery(currentUserProfileQueryOptions);
 
-  const { setUrl } = useAudioControls();
+  const { setTrackId } = useAudioControls();
   if (!data) return <></>;
 
   const image = userData?.images?.[0]?.url;
@@ -28,15 +28,10 @@ function RouteComponent() {
         className="h-20 w-20 rounded-full object-cover"
       />
       {data.items.map((track, index) => (
-        <p key={index}>{track.name}</p>
+        <Button key={index} onClick={() => setTrackId(track.id)} asChild>
+          <p>{track.name}</p>
+        </Button>
       ))}
-      <Button
-        onClick={() =>
-          setUrl(
-            "https://p.scdn.co/mp3-preview/a20fde690556ba5e9259e4bfa38274bcedfea046",
-          )
-        }
-      ></Button>
     </div>
   );
 }

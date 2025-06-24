@@ -3,6 +3,7 @@ import { Separator } from "../ui/separator";
 import { cn } from "@/lib/utils";
 import { Play, PlusCircle } from "lucide-react";
 import { formatDuration } from "@/lib/scripts/formatDuration";
+import { useAudioControls } from "@/lib/hooks/useAudioControls";
 
 export default function TracksRender({
   playlistItems,
@@ -11,6 +12,8 @@ export default function TracksRender({
   playlistItems: SpotifyApi.PlaylistTrackResponse;
   minimal?: boolean;
 }) {
+  const { trackId, setTrackId } = useAudioControls();
+
   if (!playlistItems) return <></>;
 
   return (
@@ -38,8 +41,14 @@ export default function TracksRender({
                 <Play
                   size={16}
                   className="hover:fill-foreground fill-foreground/70 hidden text-transparent group-hover:block hover:cursor-pointer"
+                  onClick={() => setTrackId(track.track!.id)}
                 />
-                <p className="text-foreground/70 text-sm font-light group-hover:hidden">
+                <p
+                  className={cn(
+                    "text-foreground/70 text-sm font-light group-hover:hidden",
+                    trackId === track.track?.id && "text-emerald-500",
+                  )}
+                >
                   {idx + 1}
                 </p>
               </div>
@@ -57,7 +66,14 @@ export default function TracksRender({
                   minimal ? "flex-row items-center" : "flex-col",
                 )}
               >
-                <span className="">{track.track!.name}</span>
+                <span
+                  className={cn(
+                    !minimal && "text-sm",
+                    trackId === track.track?.id && "text-emerald-500",
+                  )}
+                >
+                  {track.track!.name}
+                </span>
                 <span className="text-foreground/70 text-xs">
                   {minimal && <span>&nbsp;• </span>}
                   {track.track!.artists.map((artist) => artist.name).join(", ")}

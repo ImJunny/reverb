@@ -9,7 +9,7 @@ import TracksRender from "@/components/playlist/tracks-render";
 import { useBackgroundColor } from "@/lib/hooks/useBackgroundColor";
 import { useEffect } from "react";
 import BackgroundWrapper from "@/page/background-wrapper";
-import { getAverageColor } from "@/lib/hooks/getAverageColor";
+import { getAverageColor } from "@/lib/scripts/getAverageColor";
 
 export const Route = createFileRoute("/_protected/playlist/$id")({
   component: RouteComponent,
@@ -21,6 +21,7 @@ function RouteComponent() {
   const { data: playlistItems } = useQuery(playlistItemsQueryOptions(id));
 
   const { setColor } = useBackgroundColor();
+
   useEffect(() => {
     (async () => {
       if (playlistInfo?.images[0]?.url) {

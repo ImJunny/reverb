@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import TracksRender from "./tracks-render";
 import { useEffect } from "react";
 import { useBackgroundColor } from "@/lib/hooks/useBackgroundColor";
-import { getAverageColor } from "@/lib/hooks/getAverageColor";
+import { getAverageColor } from "@/lib/scripts/getAverageColor";
 
 export default function PlaylistRender({
   playlistInfo,

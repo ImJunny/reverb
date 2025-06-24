@@ -52,12 +52,13 @@ export const playlistItemsQueryOptions = (playlistId: string) =>
     },
   });
 
-export const trackPreviewQueryOptions = (trackUrl: string) =>
+export const trackPreviewQueryOptions = (trackId: string | undefined) =>
   queryOptions({
-    queryKey: ["track-preview", trackUrl],
+    queryKey: ["track-preview", trackId],
     queryFn: async () => {
+      if (!trackId) throw new Error("Track ID is required");
       const res = await api.tracks.getTrackPreview.$get({
-        query: { url: trackUrl },
+        query: { id: trackId },
       });
       if (!res.ok) throw new Error("Failed to fetch track preview");
       return res.json();

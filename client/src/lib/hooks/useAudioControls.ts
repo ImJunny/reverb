@@ -1,12 +1,13 @@
-import { createContext, useContext } from "react";
-
-export type AudioControlsContextType = {
-  url: string | null;
-  setUrl: (url: string | null) => void;
-};
+import { createContext, useContext, type RefObject } from "react";
 
 export const AudioControlsContext = createContext<
-  AudioControlsContextType | undefined
+  | {
+      trackId: string | undefined;
+      setTrackId: (songId: string | undefined) => void;
+      audioRef: RefObject<HTMLAudioElement | null>;
+      togglePlayback: () => void;
+    }
+  | undefined
 >(undefined);
 
 export function useAudioControls() {

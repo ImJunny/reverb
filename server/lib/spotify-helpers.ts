@@ -191,3 +191,17 @@ export async function getTrackPreviewUrl(url: string): Promise<string | null> {
 
   return previewUrl;
 }
+
+// get track data
+export async function getTrackData(
+  accessToken: string,
+  trackId: string
+): Promise<SpotifyApi.TrackObjectFull> {
+  const res = await axios.get(`https://api.spotify.com/v1/tracks/${trackId}`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  const data = await res.data;
+  return data;
+}
