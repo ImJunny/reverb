@@ -2,7 +2,17 @@ import { AudioControlsContext } from "@/lib/hooks/useAudioControls";
 import { useRef, useState, type ReactNode } from "react";
 
 export function AudioControlsProvider({ children }: { children: ReactNode }) {
-  const [trackId, setTrackId] = useState<string | undefined>(undefined);
+  const [trackInfo, setTrackInfo] = useState<{
+    id: string;
+    name: string;
+    artists: string[];
+    imageUrl: string;
+  }>({
+    id: "",
+    name: "",
+    artists: [],
+    imageUrl: "",
+  });
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const togglePlayback = () => {
     if (audioRef.current) {
@@ -16,7 +26,12 @@ export function AudioControlsProvider({ children }: { children: ReactNode }) {
 
   return (
     <AudioControlsContext.Provider
-      value={{ trackId, setTrackId, audioRef, togglePlayback }}
+      value={{
+        audioRef,
+        togglePlayback,
+        trackInfo,
+        setTrackInfo,
+      }}
     >
       {children}
     </AudioControlsContext.Provider>

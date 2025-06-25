@@ -6,15 +6,15 @@ import { formatDuration } from "@/lib/scripts/formatDuration";
 import { useAudioControls } from "@/lib/hooks/useAudioControls";
 
 export default function TracksRender({
-  playlistItems,
+  items,
   minimal,
 }: {
-  playlistItems: SpotifyApi.PlaylistTrackResponse;
+  items: SpotifyApi.PlaylistTrackObject[];
   minimal?: boolean;
 }) {
-  const { trackId, setTrackId } = useAudioControls();
+  const { trackInfo, setTrackInfo } = useAudioControls();
 
-  if (!playlistItems) return <></>;
+  if (!items) return <></>;
 
   return (
     <div className="h-full overflow-hidden">
@@ -32,21 +32,28 @@ export default function TracksRender({
 
       <ScrollArea className={cn("h-full", minimal && "max-h-66")}>
         <div className={cn("flex flex-col")}>
-          {playlistItems.items.map((track, idx) => (
+          {items.map((item, idx) => (
             <div
-              key={track.track!.id}
+              key={item.track!.id}
               className="group hover:bg-foreground/5 flex h-11 items-center space-x-3 rounded-sm px-3"
             >
               <div className="flex w-5 items-center justify-center">
                 <Play
                   size={16}
                   className="hover:fill-foreground fill-foreground/70 hidden text-transparent group-hover:block hover:cursor-pointer"
-                  onClick={() => setTrackId(track.track!.id)}
+                  onClick={() => {
+                    setTrackInfo({
+                      id: item.track!.id,
+                      name: item.track!.name,
+                      artists: item.track!.artists.map((artist) => artist.name),
+                      imageUrl: item.track!.album.images[0]?.url ?? "",
+                    });
+                  }}
                 />
                 <p
                   className={cn(
                     "text-foreground/70 text-sm font-light group-hover:hidden",
-                    trackId === track.track?.id && "text-emerald-500",
+                    trackInfo.id === item.track!.id && "text-emerald-500",
                   )}
                 >
                   {idx + 1}
@@ -55,7 +62,7 @@ export default function TracksRender({
 
               {!minimal && (
                 <img
-                  src={track.track?.album.images[0]?.url}
+                  src={item.track!.album.images[0]?.url}
                   alt="track"
                   className="h-9 w-9 rounded-xs object-cover"
                 />
@@ -69,14 +76,14 @@ export default function TracksRender({
                 <span
                   className={cn(
                     !minimal && "text-sm",
-                    trackId === track.track?.id && "text-emerald-500",
+                    trackInfo.id === item.track!.id && "text-emerald-500",
                   )}
                 >
-                  {track.track!.name}
+                  {item.track!.name}
                 </span>
                 <span className="text-foreground/70 text-xs">
                   {minimal && <span>&nbsp;• </span>}
-                  {track.track!.artists.map((artist) => artist.name).join(", ")}
+                  {item.track!.artists.map((artist) => artist.name).join(", ")}
                 </span>
               </div>
               <PlusCircle
@@ -84,7 +91,7 @@ export default function TracksRender({
                 className="text-foreground/70 hover:text-foreground mr-4 ml-auto hidden group-hover:block hover:cursor-pointer"
               />
               <span className="text-foreground/70 ml-auto text-xs group-hover:ml-0">
-                {formatDuration(track.track!.duration_ms)}
+                {formatDuration(item.track!.duration_ms)}
               </span>
             </div>
           ))}

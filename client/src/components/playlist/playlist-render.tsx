@@ -2,25 +2,24 @@ import Card from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import TracksRender from "./tracks-render";
 import { useEffect } from "react";
-import { useBackgroundColor } from "@/lib/hooks/useBackgroundColor";
-import { getAverageColor } from "@/lib/scripts/getAverageColor";
+import { useBackground } from "@/lib/hooks/useBackground";
 
 export default function PlaylistRender({
   playlistInfo,
-  playlistItems,
+  items,
 }: {
   playlistInfo: SpotifyApi.PlaylistObjectFull;
-  playlistItems: SpotifyApi.PlaylistTrackResponse;
+  items: SpotifyApi.PlaylistTrackObject[];
 }) {
-  const { color, setColor } = useBackgroundColor();
+  const { color, setImageUrl } = useBackground();
   useEffect(() => {
     (async () => {
       if (playlistInfo?.images[0]?.url) {
-        const avgColor = await getAverageColor(playlistInfo.images[0].url);
-        setColor(avgColor);
+        const imageUrl = playlistInfo.images[0].url;
+        setImageUrl(imageUrl);
       }
     })();
-  }, [playlistInfo, setColor]);
+  }, [playlistInfo, setImageUrl]);
 
   return (
     <Card
@@ -52,7 +51,7 @@ export default function PlaylistRender({
             : undefined,
         }}
       >
-        <TracksRender playlistItems={playlistItems} minimal />
+        <TracksRender items={items} minimal />
       </div>
     </Card>
   );

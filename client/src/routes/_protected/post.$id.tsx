@@ -24,7 +24,7 @@ function RouteComponent() {
   if (!playlistInfo || !playlistItems) return <></>;
 
   return (
-    <BackgroundWrapper gradient className="p-3">
+    <BackgroundWrapper type="blur" className="p-3">
       <Card className="flex w-full max-w-2xl p-0" transparent>
         <div className="flex flex-col space-y-3 p-3">
           <div className="flex items-center text-xs">
@@ -42,14 +42,14 @@ function RouteComponent() {
           </div>
           <PlaylistRender
             playlistInfo={playlistInfo}
-            playlistItems={playlistItems}
+            items={playlistItems.items}
           />
         </div>
 
         <Separator />
         <div className="flex flex-col space-y-3 p-3">
           <h2>Suggestions • {"5"}</h2>
-          <TracksRender playlistItems={playlistItems} minimal />
+          <TracksRender items={playlistItems.items} minimal />
         </div>
 
         <Separator />

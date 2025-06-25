@@ -5,7 +5,7 @@ import { Hono } from "hono";
 export const tracksRoute = new Hono()
   .use(authMiddleware)
 
-  // GET track preview data (url and data)
+  // GET track preview (url)
   .get("/getTrackPreview", async (c) => {
     try {
       const id = c.req.query("id");
@@ -13,7 +13,7 @@ export const tracksRoute = new Hono()
       const trackData = await getTrackData(accessToken, id!);
       const url = trackData?.external_urls.spotify;
       const link = await getTrackPreviewUrl(url);
-      return c.json({ base: trackData, link }, 200);
+      return c.json({ link }, 200);
     } catch (error: any) {
       return c.json(
         {

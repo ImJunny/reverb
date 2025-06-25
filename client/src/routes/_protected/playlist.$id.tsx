@@ -6,10 +6,9 @@ import {
 } from "@/lib/api-options";
 import { cn } from "@/lib/utils";
 import TracksRender from "@/components/playlist/tracks-render";
-import { useBackgroundColor } from "@/lib/hooks/useBackgroundColor";
+import { useBackground } from "@/lib/hooks/useBackground";
 import { useEffect } from "react";
 import BackgroundWrapper from "@/page/background-wrapper";
-import { getAverageColor } from "@/lib/scripts/getAverageColor";
 
 export const Route = createFileRoute("/_protected/playlist/$id")({
   component: RouteComponent,
@@ -20,21 +19,19 @@ function RouteComponent() {
   const { data: playlistInfo } = useQuery(playlistInfoQueryOptions(id));
   const { data: playlistItems } = useQuery(playlistItemsQueryOptions(id));
 
-  const { setColor } = useBackgroundColor();
+  const { setImageUrl } = useBackground();
 
   useEffect(() => {
-    (async () => {
-      if (playlistInfo?.images[0]?.url) {
-        const avgColor = await getAverageColor(playlistInfo.images[0].url);
-        setColor(avgColor);
-      }
-    })();
-  }, [playlistInfo, setColor]);
+    if (playlistInfo?.images[0]?.url) {
+      const imageUrl = playlistInfo.images[0].url;
+      setImageUrl(imageUrl);
+    }
+  }, [playlistInfo, setImageUrl]);
 
   if (!playlistInfo || !playlistItems) return <></>;
 
   return (
-    <BackgroundWrapper gradient moving className="flex-col">
+    <BackgroundWrapper type="blur" moving className="flex-col">
       <div className="relative mx-3 mt-8 mb-4 flex w-full justify-center">
         <div className="mx-3 flex w-full max-w-5xl space-x-4">
           <img
@@ -54,9 +51,9 @@ function RouteComponent() {
         </div>
       </div>
 
-      <div className="flex w-full justify-center bg-black/10 pb-40">
+      <div className="flex w-full justify-center bg-black/25 pb-40">
         <div className="mx-3 w-full max-w-5xl justify-center">
-          <TracksRender playlistItems={playlistItems} />
+          <TracksRender items={playlistItems.items} />
         </div>
       </div>
     </BackgroundWrapper>

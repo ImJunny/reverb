@@ -57,7 +57,7 @@ const sidebar_options = {
 
 export default function Sidebar() {
   return (
-    <aside className="bg-background-variant sticky top-16 flex flex-col rounded-sm p-3 lg:w-full lg:max-w-70">
+    <aside className="bg-muted sticky top-16 flex flex-col rounded-sm p-3 lg:w-full lg:max-w-70">
       {Object.entries(sidebar_options).map(([key, options], idx, arr) => (
         <div key={key}>
           <SidebarCategory options={options} />
