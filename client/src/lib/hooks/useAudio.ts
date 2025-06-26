@@ -20,7 +20,7 @@ export const AudioControlsContext = createContext<
   | undefined
 >(undefined);
 
-export function useAudioControls() {
+export function useAudio() {
   const context = useContext(AudioControlsContext);
   if (!context) {
     throw new Error("useColor must be used within a ColorProvider");

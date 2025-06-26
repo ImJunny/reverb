@@ -3,7 +3,7 @@ import {
   currentUserProfileQueryOptions,
   userTopTracksQueryOptions,
 } from "@/lib/api-options";
-import { useAudioControls } from "@/lib/hooks/useAudioControls";
+import { useAudio } from "@/lib/hooks/useAudio";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -15,7 +15,7 @@ function RouteComponent() {
   const { data } = useQuery(userTopTracksQueryOptions);
   const { data: userData } = useQuery(currentUserProfileQueryOptions);
 
-  const { setTrackId } = useAudioControls();
+  const { setTrackId } = useAudio();
   if (!data) return <></>;
 
   const image = userData?.images?.[0]?.url;

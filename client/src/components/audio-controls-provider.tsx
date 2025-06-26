@@ -1,4 +1,4 @@
-import { AudioControlsContext } from "@/lib/hooks/useAudioControls";
+import { AudioControlsContext } from "@/lib/hooks/useAudio";
 import { useRef, useState, type ReactNode } from "react";
 
 export function AudioControlsProvider({ children }: { children: ReactNode }) {

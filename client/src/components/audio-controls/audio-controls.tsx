@@ -1,13 +1,15 @@
-import { Pause, Play } from "lucide-react";
+/* eslint-disable react-hooks/exhaustive-deps */
 import Stage from "../stage/stage";
 import { useEffect, useState } from "react";
-import { useAudioControls } from "@/lib/hooks/useAudioControls";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { trackPreviewQueryOptions } from "@/lib/api-options";
-import { formatDuration } from "@/lib/scripts/formatDuration";
+import PlayToggle from "./play-toggle";
+import AudioBar from "./audio-bar";
+import { useAudio } from "@/lib/hooks/useAudio";
 
 export default function AudioControls() {
-  const { audioRef, trackInfo } = useAudioControls();
+  const { audioRef, trackInfo } = useAudio();
+  const queryClient = useQueryClient();
 
   const { data: previewData } = useQuery({
     ...trackPreviewQueryOptions(trackInfo.id),
@@ -15,10 +17,13 @@ export default function AudioControls() {
     placeholderData: (prev) => prev,
   });
 
+  const [playing, setPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+
+  // Initialize audio element if not already done
   useEffect(() => {
-    if (audioRef.current === null) {
-      audioRef.current = new Audio();
-    }
+    if (audioRef.current === null) audioRef.current = new Audio();
+
     if (previewData?.link) {
       audioRef.current.src = previewData.link;
       audioRef.current.play();
@@ -26,23 +31,26 @@ export default function AudioControls() {
     }
   }, [previewData, audioRef]);
 
-  const handleClick = () => {
-    if (audioRef.current === null) return;
-    if (audioRef.current.paused) {
-      audioRef.current.play();
-      setPlaying(true);
-    } else {
-      audioRef.current.pause();
-      setPlaying(false);
+  // Pause and reset current time when track changes ONLY if preview is NOT cached
+  useEffect(() => {
+    if (!trackInfo.id) return;
+    const cachedPreview = queryClient.getQueryData(
+      trackPreviewQueryOptions(trackInfo.id).queryKey,
+    );
+
+    if (!cachedPreview) {
+      setCurrentTime(0);
+      if (audioRef.current) {
+        audioRef.current.pause();
+        audioRef.current.currentTime = 0;
+      }
     }
-  };
+  }, [trackInfo.id]);
 
-  const [playing, setPlaying] = useState(false);
-
+  // Handle audio playback toggle
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-
     const handleEnded = () => {
       setPlaying(false);
       setCurrentTime(0);
@@ -53,21 +61,12 @@ export default function AudioControls() {
     };
   }, [audioRef]);
 
-  useEffect(() => {
-    if (trackInfo.id) {
-      setPlaying(true);
-    }
-  }, [trackInfo]);
-
-  const [currentTime, setCurrentTime] = useState(0);
+  // Update current time as the audio plays
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-
     const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
-
     audio.addEventListener("timeupdate", handleTimeUpdate);
-
     return () => {
       audio.removeEventListener("timeupdate", handleTimeUpdate);
     };
@@ -93,37 +92,10 @@ export default function AudioControls() {
             </p>
           </div>
         </div>
-        <div className="absolute right-0 left-0 mx-auto flex w-full max-w-lg flex-col space-y-1">
-          <button
-            onClick={handleClick}
-            className="bg-foreground cursor-pointer self-center rounded-full p-2"
-          >
-            {playing ? (
-              <Pause className="fill-background stroke-0" size={16} />
-            ) : (
-              <Play className="fill-background stroke-0" size={16} />
-            )}
-          </button>
-          <div className="text-muted-foreground flex items-center space-x-3 text-xs">
-            <span>{formatDuration(currentTime * 1000)}</span>
-            <div className="group bg-primary/20 relative h-[3px] w-full max-w-lg cursor-pointer rounded">
-              <div
-                className="bg-foreground h-full rounded group-hover:bg-emerald-500"
-                style={{
-                  width: `${(currentTime / 30) * 100}%`,
-                }}
-              />
 
-              <div
-                className="bg-foreground absolute top-1/2 hidden h-3 w-3 rounded-full group-hover:block"
-                style={{
-                  left: `${(currentTime / 30) * 100}%`,
-                  transform: "translate(-50%, -50%)", // center it horizontally and vertically
-                }}
-              />
-            </div>
-            <span>{formatDuration(30000)}</span>
-          </div>
+        <div className="absolute right-0 left-0 mx-auto flex w-full max-w-lg flex-col space-y-1">
+          <PlayToggle playing={playing} setPlaying={setPlaying} />
+          <AudioBar currentTime={currentTime} />
         </div>
 
         <div>Volume</div>

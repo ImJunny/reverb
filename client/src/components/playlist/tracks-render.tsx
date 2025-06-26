@@ -3,7 +3,7 @@ import { Separator } from "../ui/separator";
 import { cn } from "@/lib/utils";
 import { Play, PlusCircle } from "lucide-react";
 import { formatDuration } from "@/lib/scripts/formatDuration";
-import { useAudioControls } from "@/lib/hooks/useAudioControls";
+import { useAudio } from "@/lib/hooks/useAudio";
 
 export default function TracksRender({
   items,
@@ -12,7 +12,7 @@ export default function TracksRender({
   items: SpotifyApi.PlaylistTrackObject[];
   minimal?: boolean;
 }) {
-  const { trackInfo, setTrackInfo } = useAudioControls();
+  const { trackInfo, setTrackInfo } = useAudio();
 
   if (!items) return <></>;
 
@@ -53,7 +53,7 @@ export default function TracksRender({
                 <p
                   className={cn(
                     "text-foreground/70 text-sm font-light group-hover:hidden",
-                    trackInfo.id === item.track!.id && "text-emerald-500",
+                    trackInfo.id === item.track!.id && "text-sky-500",
                   )}
                 >
                   {idx + 1}
@@ -76,7 +76,7 @@ export default function TracksRender({
                 <span
                   className={cn(
                     !minimal && "text-sm",
-                    trackInfo.id === item.track!.id && "text-emerald-500",
+                    trackInfo.id === item.track!.id && "text-sky-500",
                   )}
                 >
                   {item.track!.name}
