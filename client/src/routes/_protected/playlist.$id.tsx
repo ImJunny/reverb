@@ -9,6 +9,7 @@ import TracksRender from "@/components/playlist/tracks-render";
 import { useBackground } from "@/lib/hooks/useBackground";
 import { useEffect } from "react";
 import BackgroundWrapper from "@/page/background-wrapper";
+import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_protected/playlist/$id")({
   component: RouteComponent,
@@ -40,12 +41,20 @@ function RouteComponent() {
             className={cn("h-40 w-40 object-cover shadow-2xl")}
           />
           <div>
-            <p>{playlistInfo.public ? "Public" : "Private"}</p>
+            <p className="text-sm">
+              {playlistInfo.public ? "Public" : "Private"}
+            </p>
             <h1 className="text-6xl font-extrabold tracking-wide">
               {playlistInfo.name}
             </h1>
             <div className="text-foreground/60 flex flex-col text-sm">
-              <p>{playlistInfo.tracks.total} songs</p>
+              <p className="text-sm">{playlistInfo.tracks.total} songs</p>
+            </div>
+            <div className="mt-4 flex space-x-2">
+              <Button className="h-6">Playlist</Button>
+              <Button className="h-6" variant="outline">
+                Posts (4)
+              </Button>
             </div>
           </div>
         </div>

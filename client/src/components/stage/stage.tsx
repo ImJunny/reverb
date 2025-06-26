@@ -5,7 +5,7 @@ import {
   CollapsibleTrigger,
 } from "../ui/collapsible";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useState, type HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "../ui/scroll-area";
 import { Checkbox } from "../ui/checkbox";
@@ -53,7 +53,7 @@ const data: { title: string; artist: string }[] = [
   },
 ];
 
-export default function Stage() {
+export default function Stage({ className }: HTMLAttributes<HTMLDivElement>) {
   const [open, setOpen] = useState(false);
   const [count, setCount] = useState(0);
   const [songs, setSongs] = useState(data);
@@ -62,10 +62,10 @@ export default function Stage() {
     <Collapsible
       open={open}
       onOpenChange={setOpen}
-      className="absolute right-0 bottom-20 mr-6"
+      className={cn("absolute right-0 mr-6", className)}
     >
       <CollapsibleTrigger>
-        <div className="bg-card flex w-72 items-center rounded-t-sm px-3 py-2 text-sm">
+        <div className="bg-background-variant flex w-72 items-center rounded-t-sm px-3 py-2 text-sm">
           <span>Staged Songs</span>
           <span className="text-muted-foreground">&nbsp;• {songs.length}</span>
           <ChevronUp
@@ -77,10 +77,10 @@ export default function Stage() {
         </div>
       </CollapsibleTrigger>
       <CollapsibleContent>
-        <div className="bg-card w-72 px-3 pb-2">
+        <div className="bg-background-variant w-72 px-3 pb-2">
           <ScrollArea
             className={cn(
-              "bg-background-variant mb-2 flex h-91 flex-col overflow-hidden rounded-sm",
+              "bg-muted mb-2 flex h-91 flex-col overflow-hidden rounded-sm",
             )}
           >
             {songs.length > 0 ? (
@@ -92,7 +92,7 @@ export default function Stage() {
                       "group hover:bg-accent flex flex-row items-center gap-2 p-2 pr-4",
                     )}
                   >
-                    <div className="bg-muted h-9 w-9 rounded-xs hover:cursor-pointer" />
+                    <div className="h-9 w-9 rounded-xs bg-gray-500 hover:cursor-pointer" />
                     <div className="flex flex-col text-xs">
                       <span>{song.title}</span>
                       <span className="text-muted-foreground">

@@ -34,7 +34,7 @@ export default function PlaylistRender({
         <img
           src={playlistInfo.images[0]?.url}
           alt={playlistInfo.name}
-          className={cn("h-20 w-20 rounded-sm object-cover")}
+          className={cn("h-20 w-20 rounded-sm object-cover shadow-md")}
         />
         <div>
           <h1 className="text-3xl font-bold">{playlistInfo.name}</h1>

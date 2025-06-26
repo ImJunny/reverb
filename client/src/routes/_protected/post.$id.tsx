@@ -49,7 +49,9 @@ function RouteComponent() {
         <Separator />
         <div className="flex flex-col space-y-3 p-3">
           <h2>Suggestions • {"5"}</h2>
-          <TracksRender items={playlistItems.items} minimal />
+          <Card>
+            <TracksRender items={playlistItems.items} minimal />
+          </Card>
         </div>
 
         <Separator />

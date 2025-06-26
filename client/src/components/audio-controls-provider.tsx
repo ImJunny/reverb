@@ -14,6 +14,7 @@ export function AudioControlsProvider({ children }: { children: ReactNode }) {
     imageUrl: "",
   });
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
   const togglePlayback = () => {
     if (audioRef.current) {
       if (audioRef.current.paused) {

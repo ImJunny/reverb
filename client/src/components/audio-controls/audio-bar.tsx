@@ -1,12 +1,13 @@
 import { useRef, useCallback, useState, useEffect } from "react";
 import { useAudio } from "@/lib/hooks/useAudio";
 import { formatDuration } from "@/lib/scripts/formatDuration";
+import { cn } from "@/lib/utils";
 
 export default function AudioBar({ currentTime }: { currentTime: number }) {
   const { audioRef } = useAudio();
   const barRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [duration, setDuration] = useState(30); // default to 30s or 0
+  const [duration, setDuration] = useState(30);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -73,15 +74,20 @@ export default function AudioBar({ currentTime }: { currentTime: number }) {
         onTouchStart={handleTouchStart}
       >
         <div
-          className="bg-foreground h-full rounded group-hover:bg-sky-500"
+          className={cn(
+            "bg-foreground h-full rounded group-hover:bg-rose-500",
+            isDragging && "bg-rose-500",
+          )}
           style={{ width: `${percent}%` }}
         />
         <div
-          className="bg-foreground absolute top-1/2 h-3 w-3 rounded-full group-hover:block"
+          className={cn(
+            "bg-foreground absolute top-1/2 hidden h-3 w-3 rounded-full group-hover:block",
+            isDragging && percent > 0 && "block",
+          )}
           style={{
             left: `${percent}%`,
             transform: "translate(-50%, -50%)",
-            display: isDragging || percent > 0 ? "block" : "none",
           }}
         />
       </div>

@@ -6,7 +6,7 @@ import SearchBar from "./search-bar";
 export default function Header() {
   return (
     <nav className="bg-background sticky top-0 z-1 flex h-16 items-center gap-6 p-3">
-      <h1 className="ml-3 text-xl font-semibold tracking-tight">Suggestify</h1>
+      <h1 className="ml-3 text-2xl font-semibold tracking-tight">reverb</h1>
       <div className="flex items-center space-x-2">
         <button
           onClick={() => {}}

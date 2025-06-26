@@ -24,12 +24,12 @@ export default function PlayToggle({
   return (
     <button
       onClick={handleClick}
-      className="bg-foreground cursor-pointer self-center rounded-full p-2"
+      className="cursor-pointer self-center rounded-full"
     >
       {playing ? (
-        <Pause className="fill-background stroke-0" size={16} />
+        <Pause className="fill-white stroke-0" size={28} />
       ) : (
-        <Play className="fill-background stroke-0" size={16} />
+        <Play className="fill-white stroke-0" size={28} />
       )}
     </button>
   );

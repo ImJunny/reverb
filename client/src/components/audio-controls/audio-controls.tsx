@@ -6,6 +6,8 @@ import { trackPreviewQueryOptions } from "@/lib/api-options";
 import PlayToggle from "./play-toggle";
 import AudioBar from "./audio-bar";
 import { useAudio } from "@/lib/hooks/useAudio";
+import { SkipBack, SkipForward } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function AudioControls() {
   const { audioRef, trackInfo } = useAudio();
@@ -22,7 +24,10 @@ export default function AudioControls() {
 
   // Initialize audio element if not already done
   useEffect(() => {
-    if (audioRef.current === null) audioRef.current = new Audio();
+    if (audioRef.current === null) {
+      audioRef.current = new Audio();
+      setPlaying(true);
+    }
 
     if (previewData?.link) {
       audioRef.current.src = previewData.link;
@@ -73,35 +78,44 @@ export default function AudioControls() {
   }, [audioRef]);
 
   return (
-    <div className="bg-background relative z-10 mx-2 flex h-20 w-full items-center">
-      <Stage />
+    <>
+      <audio ref={audioRef} />
+      <Stage
+        className={cn("z-10", audioRef.current ? "bottom-20" : "bottom-0")}
+      />
+      {audioRef.current && (
+        <div className="bg-background relative z-10 mx-2 flex h-20 w-full items-center">
+          <div className="relative flex w-full items-center justify-between">
+            <div className="flex w-full max-w-sm items-center overflow-hidden">
+              {trackInfo.imageUrl && (
+                <img
+                  src={trackInfo.imageUrl}
+                  alt="Album cover"
+                  className="h-13 w-13 flex-shrink-0 rounded-xs object-cover"
+                />
+              )}
+              <div className="ml-3 min-w-0">
+                <p className="truncate text-sm">{trackInfo.name}</p>
+                <p className="text-muted-foreground truncate text-xs">
+                  {trackInfo.artists.map((artist) => artist).join(", ")}
+                </p>
+              </div>
+            </div>
 
-      <div className="relative flex w-full items-center justify-between">
-        <div className="flex w-full max-w-sm items-center overflow-hidden">
-          {trackInfo.imageUrl && (
-            <img
-              src={trackInfo.imageUrl}
-              alt="Album cover"
-              className="h-13 w-13 flex-shrink-0 rounded-xs object-cover"
-            />
-          )}
-          <div className="ml-3 min-w-0">
-            <p className="truncate text-sm">{trackInfo.name}</p>
-            <p className="text-muted-foreground truncate text-xs">
-              {trackInfo.artists.map((artist) => artist).join(", ")}
-            </p>
+            <div className="absolute right-0 left-0 mx-auto flex w-full max-w-lg flex-col space-y-2">
+              <div className="flex items-center space-x-3 self-center">
+                <SkipBack className="fill-white" size={16} />
+                <PlayToggle playing={playing} setPlaying={setPlaying} />
+                <SkipForward className="fill-white" size={16} />
+              </div>
+
+              <AudioBar currentTime={currentTime} />
+            </div>
+
+            <div>Volume</div>
           </div>
         </div>
-
-        <div className="absolute right-0 left-0 mx-auto flex w-full max-w-lg flex-col space-y-1">
-          <PlayToggle playing={playing} setPlaying={setPlaying} />
-          <AudioBar currentTime={currentTime} />
-        </div>
-
-        <div>Volume</div>
-      </div>
-
-      <audio ref={audioRef} />
-    </div>
+      )}
+    </>
   );
 }

@@ -149,7 +149,7 @@ export async function getPlaylistInfo(
 export async function getPlaylistItems(
   accessToken: string,
   playlistId: string,
-  limit: number = 20,
+  limit: number = 40,
   offset: number = 0
 ): Promise<SpotifyApi.PlaylistTrackResponse> {
   const res = await axios.get(

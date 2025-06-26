@@ -10,7 +10,6 @@ export const Route = createFileRoute("/_protected/playlists")({
 
 function RouteComponent() {
   const { data } = useQuery(currentUserPlaylistsQueryOptions);
-
   return (
     <BackgroundWrapper className="flex-col p-3">
       <h1 className="text-lg font-semibold">Your playlists</h1>
@@ -34,11 +33,16 @@ function PlaylistCard({
         className="hover:bg-card flex cursor-pointer flex-col space-y-2"
         transparent
       >
-        <img
-          src={playlist.images[0]?.url}
-          alt={playlist.name}
-          className="aspect-square h-32 w-full rounded-sm object-cover"
-        />
+        {playlist.images[0]?.url ? (
+          <img
+            src={playlist.images[0].url}
+            alt={playlist.name}
+            className="aspect-square h-32 w-full rounded-sm object-cover"
+          />
+        ) : (
+          <div className="bg-muted aspect-square h-32 w-full rounded-sm" />
+        )}
+
         <div className="flex flex-col space-y-1">
           <h3 className="text-sm">{playlist.name}</h3>
           <span className="text-muted-foreground text-xs">

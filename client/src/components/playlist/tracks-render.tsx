@@ -30,12 +30,15 @@ export default function TracksRender({
         <Separator className="mt-2" />
       </div>
 
-      <ScrollArea className={cn("h-full", minimal && "max-h-66")}>
+      <ScrollArea className={cn("h-full", minimal && "max-h-45")}>
         <div className={cn("flex flex-col")}>
           {items.map((item, idx) => (
             <div
               key={item.track!.id}
-              className="group hover:bg-foreground/5 flex h-11 items-center space-x-3 rounded-sm px-3"
+              className={cn(
+                "group hover:bg-foreground/5 flex h-11 items-center space-x-3 rounded-sm px-3",
+                minimal && "h-9",
+              )}
             >
               <div className="flex w-5 items-center justify-center">
                 <Play
@@ -53,7 +56,7 @@ export default function TracksRender({
                 <p
                   className={cn(
                     "text-foreground/70 text-sm font-light group-hover:hidden",
-                    trackInfo.id === item.track!.id && "text-sky-500",
+                    trackInfo.id === item.track!.id && "text-rose-500",
                   )}
                 >
                   {idx + 1}
@@ -76,7 +79,7 @@ export default function TracksRender({
                 <span
                   className={cn(
                     !minimal && "text-sm",
-                    trackInfo.id === item.track!.id && "text-sky-500",
+                    trackInfo.id === item.track!.id && "text-rose-500",
                   )}
                 >
                   {item.track!.name}
