@@ -33,9 +33,9 @@ function PlaylistCard({
         className="hover:bg-card flex cursor-pointer flex-col space-y-2"
         transparent
       >
-        {playlist.images[0]?.url ? (
+        {playlist.images ? (
           <img
-            src={playlist.images[0].url}
+            src={playlist.images[0]?.url}
             alt={playlist.name}
             className="aspect-square h-32 w-full rounded-sm object-cover"
           />

@@ -30,7 +30,7 @@ export default function PlaylistRender({
           : undefined,
       }}
     >
-      <div className="relative flex flex-row space-x-3 px-3 py-4">
+      <div className="relative flex flex-row items-center space-x-3 px-3 py-2">
         <img
           src={playlistInfo.images[0]?.url}
           alt={playlistInfo.name}

@@ -11,6 +11,7 @@ import {
   playlistItemsQueryOptions,
 } from "@/lib/api-options";
 import BackgroundWrapper from "@/page/background-wrapper";
+import { Bookmark, Disc, Heart, MessageCircle, Share } from "lucide-react";
 
 export const Route = createFileRoute("/_protected/post/$id")({
   component: RouteComponent,
@@ -44,6 +45,13 @@ function RouteComponent() {
             playlistInfo={playlistInfo}
             items={playlistItems.items}
           />
+          <div className="my-1 flex items-center space-x-4">
+            <Heart size={20} />
+            <MessageCircle size={20} />
+            <Disc size={20} />
+            <Bookmark size={20} />
+            <Share size={20} />
+          </div>
         </div>
 
         <Separator />

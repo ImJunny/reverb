@@ -1,10 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useRef, useCallback, useState, useEffect } from "react";
 import { useAudio } from "@/lib/hooks/useAudio";
 import { formatDuration } from "@/lib/scripts/formatDuration";
 import { cn } from "@/lib/utils";
 
-export default function AudioBar({ currentTime }: { currentTime: number }) {
-  const { audioRef } = useAudio();
+export default function AudioBar() {
+  const { audioRef, currentTime, setCurrentTime } = useAudio();
   const barRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [duration, setDuration] = useState(30);
@@ -13,9 +14,8 @@ export default function AudioBar({ currentTime }: { currentTime: number }) {
     const audio = audioRef.current;
     if (!audio) return;
     const handleLoadedMetadata = () => {
-      if (Number.isFinite(audio.duration) && audio.duration > 0) {
+      if (Number.isFinite(audio.duration) && audio.duration > 0)
         setDuration(audio.duration);
-      }
     };
 
     audio.addEventListener("loadedmetadata", handleLoadedMetadata);
@@ -23,6 +23,17 @@ export default function AudioBar({ currentTime }: { currentTime: number }) {
       audio.removeEventListener("loadedmetadata", handleLoadedMetadata);
   }, [audioRef]);
 
+  // Update current time as the audio plays
+  useEffect(() => {
+    if (!audioRef.current) return;
+    const handleTimeUpdate = () =>
+      setCurrentTime(audioRef.current!.currentTime);
+    audioRef.current.addEventListener("timeupdate", handleTimeUpdate);
+    return () =>
+      audioRef.current?.removeEventListener("timeupdate", handleTimeUpdate);
+  }, [audioRef]);
+
+  // Function to seek to a specific time in the audio
   const seek = useCallback(
     (e: MouseEvent | React.MouseEvent | React.TouchEvent) => {
       if (!audioRef.current || !barRef.current) return;

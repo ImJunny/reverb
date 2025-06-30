@@ -23,7 +23,7 @@ function RouteComponent() {
   const { setImageUrl } = useBackground();
 
   useEffect(() => {
-    if (playlistInfo?.images[0]?.url) {
+    if (playlistInfo?.images && playlistInfo.images[0]?.url) {
       const imageUrl = playlistInfo.images[0].url;
       setImageUrl(imageUrl);
     }
@@ -35,11 +35,15 @@ function RouteComponent() {
     <BackgroundWrapper type="blur" moving className="flex-col">
       <div className="relative mx-3 mt-8 mb-4 flex w-full justify-center">
         <div className="mx-3 flex w-full max-w-5xl space-x-4">
-          <img
-            src={playlistInfo.images[0]?.url}
-            alt={playlistInfo.name}
-            className={cn("h-40 w-40 object-cover shadow-2xl")}
-          />
+          {playlistInfo.images ? (
+            <img
+              src={playlistInfo.images[0]?.url}
+              alt={playlistInfo.name}
+              className={cn("h-40 w-40 object-cover shadow-2xl")}
+            />
+          ) : (
+            <div className="bg-muted aspect-square h-40 w-40 rounded-sm" />
+          )}
           <div>
             <p className="text-sm">
               {playlistInfo.public ? "Public" : "Private"}

@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import Stage from "../stage/stage";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { trackPreviewQueryOptions } from "@/lib/api-options";
 import PlayToggle from "./play-toggle";
@@ -8,9 +8,10 @@ import AudioBar from "./audio-bar";
 import { useAudio } from "@/lib/hooks/useAudio";
 import { SkipBack, SkipForward } from "lucide-react";
 import { cn } from "@/lib/utils";
+import VolumeBar from "./volume-bar";
 
 export default function AudioControls() {
-  const { audioRef, trackInfo } = useAudio();
+  const { audioRef, trackInfo, setPlaying, setCurrentTime } = useAudio();
   const queryClient = useQueryClient();
 
   const { data: previewData } = useQuery({
@@ -18,9 +19,6 @@ export default function AudioControls() {
     enabled: !!trackInfo,
     placeholderData: (prev) => prev,
   });
-
-  const [playing, setPlaying] = useState(false);
-  const [currentTime, setCurrentTime] = useState(0);
 
   // Initialize audio element if not already done
   useEffect(() => {
@@ -52,29 +50,15 @@ export default function AudioControls() {
     }
   }, [trackInfo.id]);
 
-  // Handle audio playback toggle
+  // Handle audio track end
   useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
+    if (!audioRef.current) return;
     const handleEnded = () => {
       setPlaying(false);
       setCurrentTime(0);
     };
-    audio.addEventListener("ended", handleEnded);
-    return () => {
-      audio.removeEventListener("ended", handleEnded);
-    };
-  }, [audioRef]);
-
-  // Update current time as the audio plays
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-    const handleTimeUpdate = () => setCurrentTime(audio.currentTime);
-    audio.addEventListener("timeupdate", handleTimeUpdate);
-    return () => {
-      audio.removeEventListener("timeupdate", handleTimeUpdate);
-    };
+    audioRef.current.addEventListener("ended", handleEnded);
+    return () => audioRef.current?.removeEventListener("ended", handleEnded);
   }, [audioRef]);
 
   return (
@@ -84,7 +68,7 @@ export default function AudioControls() {
         className={cn("z-10", audioRef.current ? "bottom-20" : "bottom-0")}
       />
       {audioRef.current && (
-        <div className="bg-background relative z-10 mx-2 flex h-20 w-full items-center">
+        <div className="bg-background relative z-10 flex h-20 w-full items-center px-2">
           <div className="relative flex w-full items-center justify-between">
             <div className="flex w-full max-w-sm items-center overflow-hidden">
               {trackInfo.imageUrl && (
@@ -105,14 +89,14 @@ export default function AudioControls() {
             <div className="absolute right-0 left-0 mx-auto flex w-full max-w-lg flex-col space-y-2">
               <div className="flex items-center space-x-3 self-center">
                 <SkipBack className="fill-white" size={16} />
-                <PlayToggle playing={playing} setPlaying={setPlaying} />
+                <PlayToggle />
                 <SkipForward className="fill-white" size={16} />
               </div>
 
-              <AudioBar currentTime={currentTime} />
+              <AudioBar />
             </div>
 
-            <div>Volume</div>
+            <VolumeBar />
           </div>
         </div>
       )}

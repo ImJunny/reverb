@@ -1,14 +1,14 @@
 import { createContext, useContext } from "react";
 
-export const BackgroundContext = createContext<
-  BackgroundContextType | undefined
->(undefined);
-
-export type BackgroundContextType = {
+type BackgroundContextType = {
   color: string;
   imageUrl: string;
   setImageUrl: (url: string) => void;
 };
+
+export const BackgroundContext = createContext<
+  BackgroundContextType | undefined
+>(undefined);
 
 export function useBackground() {
   const context = useContext(BackgroundContext);

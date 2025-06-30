@@ -3,7 +3,7 @@ import Sidebar from "@/components/sidebar/sidebar";
 import { api } from "@/utils/client";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
 import { BackgroundColorProvider } from "@/components/bg-provider";
-import { AudioControlsProvider } from "@/components/audio-controls-provider";
+import { AudioProvider } from "@/components/audio-provider";
 import AudioControls from "@/components/audio-controls/audio-controls";
 
 export const Route = createFileRoute("/_protected")({
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/_protected")({
 
 function RootComponent() {
   return (
-    <AudioControlsProvider>
+    <AudioProvider>
       <BackgroundColorProvider>
         <div className="flex h-screen flex-col">
           <Header />
@@ -32,6 +32,6 @@ function RootComponent() {
           <AudioControls />
         </div>
       </BackgroundColorProvider>
-    </AudioControlsProvider>
+    </AudioProvider>
   );
 }

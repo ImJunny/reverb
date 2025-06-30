@@ -1,29 +1,24 @@
 import { useAudio } from "@/lib/hooks/useAudio";
 import { Pause, Play } from "lucide-react";
 
-export default function PlayToggle({
-  playing,
-  setPlaying,
-}: {
-  playing: boolean;
-  setPlaying: (playing: boolean) => void;
-}) {
-  const { audioRef } = useAudio();
+export default function PlayToggle() {
+  const { audioRef, playing, setPlaying } = useAudio();
 
-  const handleClick = () => {
-    if (audioRef.current === null) return;
-    if (audioRef.current.paused) {
-      audioRef.current.play();
-      setPlaying(true);
-    } else {
+  const togglePlayback = () => {
+    if (!audioRef.current) return;
+
+    if (playing) {
       audioRef.current.pause();
       setPlaying(false);
+    } else {
+      audioRef.current.play();
+      setPlaying(true);
     }
   };
 
   return (
     <button
-      onClick={handleClick}
+      onClick={togglePlayback}
       className="cursor-pointer self-center rounded-full"
     >
       {playing ? (

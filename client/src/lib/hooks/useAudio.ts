@@ -1,9 +1,8 @@
 import { createContext, useContext, type RefObject } from "react";
 
-export const AudioControlsContext = createContext<
+type AudioContextType =
   | {
       audioRef: RefObject<HTMLAudioElement | null>;
-      togglePlayback: () => void;
       trackInfo: {
         id: string;
         name: string;
@@ -16,14 +15,19 @@ export const AudioControlsContext = createContext<
         artists: string[];
         imageUrl: string;
       }) => void;
+      playing: boolean;
+      setPlaying: React.Dispatch<React.SetStateAction<boolean>>;
+      currentTime: number;
+      setCurrentTime: React.Dispatch<React.SetStateAction<number>>;
     }
-  | undefined
->(undefined);
+  | undefined;
+
+export const AudioContext = createContext<AudioContextType>(undefined);
 
 export function useAudio() {
-  const context = useContext(AudioControlsContext);
+  const context = useContext(AudioContext);
   if (!context) {
-    throw new Error("useColor must be used within a ColorProvider");
+    throw new Error("useAudio must be used within an AudioProvider");
   }
   return context;
 }

@@ -35,6 +35,7 @@
     // Optional strict flags (disabled by default)
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "noPropertyAccessFromIndexSignature": false
+    "noPropertyAccessFromIndexSignature": false,
+    "types": ["vite-plugin-svgr/client", "@types/spotify-api"] // added for react-plugin-svgr
   }
 }
