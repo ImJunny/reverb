@@ -26,7 +26,7 @@ export default function ProfileDropdown() {
   const avatarUrl = data?.images?.[0]?.url || undefined;
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger className="flex cursor-pointer items-center gap-2 rounded-full">
+      <DropdownMenuTrigger className="flex shrink-0 cursor-pointer items-center gap-2 rounded-full">
         <img
           src={avatarUrl}
           alt="avatar"

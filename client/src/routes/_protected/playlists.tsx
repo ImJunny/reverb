@@ -1,6 +1,6 @@
 import Card from "@/components/ui/card";
 import { currentUserPlaylistsQueryOptions } from "@/lib/api-options";
-import BackgroundWrapper from "@/page/background-wrapper";
+import BackgroundWrapper from "@/components/page/background-wrapper";
 import { useQuery } from "@tanstack/react-query";
 import { createFileRoute, Link } from "@tanstack/react-router";
 
@@ -13,7 +13,7 @@ function RouteComponent() {
   return (
     <BackgroundWrapper className="flex-col p-3">
       <h1 className="text-lg font-semibold">Your playlists</h1>
-      <div className="mt-1 flex space-x-2">
+      <div className="mt-1 flex flex-wrap gap-2">
         {data?.items.map((playlist) => (
           <PlaylistCard key={playlist.id} playlist={playlist} />
         ))}
@@ -28,7 +28,7 @@ function PlaylistCard({
   playlist: SpotifyApi.PlaylistObjectSimplified;
 }) {
   return (
-    <Link to="/playlist/$id" params={{ id: playlist.id }}>
+    <Link to="/playlist/$id" params={{ id: playlist.id }} className="shrink-0">
       <Card
         className="hover:bg-card flex cursor-pointer flex-col space-y-2"
         transparent

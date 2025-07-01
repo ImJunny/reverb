@@ -1,5 +1,5 @@
 import Card from "@/components/ui/card";
-import BackgroundWrapper from "@/page/background-wrapper";
+import BackgroundWrapper from "@/components/page/background-wrapper";
 import { createFileRoute } from "@tanstack/react-router";
 
 export const Route = createFileRoute("/_protected/")({

@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import TracksRender from "@/components/playlist/tracks-render";
 import { useBackground } from "@/lib/hooks/useBackground";
 import { useEffect } from "react";
-import BackgroundWrapper from "@/page/background-wrapper";
+import BackgroundWrapper from "@/components/page/background-wrapper";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/_protected/playlist/$id")({
@@ -39,7 +39,9 @@ function RouteComponent() {
             <img
               src={playlistInfo.images[0]?.url}
               alt={playlistInfo.name}
-              className={cn("h-40 w-40 object-cover shadow-2xl")}
+              className={cn(
+                "h-29 w-29 object-cover shadow-2xl sm:h-40 sm:w-40",
+              )}
             />
           ) : (
             <div className="bg-muted aspect-square h-40 w-40 rounded-sm" />
@@ -48,7 +50,7 @@ function RouteComponent() {
             <p className="text-sm">
               {playlistInfo.public ? "Public" : "Private"}
             </p>
-            <h1 className="text-6xl font-extrabold tracking-wide">
+            <h1 className="text-2xl font-extrabold tracking-wide md:text-4xl lg:text-6xl">
               {playlistInfo.name}
             </h1>
             <div className="text-foreground/60 flex flex-col text-sm">
@@ -64,8 +66,8 @@ function RouteComponent() {
         </div>
       </div>
 
-      <div className="flex w-full justify-center bg-black/25 pb-40">
-        <div className="mx-3 w-full max-w-5xl justify-center">
+      <div className="flex w-full justify-center bg-black/25">
+        <div className="mx-3 w-full max-w-5xl justify-center pb-3">
           <TracksRender items={playlistItems.items} />
         </div>
       </div>

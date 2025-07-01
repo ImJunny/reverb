@@ -3,7 +3,7 @@ import { getAverageColor } from "@/lib/scripts/getAverageColor";
 import { useEffect, useState, type ReactNode } from "react";
 
 export function BackgroundColorProvider({ children }: { children: ReactNode }) {
-  const [color, setColor] = useState<string>("#000000");
+  const [color, setColor] = useState<string>("#565656");
   const [imageUrl, setImageUrl] = useState<string>("");
 
   useEffect(() => {

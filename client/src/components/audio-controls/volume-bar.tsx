@@ -1,9 +1,17 @@
-import { useRef, useState, useCallback, useEffect } from "react";
+import {
+  useRef,
+  useState,
+  useCallback,
+  useEffect,
+  type HTMLAttributes,
+} from "react";
 import { useAudio } from "@/lib/hooks/useAudio";
 import { cn } from "@/lib/utils";
 import { Volume, Volume1, Volume2, VolumeOff } from "lucide-react";
 
-export default function VolumeBar() {
+export default function VolumeBar({
+  className,
+}: HTMLAttributes<HTMLDivElement>) {
   const { audioRef } = useAudio();
   const barRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
@@ -78,7 +86,12 @@ export default function VolumeBar() {
   };
 
   return (
-    <div className="text-muted-foreground flex items-center space-x-3 text-xs">
+    <div
+      className={cn(
+        "text-muted-foreground flex items-center space-x-3 text-xs",
+        className,
+      )}
+    >
       <button
         onClick={toggleMute}
         className="text-muted-foreground hover:text-foreground cursor-pointer"

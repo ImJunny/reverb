@@ -1,9 +1,9 @@
-import { Plus } from "lucide-react";
-import { Button } from "../ui/button";
+import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import ProfileDropdown from "./profile-dropdown";
 import SearchBar from "./search-bar";
 import Logo from "@/assets/logo.svg?react";
 import { useRouter } from "@tanstack/react-router";
+import SidebarOptions from "../sidebar/sidebar-options";
 
 export default function Header() {
   const router = useRouter();
@@ -13,11 +13,11 @@ export default function Header() {
 
   return (
     <nav className="bg-background sticky top-0 z-1 flex h-16 items-center gap-6 p-3">
-      <div className="ml-3 flex flex-col space-y-1">
+      <div className="ml-3 hidden flex-col space-y-1 sm:flex">
         <Logo className="h-7 w-auto cursor-pointer" onClick={handleClick} />
       </div>
 
-      {/* <div className="flex items-center space-x-2">
+      <div className="flex items-center space-x-2">
         <button
           onClick={() => {}}
           className="text-muted-foreground hover:text-foreground disabled:text-background-variant cursor-pointer transition-colors duration-100 disabled:cursor-default"
@@ -33,16 +33,14 @@ export default function Header() {
         >
           <ChevronRight />
         </button>
-      </div> */}
+      </div>
 
       <SearchBar />
       <div className="flex h-full items-center space-x-3">
-        <Button variant="ghost" className="rounded-full" asChild>
-          <div>
-            <Plus />
-            Create
-          </div>
-        </Button>
+        <SidebarOptions />
+        <button className="text-muted-foreground hover:text-foreground disabled:text-background-variant cursor-pointer transition-colors duration-100 disabled:cursor-default">
+          <Plus size={20} />
+        </button>
         <ProfileDropdown />
       </div>
     </nav>

@@ -10,12 +10,60 @@ import {
   playlistInfoQueryOptions,
   playlistItemsQueryOptions,
 } from "@/lib/api-options";
-import BackgroundWrapper from "@/page/background-wrapper";
+import BackgroundWrapper from "@/components/page/background-wrapper";
 import { Bookmark, Disc, Heart, MessageCircle, Share } from "lucide-react";
 
 export const Route = createFileRoute("/_protected/post/$id")({
   component: RouteComponent,
 });
+
+const recentPosts = [
+  {
+    id: 1,
+    username: "@johnsmith",
+    timeAgo: "1hr ago",
+    title: "Hello this is a test playlist!",
+    likes: 12,
+    comments: 5,
+    suggestions: 0,
+  },
+  {
+    id: 2,
+    username: "@janedoe",
+    timeAgo: "2hr ago",
+    title: "Another test playlist!",
+    likes: 8,
+    comments: 2,
+    suggestions: 1,
+  },
+  {
+    id: 3,
+    username: "@alexdoe",
+    timeAgo: "3hr ago",
+    title: "Yet another test playlist!",
+    likes: 5,
+    comments: 1,
+    suggestions: 0,
+  },
+  {
+    id: 4,
+    username: "@maryjane",
+    timeAgo: "4hr ago",
+    title: "This is a test playlist!",
+    likes: 20,
+    comments: 10,
+    suggestions: 3,
+  },
+  {
+    id: 5,
+    username: "@bobsmith",
+    timeAgo: "5hr ago",
+    title: "Test playlist example!",
+    likes: 15,
+    comments: 7,
+    suggestions: 2,
+  },
+];
 
 function RouteComponent() {
   const { id } = useParams({ from: "/_protected/post/$id" });
@@ -68,33 +116,61 @@ function RouteComponent() {
         </div>
       </Card>
 
-      <Card
-        className="sticky top-3 ml-3 hidden w-72 flex-col space-y-2 self-start md:flex"
-        transparent
-      >
-        <div className="flex space-x-3">
-          <div className="h-18 w-18 rounded-full bg-blue-200" />
-          <div className="flex flex-col justify-center space-y-2">
-            <h1 className="text-sm">@johnsmith</h1>
-            <div className="grid grid-cols-3 gap-3 text-xs">
-              <div className="flex flex-col">
-                <span>10</span>
-                <span>followers</span>
-              </div>
-              <div className="flex flex-col">
-                <span>2</span>
-                <span>posts</span>
-              </div>
-              <div className="flex flex-col">
-                <span>35</span>
-                <span>rep</span>
+      <div className="sticky top-3 ml-3 hidden w-72 flex-col space-y-3 self-start md:flex">
+        <Card className="w-72 flex-col space-y-2 md:flex" transparent>
+          <div className="flex space-x-3">
+            <div className="h-18 w-18 shrink-0 rounded-full bg-blue-200" />
+            <div className="flex flex-col justify-center space-y-2">
+              <h1 className="text-sm">@johnsmith</h1>
+              <div className="flex gap-x-3 text-xs">
+                <div className="flex flex-col">
+                  <span>2</span>
+                  <span>posts</span>
+                </div>
+                <div className="flex flex-col">
+                  <span>10</span>
+                  <span>followers</span>
+                </div>
+                <div className="flex flex-col">
+                  <span>35</span>
+                  <span>rep</span>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <p className="text-xs">Lorem ipsum this is an example bio.</p>
-        <Button>Follow</Button>
-      </Card>
+          <p className="text-xs">Lorem ipsum this is an example bio.</p>
+          <Button>Follow</Button>
+        </Card>
+
+        <Card transparent className="flex flex-col text-xs">
+          <div className="mb-1 flex items-center justify-between">
+            <h1>Recently viewed</h1>
+            <p className="text-muted-foreground">Clear</p>
+          </div>
+          <div className="text-foreground/80 flex flex-col space-y-2">
+            {recentPosts.map((post, idx) => (
+              <>
+                <div key={post.id} className="flex flex-col space-y-2 py-2">
+                  <div className="flex items-center space-x-2">
+                    <div className="h-6 w-6 rounded-full bg-blue-200" />
+                    <span className="text-foreground">{post.username}</span>
+                    <span className="text-muted-foreground">
+                      &nbsp;• {post.timeAgo}
+                    </span>
+                  </div>
+                  <p>{post.title}</p>
+                  <div className="flex space-x-2">
+                    <span>{post.likes} likes</span>
+                    <span>{post.comments} comments</span>
+                    <span>{post.suggestions} suggestions</span>
+                  </div>
+                </div>
+                {idx !== recentPosts.length - 1 && <Separator />}
+              </>
+            ))}
+          </div>
+        </Card>
+      </div>
     </BackgroundWrapper>
   );
 }

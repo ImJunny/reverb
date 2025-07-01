@@ -1,5 +1,3 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import Stage from "../stage/stage";
 import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { trackPreviewQueryOptions } from "@/lib/api-options";
@@ -7,7 +5,6 @@ import PlayToggle from "./play-toggle";
 import AudioBar from "./audio-bar";
 import { useAudio } from "@/lib/hooks/useAudio";
 import { SkipBack, SkipForward } from "lucide-react";
-import { cn } from "@/lib/utils";
 import VolumeBar from "./volume-bar";
 
 export default function AudioControls() {
@@ -64,9 +61,6 @@ export default function AudioControls() {
   return (
     <>
       <audio ref={audioRef} />
-      <Stage
-        className={cn("z-10", audioRef.current ? "bottom-20" : "bottom-0")}
-      />
       {audioRef.current && (
         <div className="bg-background relative z-10 flex h-20 w-full items-center px-2">
           <div className="relative flex w-full items-center justify-between">
@@ -96,7 +90,7 @@ export default function AudioControls() {
               <AudioBar />
             </div>
 
-            <VolumeBar />
+            <VolumeBar className="mr-1" />
           </div>
         </div>
       )}

@@ -60,7 +60,7 @@ function SpecialBackgroundWrapper({
   if (type === "default") return null;
 
   return (
-    <div className="absolute inset-0 z-1 h-full">
+    <div className="absolute inset-0 z-0 h-full">
       {type === "gradient" && <GradientBackground color={color} />}
       {type === "blur" && imageUrl && <BlurBackground imageUrl={imageUrl} />}
     </div>
