@@ -64,3 +64,31 @@ export const trackPreviewQueryOptions = (trackId: string | undefined) =>
       return res.json();
     },
   });
+
+export const artistDataQueryOptions = (artistId: string | undefined) =>
+  queryOptions({
+    queryKey: ["artist-data", artistId],
+    queryFn: async () => {
+      if (!artistId) throw new Error("Artist ID is required");
+      const res = await api.artists.getArtistData.$get({
+        query: { id: artistId },
+      });
+      if (!res.ok) throw new Error("Failed to fetch artist data");
+      return res.json();
+    },
+  });
+
+export const artistDataFromTrackIdQueryOptions = (
+  trackId: string | undefined,
+) =>
+  queryOptions({
+    queryKey: ["artist-data-from-track", trackId],
+    queryFn: async () => {
+      if (!trackId) throw new Error("Track ID is required");
+      const res = await api.artists.getArtistDataFromTrackId.$get({
+        query: { trackId },
+      });
+      if (!res.ok) throw new Error("Failed to fetch artist data from track ID");
+      return res.json();
+    },
+  });

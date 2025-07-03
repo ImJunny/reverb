@@ -8,13 +8,16 @@ type AudioContextType =
         name: string;
         artists: string[];
         imageUrl: string;
-      };
-      setTrackInfo: (info: {
-        id: string;
-        name: string;
-        artists: string[];
-        imageUrl: string;
-      }) => void;
+      } | null;
+
+      setTrackInfo: (
+        info: {
+          id: string;
+          name: string;
+          artists: string[];
+          imageUrl: string;
+        } | null,
+      ) => void;
       playing: boolean;
       setPlaying: React.Dispatch<React.SetStateAction<boolean>>;
       currentTime: number;

@@ -32,7 +32,7 @@ function RouteComponent() {
   if (!playlistInfo || !playlistItems) return <></>;
 
   return (
-    <BackgroundWrapper type="blur" moving className="flex-col">
+    <BackgroundWrapper type="blur" moving className="flex h-full flex-col">
       <div className="relative mx-3 mt-8 mb-4 flex w-full justify-center">
         <div className="mx-3 flex w-full max-w-5xl space-x-4">
           {playlistInfo.images ? (
@@ -53,7 +53,7 @@ function RouteComponent() {
             <h1 className="text-2xl font-extrabold tracking-wide md:text-4xl lg:text-6xl">
               {playlistInfo.name}
             </h1>
-            <div className="text-foreground/60 flex flex-col text-sm">
+            <div className="text-muted-foreground flex flex-col text-sm">
               <p className="text-sm">{playlistInfo.tracks.total} songs</p>
             </div>
             <div className="mt-4 flex space-x-2">

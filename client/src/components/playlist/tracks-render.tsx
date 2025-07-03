@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import { Pause, Play, PlusCircle } from "lucide-react";
 import { formatDuration } from "@/lib/scripts/formatDuration";
 import { useAudio } from "@/lib/hooks/useAudio";
+import { useSidebar } from "@/lib/hooks/useSidebar";
 
 export default function TracksRender({
   items,
@@ -13,6 +14,7 @@ export default function TracksRender({
   minimal?: boolean;
 }) {
   const { audioRef, trackInfo, setTrackInfo, playing, setPlaying } = useAudio();
+  const { firstOpen, setOpen, setFirstOpen } = useSidebar();
 
   const togglePlayback = () => {
     if (!audioRef.current) return;
@@ -27,7 +29,7 @@ export default function TracksRender({
   };
 
   const handleClick = (item: SpotifyApi.PlaylistTrackObject) => {
-    if (trackInfo.id === item.track!.id) {
+    if (trackInfo?.id === item.track?.id) {
       togglePlayback();
     } else {
       setTrackInfo({
@@ -37,6 +39,11 @@ export default function TracksRender({
         imageUrl: item.track!.album.images[0]?.url ?? "",
       });
     }
+
+    if (firstOpen) {
+      setOpen(true);
+      setFirstOpen(false);
+    }
   };
 
   if (!items) return <></>;
@@ -45,7 +52,7 @@ export default function TracksRender({
     <div className="h-full overflow-hidden">
       <div className="mb-3">
         <div className="grid grid-cols-2">
-          <div className="text-foreground/70 mt-2 flex space-x-3 px-3 text-xs">
+          <div className="text-muted-foreground mt-2 flex space-x-3 px-3 text-xs">
             <div className="flex w-5 items-center justify-center">
               <p>#</p>
             </div>
@@ -67,23 +74,23 @@ export default function TracksRender({
             >
               <div className="flex w-5 items-center justify-center">
                 <button onClick={() => handleClick(item)}>
-                  {playing && trackInfo.id === item.track!.id ? (
+                  {playing && trackInfo?.id === item.track!.id ? (
                     <Pause
                       size={16}
-                      className="hover:fill-foreground fill-foreground/70 hidden text-transparent group-hover:block hover:cursor-pointer"
+                      className="hover:fill-foreground fill-muted-foreground hidden text-transparent group-hover:block hover:cursor-pointer"
                     />
                   ) : (
                     <Play
                       size={16}
-                      className="hover:fill-foreground fill-foreground/70 hidden text-transparent group-hover:block hover:cursor-pointer"
+                      className="hover:fill-foreground fill-muted-foreground hidden text-transparent group-hover:block hover:cursor-pointer"
                     />
                   )}
                 </button>
 
                 <p
                   className={cn(
-                    "text-foreground/70 text-xs font-light group-hover:hidden",
-                    trackInfo.id === item.track!.id && "text-rose-500",
+                    "text-muted-foreground text-xs font-light group-hover:hidden",
+                    trackInfo?.id === item.track!.id && "text-rose-500",
                   )}
                 >
                   {idx + 1}
@@ -108,21 +115,21 @@ export default function TracksRender({
                 <span
                   className={cn(
                     !minimal && "text-sm",
-                    trackInfo.id === item.track!.id && "text-rose-500",
+                    trackInfo?.id === item.track!.id && "text-rose-500",
                   )}
                 >
                   {item.track!.name}
                 </span>
-                <span className="text-foreground/70 text-xs">
+                <span className="text-muted-foreground text-xs">
                   {minimal && <span>&nbsp;• </span>}
                   {item.track!.artists.map((artist) => artist.name).join(", ")}
                 </span>
               </div>
               <PlusCircle
                 size={16}
-                className="text-foreground/70 hover:text-foreground mr-4 ml-auto hidden group-hover:block hover:cursor-pointer"
+                className="text-muted-foreground hover:text-foreground mr-4 ml-auto hidden group-hover:block hover:cursor-pointer"
               />
-              <span className="text-foreground/70 ml-auto text-xs group-hover:ml-0">
+              <span className="text-muted-foreground ml-auto text-xs group-hover:ml-0">
                 {formatDuration(item.track!.duration_ms)}
               </span>
             </div>

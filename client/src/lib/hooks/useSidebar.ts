@@ -1,4 +1,5 @@
-import type { SidebarTypes } from "@/components/providers/sidebar-provider";
+import type { SidebarType } from "@/components/providers/sidebar-provider";
+
 import {
   createContext,
   useContext,
@@ -9,8 +10,10 @@ import {
 type SidebarContextType = {
   open: boolean;
   setOpen: Dispatch<SetStateAction<boolean>>;
-  type: SidebarTypes;
-  setType: Dispatch<SetStateAction<SidebarTypes>>;
+  type: SidebarType;
+  setType: Dispatch<SetStateAction<SidebarType>>;
+  firstOpen: boolean;
+  setFirstOpen: Dispatch<SetStateAction<boolean>>;
 };
 
 export const SidebarContext = createContext<SidebarContextType | undefined>(

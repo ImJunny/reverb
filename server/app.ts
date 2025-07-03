@@ -6,6 +6,7 @@ import { usersRoute } from "./routes/users";
 import { logger } from "hono/logger";
 import { playlistsRoute } from "./routes/playlists";
 import { tracksRoute } from "./routes/tracks";
+import { artistsRoute } from "./routes/artists";
 
 // Main app instance uses logger for debugging and CORS for cross-origin requests,
 // specifically to allow requests from the frontend running on 5173
@@ -26,7 +27,8 @@ const apiRoutes = app
   .route("/auth", authRoute)
   .route("/users", usersRoute)
   .route("/playlists", playlistsRoute)
-  .route("/tracks", tracksRoute);
+  .route("/tracks", tracksRoute)
+  .route("/artists", artistsRoute);
 
 export default app;
 export type ApiRoutes = typeof apiRoutes;

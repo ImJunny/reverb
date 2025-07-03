@@ -13,8 +13,8 @@ export const playlistsRoute = new Hono()
   .get("/getCurrentUserPlaylists", async (c) => {
     try {
       const accessToken = c.get("access_token");
-      const userProfileInfo = await getCurrentUserPlaylists(accessToken);
-      return c.json(userProfileInfo, 200);
+      const playlists = await getCurrentUserPlaylists(accessToken);
+      return c.json(playlists, 200);
     } catch (error: any) {
       return c.json(
         {

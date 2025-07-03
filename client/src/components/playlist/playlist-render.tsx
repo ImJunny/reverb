@@ -23,7 +23,7 @@ export default function PlaylistRender({
 
   return (
     <Card
-      className="flex w-full overflow-hidden p-0"
+      className="flex w-full p-0"
       style={{
         backgroundColor: color
           ? `color-mix(in srgb, ${color} 95%, white 5%)`
@@ -38,7 +38,7 @@ export default function PlaylistRender({
         />
         <div>
           <h1 className="text-3xl font-bold">{playlistInfo.name}</h1>
-          <div className="text-foreground/90 flex flex-col text-xs">
+          <div className="text-muted-foreground flex flex-col text-xs">
             <p>{playlistInfo.tracks.total} songs</p>
           </div>
         </div>

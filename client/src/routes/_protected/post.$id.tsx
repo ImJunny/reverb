@@ -79,7 +79,7 @@ function RouteComponent() {
           <div className="flex items-center text-xs">
             <div className="h-6 w-6 rounded-full bg-blue-200" />
             <span className="ml-2">@johnsmith</span>
-            <span className="text-foreground/60">&nbsp;• 1hr ago</span>
+            <span className="text-muted-foreground">&nbsp;• 1hr ago</span>
           </div>
           <h1 className="text-xl font-semibold">
             Hello this is a test playlist!
@@ -147,10 +147,10 @@ function RouteComponent() {
             <h1>Recently viewed</h1>
             <p className="text-muted-foreground">Clear</p>
           </div>
-          <div className="text-foreground/80 flex flex-col space-y-2">
+          <div className="text-muted-foreground flex flex-col space-y-2">
             {recentPosts.map((post, idx) => (
-              <>
-                <div key={post.id} className="flex flex-col space-y-2 py-2">
+              <div key={post.id}>
+                <div className="flex flex-col space-y-2 py-2">
                   <div className="flex items-center space-x-2">
                     <div className="h-6 w-6 rounded-full bg-blue-200" />
                     <span className="text-foreground">{post.username}</span>
@@ -166,7 +166,7 @@ function RouteComponent() {
                   </div>
                 </div>
                 {idx !== recentPosts.length - 1 && <Separator />}
-              </>
+              </div>
             ))}
           </div>
         </Card>

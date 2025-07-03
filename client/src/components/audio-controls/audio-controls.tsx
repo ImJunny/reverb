@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useEffect } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { trackPreviewQueryOptions } from "@/lib/api-options";
@@ -12,7 +13,7 @@ export default function AudioControls() {
   const queryClient = useQueryClient();
 
   const { data: previewData } = useQuery({
-    ...trackPreviewQueryOptions(trackInfo.id),
+    ...trackPreviewQueryOptions(trackInfo?.id),
     enabled: !!trackInfo,
     placeholderData: (prev) => prev,
   });
@@ -24,8 +25,8 @@ export default function AudioControls() {
       setPlaying(true);
     }
 
-    if (previewData?.link) {
-      audioRef.current.src = previewData.link;
+    if (previewData?.audio_src) {
+      audioRef.current.src = previewData.audio_src;
       audioRef.current.play();
       setPlaying(true);
     }
@@ -33,7 +34,7 @@ export default function AudioControls() {
 
   // Pause and reset current time when track changes ONLY if preview is NOT cached
   useEffect(() => {
-    if (!trackInfo.id) return;
+    if (!trackInfo) return;
     const cachedPreview = queryClient.getQueryData(
       trackPreviewQueryOptions(trackInfo.id).queryKey,
     );
@@ -45,7 +46,7 @@ export default function AudioControls() {
         audioRef.current.currentTime = 0;
       }
     }
-  }, [trackInfo.id]);
+  }, [trackInfo?.id]);
 
   // Handle audio track end
   useEffect(() => {
@@ -61,7 +62,7 @@ export default function AudioControls() {
   return (
     <>
       <audio ref={audioRef} />
-      {audioRef.current && (
+      {audioRef.current && trackInfo && (
         <div className="bg-background relative z-10 flex h-20 w-full items-center px-2">
           <div className="relative flex w-full items-center justify-between">
             <div className="flex w-full max-w-sm items-center overflow-hidden">

@@ -2,6 +2,7 @@ import { createContext, useContext } from "react";
 
 type BackgroundContextType = {
   color: string;
+  resetColor: () => void;
   imageUrl: string;
   setImageUrl: (url: string) => void;
 };

@@ -7,12 +7,7 @@ export function AudioProvider({ children }: { children: ReactNode }) {
     name: string;
     artists: string[];
     imageUrl: string;
-  }>({
-    id: "",
-    name: "",
-    artists: [],
-    imageUrl: "",
-  });
+  } | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [playing, setPlaying] = useState(true);
   const [currentTime, setCurrentTime] = useState(0);

@@ -149,7 +149,7 @@ export async function getPlaylistInfo(
 export async function getPlaylistItems(
   accessToken: string,
   playlistId: string,
-  limit: number = 40,
+  limit: number = 50,
   offset: number = 0
 ): Promise<SpotifyApi.PlaylistTrackResponse> {
   const res = await axios.get(
@@ -204,4 +204,32 @@ export async function getTrackData(
   });
   const data = await res.data;
   return data;
+}
+
+// get artist data
+export async function getArtistData(
+  accessToken: string,
+  artistId: string
+): Promise<SpotifyApi.ArtistObjectFull> {
+  const res = await axios.get(
+    `https://api.spotify.com/v1/artists/${artistId}`,
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  const data = await res.data;
+  return data;
+}
+
+// get artist data from track id
+export async function getArtistDataFromTrackId(
+  accessToken: string,
+  trackId: string
+): Promise<SpotifyApi.ArtistObjectFull> {
+  const trackData = await getTrackData(accessToken, trackId);
+  const artistId = trackData.artists[0]?.id;
+  if (!artistId) throw new Error("Artist not found");
+  return getArtistData(accessToken, artistId);
 }

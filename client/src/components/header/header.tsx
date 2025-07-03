@@ -3,7 +3,7 @@ import ProfileDropdown from "./profile-dropdown";
 import SearchBar from "./search-bar";
 import Logo from "@/assets/logo.svg?react";
 import { useRouter } from "@tanstack/react-router";
-import SidebarOptions from "../sidebar/sidebar-options";
+import SidebarToggle from "../sidebar/sidebar-toggle";
 
 export default function Header() {
   const router = useRouter();
@@ -37,7 +37,7 @@ export default function Header() {
 
       <SearchBar />
       <div className="flex h-full items-center space-x-3">
-        <SidebarOptions />
+        <SidebarToggle />
         <button className="text-muted-foreground hover:text-foreground disabled:text-background-variant cursor-pointer transition-colors duration-100 disabled:cursor-default">
           <Plus size={20} />
         </button>

@@ -96,7 +96,7 @@ export default function StageSidebar() {
                 </div>
                 <CircleMinus
                   size={16}
-                  className="text-foreground/60 hover:text-foreground mr-2 ml-auto hidden group-hover:block hover:cursor-pointer"
+                  className="text-muted-foreground hover:text-foreground mr-2 ml-auto hidden group-hover:block hover:cursor-pointer"
                   onClick={() => {
                     setSongs((prev) => prev.filter((_, i) => i !== index));
                   }}
