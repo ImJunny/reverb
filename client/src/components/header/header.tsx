@@ -14,7 +14,7 @@ export default function Header() {
   return (
     <nav className="bg-background sticky top-0 z-1 flex h-16 items-center gap-6 p-3">
       <div className="ml-3 hidden flex-col space-y-1 sm:flex">
-        <Logo className="h-7 w-auto cursor-pointer" onClick={handleClick} />
+        <Logo className="h-6 w-auto cursor-pointer" onClick={handleClick} />
       </div>
 
       <div className="flex items-center space-x-2">

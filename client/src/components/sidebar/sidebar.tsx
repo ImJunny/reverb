@@ -18,13 +18,14 @@ export default function RightSidebarWrapper() {
   return (
     <div className="bg-muted hidden h-full w-full max-w-80 flex-col overflow-hidden rounded-sm lg:flex">
       {/* Header */}
-      <div className="text-muted-foreground my-4 grid shrink-0 grid-cols-3 items-center justify-items-center gap-2 px-3 text-sm font-semibold">
+      <div className="text-muted-foreground mt-3 mb-3 flex shrink-0 items-center px-3 text-xs font-semibold">
         {sidebarTypes.map((sidebarType) => (
           <p
             key={sidebarType}
             className={cn(
-              "cursor-pointer",
-              type === sidebarType && "text-foreground",
+              "flex cursor-pointer items-center p-3 decoration-rose-500 transition-colors duration-100 hover:bg-white/10",
+              type === sidebarType &&
+                "text-foreground underline decoration-3 underline-offset-10",
             )}
             onClick={() => handleClick(sidebarType)}
           >
@@ -35,14 +36,16 @@ export default function RightSidebarWrapper() {
 
       {/* Scrollable content wrapper */}
       <div className="w-full overflow-hidden">
-        <ScrollArea className="h-full px-3 pb-3">
-          {type === "listening" ? (
-            <ListeningPanel />
-          ) : type === "queue" ? (
-            <QueuePanel />
-          ) : type === "bookmarks" ? (
-            <BookmarksPanel />
-          ) : null}
+        <ScrollArea className="h-full px-3">
+          <div className="mb-3">
+            {type === "listening" ? (
+              <ListeningPanel />
+            ) : type === "queue" ? (
+              <QueuePanel />
+            ) : type === "bookmarks" ? (
+              <BookmarksPanel />
+            ) : null}
+          </div>
         </ScrollArea>
       </div>
     </div>

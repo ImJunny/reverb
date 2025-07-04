@@ -28,7 +28,7 @@ function RootComponent() {
         <SidebarProvider>
           <div className="flex h-screen flex-col">
             <Header />
-            <div className="mx-2 flex flex-1 gap-x-2 overflow-hidden">
+            <div className="mx-2 mb-2 flex flex-1 gap-x-2 overflow-hidden">
               <Sidebar />
               <div className="w-full">
                 <Outlet />

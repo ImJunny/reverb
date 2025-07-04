@@ -33,7 +33,10 @@ export default function ProfileDropdown() {
           className="h-9 w-9 rounded-full object-cover"
         />
       </DropdownMenuTrigger>
-      <DropdownMenuContent sideOffset={14} className="w-42">
+      <DropdownMenuContent
+        sideOffset={14}
+        className="bg-card w-42 rounded-xs border-none shadow-lg"
+      >
         <DropdownMenuItem asChild>
           <Link to="/profile" className="">
             <User />
@@ -44,8 +47,8 @@ export default function ProfileDropdown() {
           <Settings />
           Settings
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleSignout} className="text-rose-500">
-          <LogOut className="text-rose-500" />
+        <DropdownMenuItem onClick={handleSignout} className="text-red-500">
+          <LogOut className="text-red-500" />
           Logout
         </DropdownMenuItem>
       </DropdownMenuContent>

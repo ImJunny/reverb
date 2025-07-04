@@ -126,7 +126,7 @@ export async function getCurrentUserPlaylists(
 }
 
 // get playlist info
-export async function getPlaylistInfo(
+export async function getplaylistData(
   accessToken: string,
   playlistId: string
 ): Promise<SpotifyApi.PlaylistObjectFull> {

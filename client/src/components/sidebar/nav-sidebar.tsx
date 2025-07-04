@@ -4,7 +4,6 @@ import {
   DiscAlbum,
   Home,
   MessageCircleMore,
-  User,
   Users,
 } from "lucide-react";
 import { Separator } from "../ui/separator";
@@ -28,13 +27,6 @@ const sidebar_options = {
       label: "Explore",
       icon: <Compass size={20} />,
     },
-  ],
-  social: [
-    {
-      to: "/friends",
-      label: "Friends",
-      icon: <User size={20} />,
-    },
     {
       to: "/groups",
       label: "Groups",
@@ -46,7 +38,7 @@ const sidebar_options = {
       icon: <MessageCircleMore size={20} />,
     },
   ],
-  playlist: [
+  personal: [
     {
       to: "/playlists",
       label: "Playlists",

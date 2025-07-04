@@ -5,21 +5,21 @@ import { useEffect } from "react";
 import { useBackground } from "@/lib/hooks/useBackground";
 
 export default function PlaylistRender({
-  playlistInfo,
+  playlistData,
   items,
 }: {
-  playlistInfo: SpotifyApi.PlaylistObjectFull;
+  playlistData: SpotifyApi.PlaylistObjectFull;
   items: SpotifyApi.PlaylistTrackObject[];
 }) {
   const { color, setImageUrl } = useBackground();
   useEffect(() => {
     (async () => {
-      if (playlistInfo?.images[0]?.url) {
-        const imageUrl = playlistInfo.images[0].url;
+      if (playlistData?.images[0]?.url) {
+        const imageUrl = playlistData.images[0].url;
         setImageUrl(imageUrl);
       }
     })();
-  }, [playlistInfo, setImageUrl]);
+  }, [playlistData, setImageUrl]);
 
   return (
     <Card
@@ -32,14 +32,14 @@ export default function PlaylistRender({
     >
       <div className="relative flex flex-row items-center space-x-3 px-3 py-2">
         <img
-          src={playlistInfo.images[0]?.url}
-          alt={playlistInfo.name}
+          src={playlistData.images[0]?.url}
+          alt={playlistData.name}
           className={cn("h-20 w-20 rounded-sm object-cover shadow-md")}
         />
         <div>
-          <h1 className="text-3xl font-bold">{playlistInfo.name}</h1>
+          <h1 className="text-3xl font-bold">{playlistData.name}</h1>
           <div className="text-muted-foreground flex flex-col text-xs">
-            <p>{playlistInfo.tracks.total} songs</p>
+            <p>{playlistData.tracks.total} songs</p>
           </div>
         </div>
       </div>

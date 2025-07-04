@@ -7,93 +7,60 @@ import TracksRender from "@/components/playlist/tracks-render";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import {
-  playlistInfoQueryOptions,
+  playlistDataQueryOptions,
   playlistItemsQueryOptions,
 } from "@/lib/api-options";
 import BackgroundWrapper from "@/components/page/background-wrapper";
-import { Bookmark, Disc, Heart, MessageCircle, Share } from "lucide-react";
+import {
+  Bookmark,
+  Disc,
+  Ellipsis,
+  Heart,
+  MessageCircle,
+  Share,
+} from "lucide-react";
+import RecentlyViewedCard from "@/components/page/recenty-viewed-card";
 
 export const Route = createFileRoute("/_protected/post/$id")({
   component: RouteComponent,
 });
 
-const recentPosts = [
-  {
-    id: 1,
-    username: "@johnsmith",
-    timeAgo: "1hr ago",
-    title: "Hello this is a test playlist!",
-    likes: 12,
-    comments: 5,
-    suggestions: 0,
-  },
-  {
-    id: 2,
-    username: "@janedoe",
-    timeAgo: "2hr ago",
-    title: "Another test playlist!",
-    likes: 8,
-    comments: 2,
-    suggestions: 1,
-  },
-  {
-    id: 3,
-    username: "@alexdoe",
-    timeAgo: "3hr ago",
-    title: "Yet another test playlist!",
-    likes: 5,
-    comments: 1,
-    suggestions: 0,
-  },
-  {
-    id: 4,
-    username: "@maryjane",
-    timeAgo: "4hr ago",
-    title: "This is a test playlist!",
-    likes: 20,
-    comments: 10,
-    suggestions: 3,
-  },
-  {
-    id: 5,
-    username: "@bobsmith",
-    timeAgo: "5hr ago",
-    title: "Test playlist example!",
-    likes: 15,
-    comments: 7,
-    suggestions: 2,
-  },
-];
-
 function RouteComponent() {
   const { id } = useParams({ from: "/_protected/post/$id" });
-  const { data: playlistInfo } = useQuery(playlistInfoQueryOptions(id));
+  const { data: playlistData } = useQuery(playlistDataQueryOptions(id));
   const { data: playlistItems } = useQuery(playlistItemsQueryOptions(id));
 
-  if (!playlistInfo || !playlistItems) return <></>;
+  if (!playlistData || !playlistItems) return <></>;
 
   return (
     <BackgroundWrapper type="blur" className="p-3">
       <Card className="flex w-full max-w-2xl p-0" transparent>
-        <div className="flex flex-col space-y-3 p-3">
-          <div className="flex items-center text-xs">
-            <div className="h-6 w-6 rounded-full bg-blue-200" />
-            <span className="ml-2">@johnsmith</span>
-            <span className="text-muted-foreground">&nbsp;• 1hr ago</span>
+        <div className="flex flex-col p-3">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center text-xs">
+              <img
+                src="https://picsum.photos/seed/123/200/300"
+                alt="Avatar"
+                className="h-6 w-6 rounded-full"
+              />
+              <span className="ml-2">@jerryyy_45</span>
+              <span className="text-muted-foreground">&nbsp;• 3d ago</span>
+            </div>
+            <Ellipsis size={20} className="text-muted-foreground" />
           </div>
-          <h1 className="text-xl font-semibold">
-            Hello this is a test playlist!
+          <h1 className="my-2 text-xl font-semibold">
+            Any song recommendations?
           </h1>
-          <div className="flex space-x-2">
+          <div className="mb-3 flex items-center space-x-2">
             <Badge>Help</Badge>
-            <Badge className="bg-ring text-foreground">Rap</Badge>
-            <Badge className="bg-ring text-foreground">Hip Hop</Badge>
+            <Badge className="text-secondary-foreground bg-white/20">Rnb</Badge>
+            <Badge className="text-secondary-foreground bg-white/20">Pop</Badge>
           </div>
           <PlaylistRender
-            playlistInfo={playlistInfo}
+            playlistData={playlistData}
             items={playlistItems.items}
           />
-          <div className="my-1 flex items-center space-x-4">
+          <div className="mt-3 flex items-center space-x-4">
             <Heart size={20} />
             <MessageCircle size={20} />
             <Disc size={20} />
@@ -117,11 +84,15 @@ function RouteComponent() {
       </Card>
 
       <div className="sticky top-3 ml-3 hidden w-72 flex-col space-y-3 self-start md:flex">
-        <Card className="w-72 flex-col space-y-2 md:flex" transparent>
+        <Card className="flex-col space-y-2 md:flex" transparent>
           <div className="flex space-x-3">
-            <div className="h-18 w-18 shrink-0 rounded-full bg-blue-200" />
+            <img
+              src="https://picsum.photos/seed/123/200/300"
+              alt="profile"
+              className="h-18 w-18 shrink-0 rounded-full object-cover"
+            />
             <div className="flex flex-col justify-center space-y-2">
-              <h1 className="text-sm">@johnsmith</h1>
+              <h1 className="text-sm">@jerryyy_45</h1>
               <div className="flex gap-x-3 text-xs">
                 <div className="flex flex-col">
                   <span>2</span>
@@ -138,38 +109,11 @@ function RouteComponent() {
               </div>
             </div>
           </div>
-          <p className="text-xs">Lorem ipsum this is an example bio.</p>
+          <p className="text-xs">Just another listener here...</p>
           <Button>Follow</Button>
         </Card>
 
-        <Card transparent className="flex flex-col text-xs">
-          <div className="mb-1 flex items-center justify-between">
-            <h1>Recently viewed</h1>
-            <p className="text-muted-foreground">Clear</p>
-          </div>
-          <div className="text-muted-foreground flex flex-col space-y-2">
-            {recentPosts.map((post, idx) => (
-              <div key={post.id}>
-                <div className="flex flex-col space-y-2 py-2">
-                  <div className="flex items-center space-x-2">
-                    <div className="h-6 w-6 rounded-full bg-blue-200" />
-                    <span className="text-foreground">{post.username}</span>
-                    <span className="text-muted-foreground">
-                      &nbsp;• {post.timeAgo}
-                    </span>
-                  </div>
-                  <p>{post.title}</p>
-                  <div className="flex space-x-2">
-                    <span>{post.likes} likes</span>
-                    <span>{post.comments} comments</span>
-                    <span>{post.suggestions} suggestions</span>
-                  </div>
-                </div>
-                {idx !== recentPosts.length - 1 && <Separator />}
-              </div>
-            ))}
-          </div>
-        </Card>
+        <RecentlyViewedCard />
       </div>
     </BackgroundWrapper>
   );

@@ -1,7 +1,7 @@
 import { createFileRoute, useParams } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
 import {
-  playlistInfoQueryOptions,
+  playlistDataQueryOptions,
   playlistItemsQueryOptions,
 } from "@/lib/api-options";
 import { cn } from "@/lib/utils";
@@ -17,28 +17,28 @@ export const Route = createFileRoute("/_protected/playlist/$id")({
 
 function RouteComponent() {
   const { id } = useParams({ from: "/_protected/playlist/$id" });
-  const { data: playlistInfo } = useQuery(playlistInfoQueryOptions(id));
+  const { data: playlistData } = useQuery(playlistDataQueryOptions(id));
   const { data: playlistItems } = useQuery(playlistItemsQueryOptions(id));
 
   const { setImageUrl } = useBackground();
 
   useEffect(() => {
-    if (playlistInfo?.images && playlistInfo.images[0]?.url) {
-      const imageUrl = playlistInfo.images[0].url;
+    if (playlistData?.images && playlistData.images[0]?.url) {
+      const imageUrl = playlistData.images[0].url;
       setImageUrl(imageUrl);
     }
-  }, [playlistInfo, setImageUrl]);
+  }, [playlistData, setImageUrl]);
 
-  if (!playlistInfo || !playlistItems) return <></>;
+  if (!playlistData || !playlistItems) return <></>;
 
   return (
     <BackgroundWrapper type="blur" moving className="flex h-full flex-col">
       <div className="relative mx-3 mt-8 mb-4 flex w-full justify-center">
         <div className="mx-3 flex w-full max-w-5xl space-x-4">
-          {playlistInfo.images ? (
+          {playlistData.images ? (
             <img
-              src={playlistInfo.images[0]?.url}
-              alt={playlistInfo.name}
+              src={playlistData.images[0]?.url}
+              alt={playlistData.name}
               className={cn(
                 "h-29 w-29 object-cover shadow-2xl sm:h-40 sm:w-40",
               )}
@@ -48,13 +48,13 @@ function RouteComponent() {
           )}
           <div>
             <p className="text-sm">
-              {playlistInfo.public ? "Public" : "Private"}
+              {playlistData.public ? "Public" : "Private"}
             </p>
             <h1 className="text-2xl font-extrabold tracking-wide md:text-4xl lg:text-6xl">
-              {playlistInfo.name}
+              {playlistData.name}
             </h1>
             <div className="text-muted-foreground flex flex-col text-sm">
-              <p className="text-sm">{playlistInfo.tracks.total} songs</p>
+              <p className="text-sm">{playlistData.tracks.total} songs</p>
             </div>
             <div className="mt-4 flex space-x-2">
               <Button className="h-6">Playlist</Button>

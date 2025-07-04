@@ -14,6 +14,8 @@ import { Route as ProtectedRouteImport } from './routes/_protected'
 import { Route as ProtectedIndexRouteImport } from './routes/_protected/index'
 import { Route as ProtectedProfileRouteImport } from './routes/_protected/profile'
 import { Route as ProtectedPlaylistsRouteImport } from './routes/_protected/playlists'
+import { Route as ProtectedMessagesRouteImport } from './routes/_protected/messages'
+import { Route as ProtectedGroupsRouteImport } from './routes/_protected/groups'
 import { Route as ProtectedExploreRouteImport } from './routes/_protected/explore'
 import { Route as ProtectedPostIdRouteImport } from './routes/_protected/post.$id'
 import { Route as ProtectedPlaylistIdRouteImport } from './routes/_protected/playlist.$id'
@@ -42,6 +44,16 @@ const ProtectedPlaylistsRoute = ProtectedPlaylistsRouteImport.update({
   path: '/playlists',
   getParentRoute: () => ProtectedRoute,
 } as any)
+const ProtectedMessagesRoute = ProtectedMessagesRouteImport.update({
+  id: '/messages',
+  path: '/messages',
+  getParentRoute: () => ProtectedRoute,
+} as any)
+const ProtectedGroupsRoute = ProtectedGroupsRouteImport.update({
+  id: '/groups',
+  path: '/groups',
+  getParentRoute: () => ProtectedRoute,
+} as any)
 const ProtectedExploreRoute = ProtectedExploreRouteImport.update({
   id: '/explore',
   path: '/explore',
@@ -61,6 +73,8 @@ const ProtectedPlaylistIdRoute = ProtectedPlaylistIdRouteImport.update({
 export interface FileRoutesByFullPath {
   '/signin': typeof SigninRoute
   '/explore': typeof ProtectedExploreRoute
+  '/groups': typeof ProtectedGroupsRoute
+  '/messages': typeof ProtectedMessagesRoute
   '/playlists': typeof ProtectedPlaylistsRoute
   '/profile': typeof ProtectedProfileRoute
   '/': typeof ProtectedIndexRoute
@@ -70,6 +84,8 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/signin': typeof SigninRoute
   '/explore': typeof ProtectedExploreRoute
+  '/groups': typeof ProtectedGroupsRoute
+  '/messages': typeof ProtectedMessagesRoute
   '/playlists': typeof ProtectedPlaylistsRoute
   '/profile': typeof ProtectedProfileRoute
   '/': typeof ProtectedIndexRoute
@@ -81,6 +97,8 @@ export interface FileRoutesById {
   '/_protected': typeof ProtectedRouteWithChildren
   '/signin': typeof SigninRoute
   '/_protected/explore': typeof ProtectedExploreRoute
+  '/_protected/groups': typeof ProtectedGroupsRoute
+  '/_protected/messages': typeof ProtectedMessagesRoute
   '/_protected/playlists': typeof ProtectedPlaylistsRoute
   '/_protected/profile': typeof ProtectedProfileRoute
   '/_protected/': typeof ProtectedIndexRoute
@@ -92,6 +110,8 @@ export interface FileRouteTypes {
   fullPaths:
     | '/signin'
     | '/explore'
+    | '/groups'
+    | '/messages'
     | '/playlists'
     | '/profile'
     | '/'
@@ -101,6 +121,8 @@ export interface FileRouteTypes {
   to:
     | '/signin'
     | '/explore'
+    | '/groups'
+    | '/messages'
     | '/playlists'
     | '/profile'
     | '/'
@@ -111,6 +133,8 @@ export interface FileRouteTypes {
     | '/_protected'
     | '/signin'
     | '/_protected/explore'
+    | '/_protected/groups'
+    | '/_protected/messages'
     | '/_protected/playlists'
     | '/_protected/profile'
     | '/_protected/'
@@ -160,6 +184,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ProtectedPlaylistsRouteImport
       parentRoute: typeof ProtectedRoute
     }
+    '/_protected/messages': {
+      id: '/_protected/messages'
+      path: '/messages'
+      fullPath: '/messages'
+      preLoaderRoute: typeof ProtectedMessagesRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
+    '/_protected/groups': {
+      id: '/_protected/groups'
+      path: '/groups'
+      fullPath: '/groups'
+      preLoaderRoute: typeof ProtectedGroupsRouteImport
+      parentRoute: typeof ProtectedRoute
+    }
     '/_protected/explore': {
       id: '/_protected/explore'
       path: '/explore'
@@ -186,6 +224,8 @@ declare module '@tanstack/react-router' {
 
 interface ProtectedRouteChildren {
   ProtectedExploreRoute: typeof ProtectedExploreRoute
+  ProtectedGroupsRoute: typeof ProtectedGroupsRoute
+  ProtectedMessagesRoute: typeof ProtectedMessagesRoute
   ProtectedPlaylistsRoute: typeof ProtectedPlaylistsRoute
   ProtectedProfileRoute: typeof ProtectedProfileRoute
   ProtectedIndexRoute: typeof ProtectedIndexRoute
@@ -195,6 +235,8 @@ interface ProtectedRouteChildren {
 
 const ProtectedRouteChildren: ProtectedRouteChildren = {
   ProtectedExploreRoute: ProtectedExploreRoute,
+  ProtectedGroupsRoute: ProtectedGroupsRoute,
+  ProtectedMessagesRoute: ProtectedMessagesRoute,
   ProtectedPlaylistsRoute: ProtectedPlaylistsRoute,
   ProtectedProfileRoute: ProtectedProfileRoute,
   ProtectedIndexRoute: ProtectedIndexRoute,

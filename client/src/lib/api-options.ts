@@ -28,11 +28,11 @@ export const currentUserPlaylistsQueryOptions = queryOptions({
   },
 });
 
-export const playlistInfoQueryOptions = (playlistId: string) =>
+export const playlistDataQueryOptions = (playlistId: string) =>
   queryOptions({
     queryKey: ["playlist-info", playlistId],
     queryFn: async () => {
-      const res = await api.playlists.getPlaylistInfo[":id"].$get({
+      const res = await api.playlists.getplaylistData[":id"].$get({
         param: { id: playlistId },
       });
       if (!res.ok) throw new Error("Failed to fetch playlist info");

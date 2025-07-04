@@ -11,7 +11,11 @@ export const Route = createFileRoute("/_protected/playlists")({
 function RouteComponent() {
   const { data } = useQuery(currentUserPlaylistsQueryOptions);
   return (
-    <BackgroundWrapper className="flex-col p-3">
+    <BackgroundWrapper
+      className="flex-col p-3"
+      type="gradient"
+      options={{ resetColor: true }}
+    >
       <h1 className="text-lg font-semibold">Your playlists</h1>
       <div className="mt-1 flex flex-wrap gap-2">
         {data?.items.map((playlist) => (

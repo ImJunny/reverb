@@ -1,6 +1,6 @@
 import {
   getCurrentUserPlaylists,
-  getPlaylistInfo,
+  getplaylistData,
   getPlaylistItems,
 } from "@server/lib/spotify-helpers";
 import { authMiddleware } from "@server/utils/auth-middleware";
@@ -14,6 +14,7 @@ export const playlistsRoute = new Hono()
     try {
       const accessToken = c.get("access_token");
       const playlists = await getCurrentUserPlaylists(accessToken);
+      console.log(playlists);
       return c.json(playlists, 200);
     } catch (error: any) {
       return c.json(
@@ -27,7 +28,7 @@ export const playlistsRoute = new Hono()
   })
 
   // GET playlist info
-  .get("/getPlaylistInfo/:id", async (c) => {
+  .get("/getplaylistData/:id", async (c) => {
     const playlistId = c.req.param("id");
     if (!playlistId) {
       return c.json({ message: "Playlist ID is required" }, 400);
@@ -35,8 +36,8 @@ export const playlistsRoute = new Hono()
 
     try {
       const accessToken = c.get("access_token");
-      const playlistInfo = await getPlaylistInfo(accessToken, playlistId);
-      return c.json(playlistInfo, 200);
+      const playlistData = await getplaylistData(accessToken, playlistId);
+      return c.json(playlistData, 200);
     } catch (error: any) {
       return c.json(
         { message: "Failed to fetch playlist info", error: error.message },

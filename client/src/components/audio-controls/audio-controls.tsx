@@ -63,7 +63,7 @@ export default function AudioControls() {
     <>
       <audio ref={audioRef} />
       {audioRef.current && trackInfo && (
-        <div className="bg-background relative z-10 flex h-20 w-full items-center px-2">
+        <div className="bg-background relative z-10 -mt-2 flex h-20 w-full items-center px-2">
           <div className="relative flex w-full items-center justify-between">
             <div className="flex w-full max-w-sm items-center overflow-hidden">
               {trackInfo.imageUrl && (
