@@ -6,7 +6,8 @@
   "license": "MIT",
   "homepage": "https://github.com/stevedylandev/bhvr",
   "workspaces": [
-    "./client"
+    "./client",
+    "./shared"
   ],
   "scripts": {
     "dev:client": "cd client && bun run dev",
@@ -31,6 +32,7 @@
     "typescript": "^5.7.3"
   },
   "dependencies": {
+    "shared": "*",
     "@hono/node-server": "^1.14.4",
     "@hono/zod-validator": "^0.7.0",
     "@neondatabase/serverless": "^1.0.1",

@@ -14,7 +14,7 @@ export default function ProfileDropdown() {
   const router = useRouter();
 
   const handleSignout = async () => {
-    const res = await api.auth.signout.$post();
+    const res = await api.public.auth.signout.$post();
     if (res.ok) {
       router.navigate({
         to: "/signin",

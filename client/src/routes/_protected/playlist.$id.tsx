@@ -23,9 +23,8 @@ function RouteComponent() {
   const { setImageUrl } = useBackground();
 
   useEffect(() => {
-    if (playlistData?.images && playlistData.images[0]?.url) {
-      const imageUrl = playlistData.images[0].url;
-      setImageUrl(imageUrl);
+    if (playlistData?.image_url) {
+      setImageUrl(playlistData.image_url);
     }
   }, [playlistData, setImageUrl]);
 
@@ -35,9 +34,9 @@ function RouteComponent() {
     <BackgroundWrapper type="blur" moving className="flex h-full flex-col">
       <div className="relative mx-3 mt-8 mb-4 flex w-full justify-center">
         <div className="mx-3 flex w-full max-w-5xl space-x-4">
-          {playlistData.images ? (
+          {playlistData.image_url ? (
             <img
-              src={playlistData.images[0]?.url}
+              src={playlistData.image_url}
               alt={playlistData.name}
               className={cn(
                 "h-29 w-29 object-cover shadow-2xl sm:h-40 sm:w-40",
@@ -54,7 +53,7 @@ function RouteComponent() {
               {playlistData.name}
             </h1>
             <div className="text-muted-foreground flex flex-col text-sm">
-              <p className="text-sm">{playlistData.tracks.total} songs</p>
+              <p className="text-sm">{playlistData.total} songs</p>
             </div>
             <div className="mt-4 flex space-x-2">
               <Button className="h-6">Playlist</Button>
@@ -68,7 +67,7 @@ function RouteComponent() {
 
       <div className="flex w-full justify-center bg-black/25">
         <div className="mx-3 w-full max-w-5xl justify-center pb-3">
-          <TracksRender items={playlistItems.items} />
+          <TracksRender items={playlistItems} />
         </div>
       </div>
     </BackgroundWrapper>

@@ -1,8 +1,8 @@
 import axios from "axios";
 import * as cheerio from "cheerio";
 
-// get authorization URL
-export function getAuthorizationUrl() {
+// Get authorization URL
+export function getSpotifyAuthorizationUrl() {
   const { SPOTIFY_CLIENT_ID, SPOTIFY_REDIRECT_URI } = process.env;
   const scopes = encodeURIComponent(
     [
@@ -22,8 +22,8 @@ export function getAuthorizationUrl() {
   return authUrl;
 }
 
-// get tokens from authorization code
-export async function getTokenData(code: string) {
+// Get tokens from authorization code
+export async function getSpotifyTokenData(code: string) {
   const { SPOTIFY_REDIRECT_URI, SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } =
     process.env;
   const res = await axios.post(
@@ -48,8 +48,8 @@ export async function getTokenData(code: string) {
   return data;
 }
 
-// get user id from access token
-export async function getUserId(accessToken: string) {
+// Get user id from access token
+export async function getSpotifyUserId(accessToken: string) {
   const res = await axios.get("https://api.spotify.com/v1/me", {
     headers: {
       Authorization: `Bearer ${accessToken}`,
@@ -59,8 +59,8 @@ export async function getUserId(accessToken: string) {
   return data.id;
 }
 
-// get user top tracks from access token
-export async function getTopTracks(
+// Get user top tracks from access token
+export async function getSpotifyTopTracks(
   accessToken: string
 ): Promise<SpotifyApi.UsersTopTracksResponse> {
   const res = await axios.get(
@@ -75,8 +75,8 @@ export async function getTopTracks(
   return data;
 }
 
-// get new tokens from refresh token
-export async function getNewAccessToken(refreshToken: string) {
+// Get new tokens from refresh token
+export async function getSpotifyNewAccessToken(refreshToken: string) {
   const { SPOTIFY_CLIENT_ID, SPOTIFY_CLIENT_SECRET } = process.env;
   const res = await axios.post(
     "https://accounts.spotify.com/api/token",
@@ -99,8 +99,8 @@ export async function getNewAccessToken(refreshToken: string) {
   return data;
 }
 
-// get user profile info from user id
-export async function getCurrentUserProfile(
+// Get user profile info from user id
+export async function getSpotifyCurrentUserProfile(
   accessToken: string
 ): Promise<SpotifyApi.CurrentUsersProfileResponse> {
   const res = await axios.get("https://api.spotify.com/v1/me", {
@@ -112,8 +112,8 @@ export async function getCurrentUserProfile(
   return data;
 }
 
-// get current user playlists
-export async function getCurrentUserPlaylists(
+// Get current user playlists
+export async function getSpotifyCurrentUserPlaylists(
   accessToken: string
 ): Promise<SpotifyApi.ListOfCurrentUsersPlaylistsResponse> {
   const res = await axios.get("https://api.spotify.com/v1/me/playlists", {
@@ -125,8 +125,8 @@ export async function getCurrentUserPlaylists(
   return data;
 }
 
-// get playlist info
-export async function getplaylistData(
+// Get playlist info
+export async function getSpotifyPlaylistData(
   accessToken: string,
   playlistId: string
 ): Promise<SpotifyApi.PlaylistObjectFull> {
@@ -145,8 +145,8 @@ export async function getplaylistData(
   return data;
 }
 
-// get playlist tracks
-export async function getPlaylistItems(
+// Get playlist tracks
+export async function getSpotifyPlaylistItems(
   accessToken: string,
   playlistId: string,
   limit: number = 50,
@@ -170,8 +170,10 @@ export async function getPlaylistItems(
   return data;
 }
 
-// get track preview url
-export async function getTrackPreviewUrl(url: string): Promise<string | null> {
+// Get track preview url
+export async function getSpotifyTrackPreviewUrl(
+  url: string
+): Promise<string | null> {
   const response = await axios.get(url);
   const html = response.data;
   const $ = cheerio.load(html);
@@ -192,8 +194,8 @@ export async function getTrackPreviewUrl(url: string): Promise<string | null> {
   return previewUrl;
 }
 
-// get track data
-export async function getTrackData(
+// Get track data
+export async function getSpotifyTrackData(
   accessToken: string,
   trackId: string
 ): Promise<SpotifyApi.TrackObjectFull> {
@@ -206,8 +208,8 @@ export async function getTrackData(
   return data;
 }
 
-// get artist data
-export async function getArtistData(
+// Get artist data
+export async function getSpotifyArtistData(
   accessToken: string,
   artistId: string
 ): Promise<SpotifyApi.ArtistObjectFull> {
@@ -221,15 +223,4 @@ export async function getArtistData(
   );
   const data = await res.data;
   return data;
-}
-
-// get artist data from track id
-export async function getArtistDataFromTrackId(
-  accessToken: string,
-  trackId: string
-): Promise<SpotifyApi.ArtistObjectFull> {
-  const trackData = await getTrackData(accessToken, trackId);
-  const artistId = trackData.artists[0]?.id;
-  if (!artistId) throw new Error("Artist not found");
-  return getArtistData(accessToken, artistId);
 }

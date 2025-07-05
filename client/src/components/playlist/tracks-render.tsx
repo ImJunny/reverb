@@ -12,12 +12,13 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
+import type { PlaylistItem } from "shared/types";
 
 export default function TracksRender({
   items,
   minimal,
 }: {
-  items: SpotifyApi.PlaylistTrackObject[];
+  items: PlaylistItem[];
   minimal?: boolean;
 }) {
   const { audioRef, trackInfo, setTrackInfo, playing, setPlaying } = useAudio();
@@ -35,15 +36,15 @@ export default function TracksRender({
     }
   };
 
-  const handleClick = (item: SpotifyApi.PlaylistTrackObject) => {
-    if (trackInfo?.id === item.track?.id) {
+  const handleClick = (item: PlaylistItem) => {
+    if (trackInfo?.id === item.id) {
       togglePlayback();
     } else {
       setTrackInfo({
-        id: item.track!.id,
-        name: item.track!.name,
-        artists: item.track!.artists.map((artist) => artist.name),
-        imageUrl: item.track!.album.images[0]?.url ?? "",
+        id: item.id,
+        name: item.name,
+        artists: item.artists.map((artist) => artist.name),
+        imageUrl: item.album.images[0]?.url ?? "",
       });
     }
 
@@ -72,7 +73,7 @@ export default function TracksRender({
       <ScrollArea className={cn("h-full", minimal && "max-h-63")}>
         <div className={cn("flex flex-col")}>
           {items.map((item, idx) => (
-            <ContextMenu key={item.track!.id}>
+            <ContextMenu key={item.id}>
               <ContextMenuTrigger>
                 <div
                   className={cn(
@@ -82,7 +83,7 @@ export default function TracksRender({
                 >
                   <div className="flex w-5 items-center justify-center">
                     <button onClick={() => handleClick(item)}>
-                      {playing && trackInfo?.id === item.track!.id ? (
+                      {playing && trackInfo?.id === item.id ? (
                         <Pause
                           size={16}
                           className="hover:fill-foreground fill-muted-foreground hidden text-transparent group-hover:block hover:cursor-pointer"
@@ -98,7 +99,7 @@ export default function TracksRender({
                     <p
                       className={cn(
                         "text-muted-foreground text-xs font-light group-hover:hidden",
-                        trackInfo?.id === item.track!.id && "text-rose-500",
+                        trackInfo?.id === item.id && "text-rose-500",
                       )}
                     >
                       {idx + 1}
@@ -106,7 +107,7 @@ export default function TracksRender({
                   </div>
 
                   <img
-                    src={item.track!.album.images[0]?.url}
+                    src={item.album.images[0]?.url}
                     alt="track"
                     className={cn(
                       "h-9 w-9 rounded-xs object-cover",
@@ -123,16 +124,14 @@ export default function TracksRender({
                     <span
                       className={cn(
                         !minimal && "text-sm",
-                        trackInfo?.id === item.track!.id && "text-rose-500",
+                        trackInfo?.id === item.id && "text-rose-500",
                       )}
                     >
-                      {item.track!.name}
+                      {item.name}
                     </span>
                     <span className="text-muted-foreground text-xs">
                       {minimal && <span>&nbsp;• </span>}
-                      {item
-                        .track!.artists.map((artist) => artist.name)
-                        .join(", ")}
+                      {item.artists.map((artist) => artist.name).join(", ")}
                     </span>
                   </div>
                   <PlusCircle
@@ -140,7 +139,7 @@ export default function TracksRender({
                     className="text-muted-foreground hover:text-foreground mr-4 ml-auto hidden group-hover:block hover:cursor-pointer"
                   />
                   <span className="text-muted-foreground ml-auto text-xs group-hover:ml-0">
-                    {formatDuration(item.track!.duration_ms)}
+                    {formatDuration(item.duration_ms)}
                   </span>
                 </div>
               </ContextMenuTrigger>

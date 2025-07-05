@@ -3,14 +3,17 @@ import {
   getSession,
   updateSession,
 } from "@server/db/actions/session-actions";
-import { getNewAccessToken } from "@server/lib/spotify-helpers";
+import { getSpotifyNewAccessToken } from "@server/lib/spotify-helpers";
+import type { Context } from "hono";
 import { getCookie } from "hono/cookie";
 import { createMiddleware } from "hono/factory";
 
-type Variables = {
+export type Variables = {
   access_token: string;
   user_id: string;
 };
+
+export type ProtectedContext = Context<{ Variables: Variables }>;
 
 export const authMiddleware = createMiddleware<{ Variables: Variables }>(
   async (c, next) => {
@@ -22,7 +25,7 @@ export const authMiddleware = createMiddleware<{ Variables: Variables }>(
 
     if (session.expires_at < new Date()) {
       const refreshToken = await getRefreshToken(userId!);
-      const tokenData = await getNewAccessToken(refreshToken);
+      const tokenData = await getSpotifyNewAccessToken(refreshToken);
 
       await updateSession(
         userId,

@@ -10,7 +10,7 @@ import { SidebarProvider } from "@/components/providers/sidebar-provider";
 
 export const Route = createFileRoute("/_protected")({
   beforeLoad: async () => {
-    const res = await api.auth.session.$get();
+    const res = await api.public.auth.session.$get();
     const data = await res.json();
     if (data.userId === null) {
       throw redirect({

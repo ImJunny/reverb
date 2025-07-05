@@ -56,10 +56,7 @@ function RouteComponent() {
             <Badge className="text-secondary-foreground bg-white/20">Rnb</Badge>
             <Badge className="text-secondary-foreground bg-white/20">Pop</Badge>
           </div>
-          <PlaylistRender
-            playlistData={playlistData}
-            items={playlistItems.items}
-          />
+          <PlaylistRender playlistData={playlistData} items={playlistItems} />
           <div className="mt-3 flex items-center space-x-4">
             <Heart size={20} />
             <MessageCircle size={20} />
@@ -73,7 +70,7 @@ function RouteComponent() {
         <div className="flex flex-col space-y-3 p-3">
           <h2>Suggestions • {"5"}</h2>
           <Card>
-            <TracksRender items={playlistItems.items} minimal />
+            <TracksRender items={playlistItems} minimal />
           </Card>
         </div>
 

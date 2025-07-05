@@ -9,7 +9,7 @@ export const Route = createFileRoute("/signin")({
 
 function RouteComponent() {
   const handleSignIn = () => {
-    window.location.href = `http://localhost:3000/api/auth/authorize`;
+    window.location.href = `http://localhost:3000/api/public/auth/authorize`;
   };
 
   return (
