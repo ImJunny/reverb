@@ -83,3 +83,38 @@ export const artistDataFromTrackIdQueryOptions = (
       return res.json();
     },
   });
+
+export const trackSummaryQueryOptions = (
+  trackId: string | undefined,
+  trackName: string | undefined,
+  artistName: string | undefined,
+) =>
+  queryOptions({
+    queryKey: ["track-summary", trackName],
+    queryFn: async () => {
+      if (!trackName || !trackId) throw new Error("Missing track information");
+      const res = await api.protected.summary.track_summary.$get({
+        query: { trackId, trackName, artistName },
+      });
+      if (!res.ok) throw new Error("Failed to fetch track summary");
+      return res.json();
+    },
+  });
+
+export const artistSummaryQueryOptions = (
+  trackName: string | undefined,
+  artistId: string | undefined,
+  artistName: string | undefined,
+) =>
+  queryOptions({
+    queryKey: ["artist-summary", artistName],
+    queryFn: async () => {
+      if (!artistName || !artistId)
+        throw new Error("Missing artist information");
+      const res = await api.protected.summary.artist_summary.$get({
+        query: { trackName, artistId, artistName },
+      });
+      if (!res.ok) throw new Error("Failed to fetch artist summary");
+      return res.json();
+    },
+  });

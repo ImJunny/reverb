@@ -2,7 +2,7 @@ import { useSidebar } from "@/lib/hooks/useSidebar";
 import { sidebarTypes, type SidebarType } from "../providers/sidebar-provider";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "../ui/scroll-area";
-import ListeningPanel from "./listening-panel";
+import ListeningPanel from "./listening-panel/listening-panel";
 import QueuePanel from "./queue-panel";
 import BookmarksPanel from "./bookmarks-panel";
 

@@ -12,6 +12,10 @@ import {
   getArtistData,
   getArtistDataFromTrackId,
 } from "../procedures/protected/artist";
+import {
+  getArtistSummary,
+  getTrackSummary,
+} from "@server/procedures/protected/summary";
 
 // Protected API routes
 const usersRoute = new Hono().get("/profile", getUserProfile);
@@ -25,6 +29,9 @@ const tracksRoute = new Hono()
 const artistsRoute = new Hono()
   .get("/artist_data", getArtistData)
   .get("/artist_data_from_track_id", getArtistDataFromTrackId);
+const summaryRoute = new Hono()
+  .get("/track_summary", getTrackSummary)
+  .get("/artist_summary", getArtistSummary);
 
 // Protected API
 export const protectedApi = new Hono()
@@ -32,4 +39,5 @@ export const protectedApi = new Hono()
   .route("/user", usersRoute)
   .route("/playlist", playlistsRoute)
   .route("/track", tracksRoute)
-  .route("/artist", artistsRoute);
+  .route("/artist", artistsRoute)
+  .route("/summary", summaryRoute);
