@@ -2,7 +2,11 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
+function Textarea({
+  className,
+  label,
+  ...props
+}: React.ComponentProps<"textarea"> & { label?: string }) {
   return (
     <div className="relative">
       <textarea
@@ -30,7 +34,9 @@ function Textarea({ className, ...props }: React.ComponentProps<"textarea">) {
         )}
       >
         <div className="bg-input/50 absolute bottom-0 flex h-4/7 w-full" />
-        <span className={cn("relative z-1 mx-[3px]")}>{props.placeholder}</span>
+        <span className={cn("relative z-1 mx-[3px]")}>
+          {label ?? props.placeholder}
+        </span>
       </div>
     </div>
   );

@@ -23,7 +23,7 @@ export default function PlaylistRender({
 
   return (
     <Card
-      className="flex w-full p-0"
+      className="flex w-full rounded-xs p-0"
       style={{
         backgroundColor: color
           ? `color-mix(in srgb, ${color} 95%, white 5%)`
@@ -34,7 +34,7 @@ export default function PlaylistRender({
         <img
           src={playlistData.image_url}
           alt={playlistData.name}
-          className={cn("h-20 w-20 rounded-sm object-cover shadow-md")}
+          className={cn("h-20 w-20 rounded-xs object-cover shadow-md")}
         />
         <div>
           <h1 className="text-3xl font-bold">{playlistData.name}</h1>
@@ -44,7 +44,7 @@ export default function PlaylistRender({
         </div>
       </div>
       <div
-        className="p-3"
+        className="rounded-xs p-3"
         style={{
           backgroundColor: color
             ? `color-mix(in srgb, ${color} 60%, black 40%)`

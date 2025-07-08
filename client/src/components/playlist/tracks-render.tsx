@@ -44,7 +44,7 @@ export default function TracksRender({
         id: item.id,
         name: item.name,
         artists: item.artists.map((artist) => artist.name),
-        imageUrl: item.album.images[0]?.url ?? "",
+        image_url: item.album.images[0]?.url ?? "",
       });
     }
 

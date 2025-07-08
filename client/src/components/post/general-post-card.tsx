@@ -80,7 +80,7 @@ export default function GeneralPostCard({
         </div>
         {playlistData && playlistItems && (
           <Card
-            className="relative flex w-full max-w-150 flex-row space-x-3 p-3"
+            className="relative flex w-full max-w-150 flex-row space-x-3 rounded-xs p-3"
             style={{
               backgroundColor: color
                 ? `color-mix(in srgb, ${color} 95%, white 5%)`
@@ -90,7 +90,7 @@ export default function GeneralPostCard({
             <img
               src={playlistData.image_url}
               alt={playlistData.name}
-              className={cn("h-26 w-26 rounded-sm object-cover shadow-md")}
+              className={cn("h-26 w-26 rounded-xs object-cover shadow-md")}
             />
             <div>
               <h1 className="text-xl font-semibold">{playlistData.name}</h1>

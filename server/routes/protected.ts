@@ -6,7 +6,11 @@ import {
   getPlaylistData,
   getPlaylistItems,
 } from "../procedures/protected/playlist";
-import { getTrackData, getTrackPreview } from "../procedures/protected/track";
+import {
+  getTrackData,
+  getTrackPreview,
+  getTrackSearch,
+} from "../procedures/protected/track";
 import { authMiddleware } from "@server/utils/auth-middleware";
 import {
   getArtistData,
@@ -25,7 +29,8 @@ const playlistsRoute = new Hono()
   .get("/playlist_items/:id", getPlaylistItems);
 const tracksRoute = new Hono()
   .get("/track_preview", getTrackPreview)
-  .get("/track_data", getTrackData);
+  .get("/track_data", getTrackData)
+  .get("/track_search", getTrackSearch);
 const artistsRoute = new Hono()
   .get("/artist_data", getArtistData)
   .get("/artist_data_from_track_id", getArtistDataFromTrackId);

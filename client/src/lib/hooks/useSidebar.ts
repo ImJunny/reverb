@@ -1,4 +1,4 @@
-import type { SidebarType } from "@/components/providers/sidebar-provider";
+import type { SidebarType } from "@/components/sidebar/sidebar-provider";
 
 import {
   createContext,

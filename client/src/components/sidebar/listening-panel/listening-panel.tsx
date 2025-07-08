@@ -15,7 +15,7 @@ export default function ListeningPanel() {
   return (
     <div>
       <img
-        src={trackInfo.imageUrl}
+        src={trackInfo.image_url}
         alt="album"
         className="aspect-square h-auto w-full rounded-sm"
       />

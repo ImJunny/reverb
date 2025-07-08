@@ -1,5 +1,5 @@
 import { useSidebar } from "@/lib/hooks/useSidebar";
-import { sidebarTypes, type SidebarType } from "../providers/sidebar-provider";
+import { sidebarTypes, type SidebarType } from "./sidebar-provider";
 import { cn } from "@/lib/utils";
 import { ScrollArea } from "../ui/scroll-area";
 import ListeningPanel from "./listening-panel/listening-panel";

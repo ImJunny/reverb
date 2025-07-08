@@ -2,11 +2,11 @@ import Header from "@/components/header/header";
 import Sidebar from "@/components/sidebar/nav-sidebar";
 import { api } from "@/utils/client";
 import { createFileRoute, Outlet, redirect } from "@tanstack/react-router";
-import { BackgroundColorProvider } from "@/components/providers/background-provider";
-import { AudioProvider } from "@/components/providers/audio-provider";
+import { BackgroundColorProvider } from "@/components/page/background-provider";
+import { AudioProvider } from "@/components/audio-controls/audio-provider";
 import AudioControls from "@/components/audio-controls/audio-controls";
 import RightSidebarWrapper from "@/components/sidebar/sidebar";
-import { SidebarProvider } from "@/components/providers/sidebar-provider";
+import { SidebarProvider } from "@/components/sidebar/sidebar-provider";
 
 export const Route = createFileRoute("/_protected")({
   beforeLoad: async () => {

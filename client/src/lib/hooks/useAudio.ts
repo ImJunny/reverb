@@ -1,23 +1,17 @@
-import { createContext, useContext, type RefObject } from "react";
+import {
+  createContext,
+  useContext,
+  type Dispatch,
+  type RefObject,
+  type SetStateAction,
+} from "react";
+import type { TrackInfoItem } from "shared/types";
 
 type AudioContextType =
   | {
       audioRef: RefObject<HTMLAudioElement | null>;
-      trackInfo: {
-        id: string;
-        name: string;
-        artists: string[];
-        imageUrl: string;
-      } | null;
-
-      setTrackInfo: (
-        info: {
-          id: string;
-          name: string;
-          artists: string[];
-          imageUrl: string;
-        } | null,
-      ) => void;
+      trackInfo: TrackInfoItem | null;
+      setTrackInfo: Dispatch<SetStateAction<TrackInfoItem | null>>;
       playing: boolean;
       setPlaying: React.Dispatch<React.SetStateAction<boolean>>;
       currentTime: number;

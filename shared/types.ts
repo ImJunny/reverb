@@ -45,3 +45,17 @@ export type UserProfile = {
   email: string;
   images?: { url: string }[];
 };
+
+export type TrackSearchResult = {
+  id: string;
+  name: string;
+  artists: { name: string }[];
+  image_url: string;
+};
+
+export type TrackInfoItem = {
+  id: string;
+  name: string;
+  artists: string[];
+  image_url: string;
+};

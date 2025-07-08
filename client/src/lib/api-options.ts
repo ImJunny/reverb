@@ -118,3 +118,16 @@ export const artistSummaryQueryOptions = (
       return res.json();
     },
   });
+
+export const trackSearchQueryOptions = (query: string) =>
+  queryOptions({
+    queryKey: ["track-search", query],
+    queryFn: async () => {
+      if (!query) throw new Error("Query is required");
+      const res = await api.protected.track.track_search.$get({
+        query: { query },
+      });
+      if (!res.ok) throw new Error("Failed to search for tracks");
+      return res.json();
+    },
+  });

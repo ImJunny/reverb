@@ -224,3 +224,23 @@ export async function getSpotifyArtistData(
   const data = await res.data;
   return data;
 }
+
+// Search song
+export async function getSpotifySongSearch(
+  accessToken: string,
+  query: string,
+  limit: number = 7
+): Promise<SpotifyApi.SearchResponse> {
+  const res = await axios.get("https://api.spotify.com/v1/search", {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+    params: {
+      q: query,
+      type: "track",
+      limit,
+    },
+  });
+  const data = await res.data;
+  return data;
+}

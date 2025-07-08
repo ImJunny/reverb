@@ -1,7 +1,7 @@
 import BackgroundWrapper from "@/components/page/background-wrapper";
 import { createFileRoute } from "@tanstack/react-router";
 import RecentlyViewedCard from "@/components/page/recenty-viewed-card";
-import GeneralPostCard from "@/components/post/GeneralPostCard";
+import GeneralPostCard from "@/components/post/general-post-card";
 
 export const Route = createFileRoute("/_protected/")({
   component: RouteComponent,

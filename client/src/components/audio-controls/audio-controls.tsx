@@ -67,9 +67,9 @@ export default function AudioControls() {
         <div className="bg-background relative z-10 -mt-2 flex h-20 w-full items-center px-2">
           <div className="relative flex w-full items-center justify-between">
             <div className="flex w-full max-w-sm items-center overflow-hidden">
-              {trackInfo.imageUrl && (
+              {trackInfo.image_url && (
                 <img
-                  src={trackInfo.imageUrl}
+                  src={trackInfo.image_url}
                   alt="Album cover"
                   className="h-13 w-13 flex-shrink-0 rounded-xs object-cover"
                 />
