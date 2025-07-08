@@ -38,7 +38,12 @@ export default function Header() {
       <SearchBar />
       <div className="flex h-full items-center space-x-3">
         <SidebarToggle />
-        <button className="text-muted-foreground hover:text-foreground disabled:text-background-variant cursor-pointer transition-colors duration-100 disabled:cursor-default">
+        <button
+          className="text-muted-foreground hover:text-foreground disabled:text-background-variant cursor-pointer transition-colors duration-100 disabled:cursor-default"
+          onClick={() => {
+            router.navigate({ to: "/create-post" });
+          }}
+        >
           <Plus size={20} />
         </button>
         <ProfileDropdown />

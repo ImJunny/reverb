@@ -47,8 +47,8 @@ export default function ProfileDropdown() {
           <Settings />
           Settings
         </DropdownMenuItem>
-        <DropdownMenuItem onClick={handleSignout} className="text-red-500">
-          <LogOut className="text-red-500" />
+        <DropdownMenuItem onClick={handleSignout} className="text-destructive">
+          <LogOut className="text-destructive" />
           Logout
         </DropdownMenuItem>
       </DropdownMenuContent>

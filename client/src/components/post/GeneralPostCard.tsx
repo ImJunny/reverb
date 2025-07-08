@@ -53,7 +53,7 @@ export default function GeneralPostCard({
 
   return (
     <Link to={`/post/${post.playlist_id}` as string} className="no-underline">
-      <Card className="p-3" transparent>
+      <Card className="hover:bg-card p-3" transparent>
         <div className="flex items-center justify-between">
           <div className="flex items-center text-xs">
             <img

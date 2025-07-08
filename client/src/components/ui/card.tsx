@@ -12,7 +12,7 @@ export default function Card({ className, transparent, ...props }: CardProps) {
       data-slot="card"
       className={cn(
         "bg-card text-card-foreground flex flex-col rounded-sm p-3",
-        transparent && "bg-card/60",
+        transparent && "bg-card/80",
         className,
       )}
       {...props}

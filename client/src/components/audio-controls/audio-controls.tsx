@@ -22,6 +22,7 @@ export default function AudioControls() {
   useEffect(() => {
     if (audioRef.current === null) {
       audioRef.current = new Audio();
+      audioRef.current.volume = 0.1;
       setPlaying(true);
     }
 

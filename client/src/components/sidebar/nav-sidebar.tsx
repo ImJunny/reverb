@@ -66,7 +66,7 @@ function SidebarCategory({ options }: { options: Option[] }) {
       {options.map((option) => (
         <li key={option.to}>
           <Tooltip>
-            <TooltipTrigger className="w-full">
+            <TooltipTrigger className="w-full" asChild>
               <Link
                 to={option.to}
                 className="[&.active]:bg-accent hover:bg-accent/50 flex items-center gap-4 rounded-sm px-3 py-3 text-sm [&.active]:font-semibold"
