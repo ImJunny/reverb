@@ -1,6 +1,6 @@
 import Card from "@/components/ui/card";
 import { cn } from "@/lib/utils";
-import TracksRender from "./tracks-render";
+import TracksRender from "../track/tracks-render";
 import { useEffect } from "react";
 import { useBackground } from "@/lib/hooks/useBackground";
 import { useQuery } from "@tanstack/react-query";
@@ -28,7 +28,7 @@ export default function PlaylistRender({ playlistId }: { playlistId: string }) {
 
   return (
     <Card
-      className="flex w-full rounded-xs p-0"
+      className="flex w-full overflow-hidden rounded-xs p-0"
       style={{
         backgroundColor: color
           ? `color-mix(in srgb, ${color} 95%, white 5%)`
@@ -49,7 +49,7 @@ export default function PlaylistRender({ playlistId }: { playlistId: string }) {
         </div>
       </div>
       <div
-        className="rounded-xs p-3"
+        className="p-3"
         style={{
           backgroundColor: color
             ? `color-mix(in srgb, ${color} 60%, black 40%)`

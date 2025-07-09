@@ -14,12 +14,14 @@ import {
 } from "@/components/ui/context-menu";
 import type { PlaylistItem } from "shared/types";
 
-export default function TracksRender({
+export default function TrackSuggestionsRender({
   items,
   minimal,
+  children,
 }: {
   items: PlaylistItem[];
   minimal?: boolean;
+  children?: React.ReactNode;
 }) {
   const { audioRef, trackInfo, setTrackInfo, playing, setPlaying } = useAudio();
   const { firstOpen, setOpen, setFirstOpen } = useSidebar();
@@ -44,7 +46,7 @@ export default function TracksRender({
         id: item.id,
         name: item.name,
         artists: item.artists.map((artist) => artist.name),
-        image_url: item.album.images[0]?.url ?? "",
+        image_url: item.album.image_url,
       });
     }
 
@@ -107,10 +109,10 @@ export default function TracksRender({
                   </div>
 
                   <img
-                    src={item.album.images[0]?.url}
+                    src={item.album.image_url}
                     alt="track"
                     className={cn(
-                      "h-9 w-9 rounded-xs object-cover",
+                      "rounded-xxs h-9 w-9 object-cover",
                       minimal && "h-7 w-7",
                     )}
                   />
@@ -134,6 +136,9 @@ export default function TracksRender({
                       {item.artists.map((artist) => artist.name).join(", ")}
                     </span>
                   </div>
+
+                  {children}
+
                   <PlusCircle
                     size={16}
                     className="text-muted-foreground hover:text-foreground mr-4 ml-auto hidden group-hover:block hover:cursor-pointer"

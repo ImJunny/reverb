@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import RecentlyViewedCard from "@/components/page/recenty-viewed-card";
 import GeneralTrackCard from "@/components/post/general-post/general-track-card";
+// import TracksRender from "@/components/playlist/tracks-render";
 
 export const Route = createFileRoute("/_protected/post/$id")({
   component: RouteComponent,
@@ -28,7 +29,7 @@ function RouteComponent() {
 
   return (
     <BackgroundWrapper type="blur" className="p-3">
-      <Card className="flex w-full max-w-2xl p-0" transparent>
+      <Card className="flex w-full max-w-2xl rounded-xs p-0" transparent>
         <div className="flex flex-col p-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center text-xs">
@@ -66,13 +67,13 @@ function RouteComponent() {
           </div>
         </div>
 
-        <Separator />
+        {/* <Separator />
         <div className="flex flex-col space-y-3 p-3">
           <h2>Suggestions • {"5"}</h2>
           <Card className="rounded-xs">
-            {/* <TracksRender items={playlistItems} minimal /> */}
+            <TracksRender items={playlistItems} minimal />
           </Card>
-        </div>
+        </div> */}
 
         <Separator />
         <div className="flex flex-col space-y-3 p-3">
@@ -81,7 +82,7 @@ function RouteComponent() {
       </Card>
 
       <div className="sticky top-3 ml-3 hidden w-72 flex-col space-y-3 self-start md:flex">
-        <Card className="flex-col space-y-2 md:flex" transparent>
+        <Card className="flex-col space-y-2 rounded-xs md:flex" transparent>
           <div className="flex space-x-3">
             <img
               src="https://picsum.photos/seed/123/200/300"

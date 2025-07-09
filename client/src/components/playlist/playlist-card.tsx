@@ -6,7 +6,7 @@ export function PlaylistCard({ playlist }: { playlist: GeneralPlaylistData }) {
   return (
     <Link to="/playlist/$id" params={{ id: playlist.id }} className="shrink-0">
       <Card
-        className="hover:bg-card flex cursor-pointer flex-col space-y-2"
+        className="hover:bg-card flex cursor-pointer flex-col space-y-2 rounded-xs"
         transparent
       >
         {playlist.image_url ? (

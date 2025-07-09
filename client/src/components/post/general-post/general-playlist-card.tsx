@@ -7,18 +7,16 @@ import {
 import { getAverageColor } from "@/lib/scripts/getAverageColor";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type HTMLAttributes } from "react";
 
 export default function GeneralPlaylistCard({
   playlistId,
+  className,
 }: {
   playlistId: string;
-}) {
+} & HTMLAttributes<HTMLDivElement>) {
   const { data: playlistData } = useQuery({
     ...playlistDataQueryOptions(playlistId),
-  });
-  const { data: playlistItems } = useQuery({
-    ...playlistItemsQueryOptions(playlistId),
   });
 
   const [color, setColor] = useState<string | null>(null);
@@ -32,8 +30,7 @@ export default function GeneralPlaylistCard({
     })();
   }, [imageUrl]);
 
-  if (!playlistData || !playlistItems)
-    return <Skeleton className="h-28 w-full rounded-xs" />;
+  if (!playlistData) return <Skeleton className="h-28 w-full rounded-xs" />;
 
   return (
     <Card
@@ -41,7 +38,10 @@ export default function GeneralPlaylistCard({
         e.preventDefault();
         e.stopPropagation();
       }}
-      className="relative flex cursor-default flex-row space-x-3 rounded-xs p-3 shadow-lg ring-1 ring-black/5"
+      className={cn(
+        "relative flex cursor-default flex-row space-x-3 rounded-xs p-3 shadow-lg ring-1 ring-black/5",
+        className,
+      )}
       style={{
         backgroundColor: color
           ? `color-mix(in srgb, ${color} 95%, white 5%)`
@@ -51,21 +51,14 @@ export default function GeneralPlaylistCard({
       <img
         src={playlistData.image_url}
         alt={playlistData.name}
-        className={cn("h-22 w-22 rounded-xs object-cover shadow-md")}
+        className={cn("rounded-xxs h-22 w-22 object-cover shadow-md")}
       />
       <div className="flex flex-1 flex-col">
         <p className="text-muted-foreground text-xs">Playlist</p>
-        <h1 className="text-sm font-semibold">{playlistData.name}</h1>
-        <ul className="mt-auto flex flex-col">
-          {playlistItems.slice(0, 3).map((item) => (
-            <li key={item.id} className="text-xs">
-              <span>{item.name}</span>
-              <span className="text-muted-foreground">
-                &nbsp;• {item.artists[0]?.name}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <h1 className="mt-auto text-2xl font-bold">{playlistData.name}</h1>
+        <p className="text-muted-foreground mb-3 text-xs">
+          {playlistData.total} songs
+        </p>
       </div>
     </Card>
   );

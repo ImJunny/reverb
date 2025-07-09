@@ -93,7 +93,7 @@ export async function getPlaylistItems(c: ProtectedContext) {
       album: {
         id: item.track!.album.id,
         name: item.track!.album.name,
-        images: item.track!.album.images,
+        image_url: item.track!.album.images[0]!.url,
       },
     }));
 

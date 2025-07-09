@@ -7,10 +7,13 @@ import { getAverageColor } from "@/lib/scripts/getAverageColor";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { Pause, Play } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useState, type HTMLAttributes } from "react";
 import type { Track } from "shared/types";
 
-export default function GeneralTrackCard({ trackId }: { trackId: string }) {
+export default function GeneralTrackCard({
+  trackId,
+  className,
+}: { trackId: string } & HTMLAttributes<HTMLDivElement>) {
   const { data: trackData, isFetching } = useQuery(
     trackDataQueryOptions(trackId),
   );
@@ -58,7 +61,7 @@ export default function GeneralTrackCard({ trackId }: { trackId: string }) {
   };
 
   if (isFetching) {
-    return <Skeleton className="h-22 w-full rounded-xs" />;
+    return <Skeleton className="h-20 w-full rounded-xs" />;
   }
 
   return (
@@ -67,7 +70,10 @@ export default function GeneralTrackCard({ trackId }: { trackId: string }) {
         e.preventDefault();
         e.stopPropagation();
       }}
-      className="bg-background flex cursor-default flex-row rounded-xs shadow-lg ring-2 ring-black/5"
+      className={cn(
+        "bg-background flex max-w-112 cursor-default flex-row rounded-xs shadow-lg ring-2 ring-black/5",
+        className,
+      )}
       style={{
         backgroundColor: color
           ? `color-mix(in srgb, ${color} 55%, #000 45%)`
@@ -77,7 +83,7 @@ export default function GeneralTrackCard({ trackId }: { trackId: string }) {
       <img
         src={trackData?.album.image_url || ""}
         alt="Track"
-        className="h-16 w-16 rounded-xs object-cover shadow-md"
+        className="rounded-xx s h-14 w-14 object-cover shadow-md"
       />
       <div className="ml-3 flex flex-1 flex-col">
         <p className="text-muted-foreground text-xs">Song</p>

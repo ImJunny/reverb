@@ -71,7 +71,7 @@ export default function AudioControls() {
                 <img
                   src={trackInfo.image_url}
                   alt="Album cover"
-                  className="h-13 w-13 flex-shrink-0 rounded-xs object-cover"
+                  className="rounded-xxs h-13 w-13 flex-shrink-0 object-cover"
                 />
               )}
               <div className="ml-3 min-w-0">

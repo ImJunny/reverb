@@ -17,7 +17,7 @@ import { formatTimeAgo } from "@/lib/scripts/formatTimeAgo";
 export default function GeneralPostCard({ post }: { post: Post }) {
   return (
     <Link to={`/post/${post.id}` as string} className="no-underline">
-      <Card className="hover:bg-card p-3" transparent>
+      <Card className="hover:bg-card rounded-xs p-3" transparent>
         <div className="flex items-center justify-between">
           <div className="flex items-center text-xs">
             <img
@@ -33,7 +33,7 @@ export default function GeneralPostCard({ post }: { post: Post }) {
           <Ellipsis size={20} className="text-muted-foreground" />
         </div>
 
-        <h1 className="my-2 text-lg font-semibold">{post.title}</h1>
+        <h1 className="mt-2 text-lg font-semibold">{post.title}</h1>
         {/* <div className="mb-3 flex items-center space-x-2">
           <Badge>{post.tags[0]}</Badge>
           {post.tags.slice(1).map((tag, idx) => (
@@ -46,10 +46,10 @@ export default function GeneralPostCard({ post }: { post: Post }) {
           <p className="text-muted-foreground text-sm">{post.content}</p>
         )}
         {post.type === "track_id" && (
-          <GeneralTrackCard trackId={post.content!} />
+          <GeneralTrackCard trackId={post.content!} className="mt-2" />
         )}
         {post.type === "playlist_id" && (
-          <GeneralPlaylistCard playlistId={post.content!} />
+          <GeneralPlaylistCard playlistId={post.content!} className="mt-2" />
         )}
         <div className="mt-3 flex items-center space-x-4">
           <Heart size={20} />
