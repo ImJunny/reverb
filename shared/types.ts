@@ -59,3 +59,10 @@ export type TrackInfoItem = {
   artists: string[];
   image_url: string;
 };
+
+export type CreatePost = {
+  title: string;
+  type: "text" | "track_id" | "playlist_id";
+  content: string;
+  allow_suggestions: boolean;
+};

@@ -5,7 +5,7 @@ import {
   getSpotifyTokenData,
   getSpotifyUserId,
 } from "@server/lib/spotify-helpers";
-import { createSession } from "@server/db/actions/session-actions";
+import { createSessionDB } from "@server/db/actions/session-actions";
 
 // Generate authorization URL and redirect user to Spotify for login
 export async function authorize(c: Context) {
@@ -29,7 +29,7 @@ export async function handleCallback(c: Context) {
       maxAge: 60 * 60 * 24 * 30,
     });
 
-    await createSession(
+    await createSessionDB(
       userId,
       tokenData.access_token,
       tokenData.refresh_token,

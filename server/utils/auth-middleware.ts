@@ -1,7 +1,7 @@
 import {
-  getRefreshToken,
-  getSession,
-  updateSession,
+  getRefreshTokenDB,
+  getSessionDB,
+  updateSessionDB,
 } from "@server/db/actions/session-actions";
 import { getSpotifyNewAccessToken } from "@server/lib/spotify-helpers";
 import type { Context } from "hono";
@@ -20,14 +20,14 @@ export const authMiddleware = createMiddleware<{ Variables: Variables }>(
     const userId = getCookie(c, "user_id");
     if (!userId) return c.text("Unauthorized, no session cookie found.", 401);
 
-    const session = await getSession(userId);
+    const session = await getSessionDB(userId);
     if (!session) return c.text("Unauthorized, no session found.", 401);
 
     if (session.expires_at < new Date()) {
-      const refreshToken = await getRefreshToken(userId!);
+      const refreshToken = await getRefreshTokenDB(userId!);
       const tokenData = await getSpotifyNewAccessToken(refreshToken);
 
-      await updateSession(
+      await updateSessionDB(
         userId,
         tokenData.access_token,
         new Date(Date.now() + tokenData.expires_in * 1000)

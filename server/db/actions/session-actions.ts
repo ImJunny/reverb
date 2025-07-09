@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import { db } from "..";
 import { sessionsTable } from "../schema";
 
-export async function getRefreshToken(userId: string) {
+export async function getRefreshTokenDB(userId: string) {
   const refreshToken = await db
     .select()
     .from(sessionsTable)
@@ -12,7 +12,7 @@ export async function getRefreshToken(userId: string) {
   return refreshToken;
 }
 
-export async function createSession(
+export async function createSessionDB(
   userId: string,
   accessToken: string,
   refreshToken: string,
@@ -36,7 +36,7 @@ export async function createSession(
     });
 }
 
-export async function updateSession(
+export async function updateSessionDB(
   userId: string,
   accessToken: string,
   expiresAt: Date
@@ -50,7 +50,7 @@ export async function updateSession(
     .where(eq(sessionsTable.user_id, userId));
 }
 
-export async function getSession(userId: string) {
+export async function getSessionDB(userId: string) {
   const session = await db
     .select()
     .from(sessionsTable)

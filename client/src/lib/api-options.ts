@@ -1,5 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { api } from "../utils/client";
+import type { CreatePost } from "shared/types";
 
 export const currentUserProfileQueryOptions = queryOptions({
   queryKey: ["current-user-profile"],
@@ -131,3 +132,21 @@ export const trackSearchQueryOptions = (query: string) =>
       return res.json();
     },
   });
+
+export const createPostMutationOptions = () => {
+  return {
+    mutationKey: ["create-post"],
+    mutationFn: async (data: CreatePost) => {
+      const res = await api.protected.post.create.$post({
+        json: {
+          title: data.title,
+          type: data.type,
+          allow_suggestions: data.allow_suggestions,
+          content: data.content,
+        },
+      });
+      if (!res.ok) throw new Error("Failed to create post");
+      return res.json();
+    },
+  };
+};

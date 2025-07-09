@@ -4,23 +4,24 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { FormErrorList } from "@/components/page/form-errors";
-import { z } from "zod";
 import SearchTrack from "@/components/post/create-post/search-track/search-track";
 import { Switch } from "@/components/ui/switch";
+import { useMutation } from "@tanstack/react-query";
+import { createPostMutationOptions } from "@/lib/api-options";
 
 const contentTypes = [
   { type: "text", label: "Text" },
   { type: "track_id", label: "Song" },
   { type: "playlist_id", label: "Playlist" },
 ] as const;
-
 export type ContentType = (typeof contentTypes)[number];
 
 export default function CreatePostForm() {
+  const { mutate } = useMutation(createPostMutationOptions());
   const form = useForm({
     defaultValues: {
       title: "",
-      type: "text",
+      type: "text" as "text" | "track_id" | "playlist_id",
       allow_suggestions: false,
       text: "",
       track_id: "",
@@ -29,7 +30,7 @@ export default function CreatePostForm() {
     onSubmit: async ({ value }) => {
       const formattedData = {
         title: value.title,
-        type: value.type,
+        type: value.type as "text" | "track_id" | "playlist_id",
         allow_suggestions: value.allow_suggestions,
         content:
           value.type === "text"
@@ -38,7 +39,9 @@ export default function CreatePostForm() {
               ? value.track_id
               : value.playlist_id,
       };
-      alert(JSON.stringify(formattedData, null, 2));
+      mutate(formattedData, {
+        onSuccess: (data) => console.log("Response:", data),
+      });
     },
   });
 
@@ -72,9 +75,11 @@ export default function CreatePostForm() {
         <form.Field
           name="title"
           validators={{
-            onChange: z
-              .string()
-              .min(10, "Title must be at least 10 characters."),
+            onChange: ({ value }) => {
+              if (!value) {
+                return "Title is required.";
+              }
+            },
           }}
         >
           {(field) => (
@@ -113,12 +118,7 @@ export default function CreatePostForm() {
             switch (type) {
               case "text":
                 return (
-                  <form.Field
-                    name="text"
-                    validators={{
-                      onChange: z.string(),
-                    }}
-                  >
+                  <form.Field name="text">
                     {(field) => (
                       <Textarea
                         placeholder="Body text (optional)"
@@ -137,7 +137,12 @@ export default function CreatePostForm() {
                   <form.Field
                     name="track_id"
                     validators={{
-                      onChange: z.string().min(1, "Song selection required."),
+                      onChange: ({ value }) => {
+                        if (form.state.values.type !== "track_id") return null;
+                        if (!value) {
+                          return "Song selection is required.";
+                        }
+                      },
                     }}
                   >
                     {(field) => (
@@ -148,36 +153,37 @@ export default function CreatePostForm() {
                     )}
                   </form.Field>
                 );
-              // case "playlist_id":
-              //   return (
-              //     <form.Field
-              //       name="playlist_id"
-              //       validators={{
-              //         onChange: z.string().min(1, "Playlist required."),
-              //       }}
-              //     >
-              //       {(field) => (
-              //         <Input
-              //           placeholder="Playlist ID"
-              //           value={field.state.value}
-              //           onBlur={field.handleBlur}
-              //           onChange={(e) => field.handleChange(e.target.value)}
-              //         />
-              //       )}
-              //     </form.Field>
-              //   );
+              case "playlist_id":
+                return (
+                  <form.Field
+                    name="playlist_id"
+                    validators={{
+                      onChange: ({ value }) => {
+                        if (form.state.values.type !== "playlist_id")
+                          return null;
+                        if (!value) {
+                          return "Playlist ID is required.";
+                        }
+                      },
+                    }}
+                  >
+                    {(field) => (
+                      <Input
+                        placeholder="Playlist ID"
+                        value={field.state.value}
+                        onBlur={field.handleBlur}
+                        onChange={(e) => field.handleChange(e.target.value)}
+                      />
+                    )}
+                  </form.Field>
+                );
               default:
                 return null;
             }
           }}
         </form.Subscribe>
 
-        <form.Field
-          name="allow_suggestions"
-          validators={{
-            onChange: z.boolean(),
-          }}
-        >
+        <form.Field name="allow_suggestions">
           {(field) => (
             <div className="flex items-center space-x-3">
               <div>
