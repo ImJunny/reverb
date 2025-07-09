@@ -3,15 +3,18 @@ import { cn } from "@/lib/utils";
 import TracksRender from "./tracks-render";
 import { useEffect } from "react";
 import { useBackground } from "@/lib/hooks/useBackground";
-import type { PlaylistData, PlaylistItem } from "shared/types";
+import { useQuery } from "@tanstack/react-query";
+import {
+  playlistDataQueryOptions,
+  playlistItemsQueryOptions,
+} from "@/lib/api-options";
 
-export default function PlaylistRender({
-  playlistData,
-  items,
-}: {
-  playlistData: PlaylistData;
-  items: PlaylistItem[];
-}) {
+export default function PlaylistRender({ playlistId }: { playlistId: string }) {
+  const { data: playlistData } = useQuery(playlistDataQueryOptions(playlistId));
+  const { data: playlistItems } = useQuery(
+    playlistItemsQueryOptions(playlistId),
+  );
+
   const { color, setImageUrl } = useBackground();
   useEffect(() => {
     (async () => {
@@ -20,6 +23,8 @@ export default function PlaylistRender({
       }
     })();
   }, [playlistData, setImageUrl]);
+
+  if (!playlistData || !playlistItems) return null;
 
   return (
     <Card
@@ -51,7 +56,7 @@ export default function PlaylistRender({
             : undefined,
         }}
       >
-        <TracksRender items={items} minimal />
+        <TracksRender items={playlistItems} minimal />
       </div>
     </Card>
   );

@@ -8,6 +8,8 @@ import SearchTrack from "@/components/post/create-post/search-track/search-track
 import { Switch } from "@/components/ui/switch";
 import { useMutation } from "@tanstack/react-query";
 import { createPostMutationOptions } from "@/lib/api-options";
+import { toast } from "sonner";
+import { useRouter } from "@tanstack/react-router";
 
 const contentTypes = [
   { type: "text", label: "Text" },
@@ -17,7 +19,8 @@ const contentTypes = [
 export type ContentType = (typeof contentTypes)[number];
 
 export default function CreatePostForm() {
-  const { mutate } = useMutation(createPostMutationOptions());
+  const router = useRouter();
+  const { mutate, isPending } = useMutation(createPostMutationOptions());
   const form = useForm({
     defaultValues: {
       title: "",
@@ -40,7 +43,10 @@ export default function CreatePostForm() {
               : value.playlist_id,
       };
       mutate(formattedData, {
-        onSuccess: (data) => console.log("Response:", data),
+        onSuccess: () => {
+          toast.success("Post created successfully!");
+          router.navigate({ to: "/" });
+        },
       });
     },
   });
@@ -198,7 +204,7 @@ export default function CreatePostForm() {
             </div>
           )}
         </form.Field>
-        <Button type="submit" className="self-end">
+        <Button type="submit" className="self-end" disabled={isPending}>
           Create post
         </Button>
       </form>

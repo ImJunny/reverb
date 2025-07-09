@@ -1,25 +1,25 @@
 import { eq } from "drizzle-orm";
 import { db } from "..";
-import { sessionsTable } from "../schema";
+import { usersTable } from "../schema";
 
 export async function getRefreshTokenDB(userId: string) {
   const refreshToken = await db
     .select()
-    .from(sessionsTable)
-    .where(eq(sessionsTable.user_id, userId!))
+    .from(usersTable)
+    .where(eq(usersTable.user_id, userId!))
     .limit(1)
     .then((data) => data[0]!.refresh_token);
   return refreshToken;
 }
 
-export async function createSessionDB(
+export async function createUserDB(
   userId: string,
   accessToken: string,
   refreshToken: string,
   expiresAt: Date
 ) {
   await db
-    .insert(sessionsTable)
+    .insert(usersTable)
     .values({
       user_id: userId,
       access_token: accessToken,
@@ -27,7 +27,7 @@ export async function createSessionDB(
       expires_at: expiresAt,
     })
     .onConflictDoUpdate({
-      target: sessionsTable.user_id,
+      target: usersTable.user_id,
       set: {
         access_token: accessToken,
         refresh_token: refreshToken,
@@ -36,25 +36,25 @@ export async function createSessionDB(
     });
 }
 
-export async function updateSessionDB(
+export async function updateUserTokensDB(
   userId: string,
   accessToken: string,
   expiresAt: Date
 ) {
   await db
-    .update(sessionsTable)
+    .update(usersTable)
     .set({
       access_token: accessToken,
       expires_at: expiresAt,
     })
-    .where(eq(sessionsTable.user_id, userId));
+    .where(eq(usersTable.user_id, userId));
 }
 
-export async function getSessionDB(userId: string) {
+export async function getUserDB(userId: string) {
   const session = await db
     .select()
-    .from(sessionsTable)
-    .where(eq(sessionsTable.user_id, userId))
+    .from(usersTable)
+    .where(eq(usersTable.user_id, userId))
     .limit(1)
     .then((data) => data[0]);
   return session;

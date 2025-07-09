@@ -57,6 +57,19 @@ export const trackPreviewQueryOptions = (trackId: string | undefined) =>
     },
   });
 
+export const trackDataQueryOptions = (trackId: string | undefined) =>
+  queryOptions({
+    queryKey: ["track-data", trackId],
+    queryFn: async () => {
+      if (!trackId) throw new Error("Track ID is required");
+      const res = await api.protected.track.track_data.$get({
+        query: { id: trackId },
+      });
+      if (!res.ok) throw new Error("Failed to fetch track data");
+      return res.json();
+    },
+  });
+
 export const artistDataQueryOptions = (artistId: string | undefined) =>
   queryOptions({
     queryKey: ["artist-data", artistId],
@@ -150,3 +163,26 @@ export const createPostMutationOptions = () => {
     },
   };
 };
+
+export const homePostsQueryOptions = () =>
+  queryOptions({
+    queryKey: ["home-posts"],
+    queryFn: async () => {
+      const res = await api.protected.post.home_posts.$get();
+      if (!res.ok) throw new Error("Failed to fetch home posts");
+      return res.json();
+    },
+  });
+
+export const postQueryOptions = (postId: string) =>
+  queryOptions({
+    queryKey: ["post", postId],
+    queryFn: async () => {
+      if (!postId) throw new Error("Post ID is required");
+      const res = await api.protected.post.post[":id"].$get({
+        param: { id: postId },
+      });
+      if (!res.ok) throw new Error("Failed to fetch post");
+      return res.json();
+    },
+  });

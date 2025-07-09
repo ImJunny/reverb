@@ -72,19 +72,25 @@ function SpecialBackgroundWrapper({
 
   return (
     <div className="absolute inset-0 z-0 h-full">
-      {type === "gradient" && <GradientBackground color={color} />}
+      {type === "gradient" && <GradientBackground color={color} compact />}
       {type === "blur" && imageUrl && <BlurBackground imageUrl={imageUrl} />}
     </div>
   );
 }
 
 // GradientBackground component that renders a gradient background
-function GradientBackground({ color }: { color: string }) {
+function GradientBackground({
+  color,
+  compact,
+}: {
+  color: string;
+  compact?: boolean;
+}) {
   return (
     <div
       className="absolute inset-0 z-1 h-full"
       style={{
-        backgroundImage: `linear-gradient(to top, var(--muted), var(--muted), ${color}) `,
+        backgroundImage: `linear-gradient(to top, var(--muted), var(--muted) ${compact ? "70%" : ""}, ${color}) `,
       }}
     />
   );

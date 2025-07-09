@@ -10,6 +10,7 @@ export const Route = createFileRoute("/_protected/playlists")({
 
 function RouteComponent() {
   const { data } = useQuery(currentUserPlaylistsQueryOptions);
+
   return (
     <BackgroundWrapper
       className="flex-col p-3"

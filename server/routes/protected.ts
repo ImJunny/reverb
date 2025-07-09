@@ -20,7 +20,11 @@ import {
   getArtistSummary,
   getTrackSummary,
 } from "@server/procedures/protected/summary";
-import { createPost } from "@server/procedures/protected/post";
+import {
+  createPost,
+  getHomePosts,
+  getPost,
+} from "@server/procedures/protected/post";
 import { zValidator } from "@hono/zod-validator";
 import { CreatePostSchema } from "@server/zod-schemas/schemas";
 
@@ -40,11 +44,10 @@ const artistsRoute = new Hono()
 const summaryRoute = new Hono()
   .get("/track_summary", getTrackSummary)
   .get("/artist_summary", getArtistSummary);
-const postsRoute = new Hono().post(
-  "/create",
-  zValidator("json", CreatePostSchema),
-  createPost
-);
+const postsRoute = new Hono()
+  .post("/create", zValidator("json", CreatePostSchema), createPost)
+  .get("/home_posts", getHomePosts)
+  .get("/post/:id", getPost);
 
 // Protected API
 export const protectedApi = new Hono()

@@ -4,7 +4,7 @@ import {
   getSpotifyTrackPreviewUrl,
 } from "@server/lib/spotify-helpers";
 import type { ProtectedContext } from "@server/utils/auth-middleware";
-import type { TrackSearchResult } from "shared/types";
+import type { Track, TrackSearchResult } from "shared/types";
 
 export async function getTrackData(c: ProtectedContext) {
   const id = c.req.query("id");
@@ -13,7 +13,22 @@ export async function getTrackData(c: ProtectedContext) {
   try {
     const accessToken = c.get("access_token");
     const trackData = await getSpotifyTrackData(accessToken, id);
-    return c.json(trackData, 200);
+    const formattedData: Track = {
+      id: trackData.id,
+      name: trackData.name,
+      artists: trackData.artists.map((artist) => ({
+        id: artist.id,
+        name: artist.name,
+      })),
+      album: {
+        id: trackData.album.id,
+        name: trackData.album.name,
+        image_url: trackData.album.images[0]?.url || "",
+      },
+      duration_ms: trackData.duration_ms,
+      external_urls: trackData.external_urls,
+    };
+    return c.json(formattedData, 200);
   } catch (error: any) {
     return c.json(
       { message: "Failed to fetch track data", error: error.message },

@@ -3,13 +3,9 @@ import { createFileRoute, useParams } from "@tanstack/react-router";
 import PlaylistRender from "@/components/playlist/playlist-render";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import TracksRender from "@/components/playlist/tracks-render";
 import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
-import {
-  playlistDataQueryOptions,
-  playlistItemsQueryOptions,
-} from "@/lib/api-options";
+import { postQueryOptions } from "@/lib/api-options";
 import BackgroundWrapper from "@/components/page/background-wrapper";
 import {
   Bookmark,
@@ -20,6 +16,7 @@ import {
   Share,
 } from "lucide-react";
 import RecentlyViewedCard from "@/components/page/recenty-viewed-card";
+import GeneralTrackCard from "@/components/post/general-post/general-track-card";
 
 export const Route = createFileRoute("/_protected/post/$id")({
   component: RouteComponent,
@@ -27,10 +24,7 @@ export const Route = createFileRoute("/_protected/post/$id")({
 
 function RouteComponent() {
   const { id } = useParams({ from: "/_protected/post/$id" });
-  const { data: playlistData } = useQuery(playlistDataQueryOptions(id));
-  const { data: playlistItems } = useQuery(playlistItemsQueryOptions(id));
-
-  if (!playlistData || !playlistItems) return <></>;
+  const { data: post } = useQuery(postQueryOptions(id));
 
   return (
     <BackgroundWrapper type="blur" className="p-3">
@@ -48,15 +42,21 @@ function RouteComponent() {
             </div>
             <Ellipsis size={20} className="text-muted-foreground" />
           </div>
-          <h1 className="my-2 text-xl font-semibold">
-            Any song recommendations?
-          </h1>
+          <h1 className="my-2 text-xl font-semibold">{post?.title}</h1>
           <div className="mb-3 flex items-center space-x-2">
             <Badge>Help</Badge>
             <Badge className="text-secondary-foreground bg-white/20">Rnb</Badge>
             <Badge className="text-secondary-foreground bg-white/20">Pop</Badge>
           </div>
-          <PlaylistRender playlistData={playlistData} items={playlistItems} />
+          {post?.type === "text" && (
+            <p className="text-muted-foreground text-sm">{post?.content}</p>
+          )}
+          {post?.type === "track_id" && (
+            <GeneralTrackCard trackId={post.content!} />
+          )}
+          {post?.type === "playlist_id" && (
+            <PlaylistRender playlistId={post.content!} />
+          )}
           <div className="mt-3 flex items-center space-x-4">
             <Heart size={20} />
             <MessageCircle size={20} />
@@ -70,7 +70,7 @@ function RouteComponent() {
         <div className="flex flex-col space-y-3 p-3">
           <h2>Suggestions • {"5"}</h2>
           <Card className="rounded-xs">
-            <TracksRender items={playlistItems} minimal />
+            {/* <TracksRender items={playlistItems} minimal /> */}
           </Card>
         </div>
 
