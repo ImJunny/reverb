@@ -17,7 +17,7 @@ import { formatTimeAgo } from "@/lib/scripts/formatTimeAgo";
 export default function GeneralPostCard({ post }: { post: Post }) {
   return (
     <Link to={`/post/${post.id}` as string} className="no-underline">
-      <Card className="hover:bg-card rounded-xs p-3" transparent>
+      <Card className="hover:bg-card rounded-xs p-3 shadow-xl ring-1 ring-black/5">
         <div className="flex items-center justify-between">
           <div className="flex items-center text-xs">
             <img
@@ -43,7 +43,9 @@ export default function GeneralPostCard({ post }: { post: Post }) {
           ))}
         </div> */}
         {post.type === "text" && (
-          <p className="text-muted-foreground text-sm">{post.content}</p>
+          <p className="text-muted-foreground line-clamp-2 text-sm">
+            {post.content}
+          </p>
         )}
         {post.type === "track_id" && (
           <GeneralTrackCard trackId={post.content!} className="mt-2" />

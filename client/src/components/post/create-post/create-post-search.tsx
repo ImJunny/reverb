@@ -1,7 +1,6 @@
 import { type UseQueryOptions } from "@tanstack/react-query";
 import { trackSearchQueryOptions } from "@/lib/api-options";
 import type { AnyFieldApi } from "@tanstack/react-form";
-import SearchTrackSelection from "./search-track-selection";
 import {
   Search,
   SearchInput,
@@ -11,8 +10,9 @@ import {
 import type { TrackSearchResult } from "shared/types";
 import { useCreatePost } from "@/lib/hooks/useCreatePost";
 import { cn } from "@/lib/utils";
+import GeneralTrackCard from "../general-post/general-track-card";
 
-export default function SearchTrack({
+export default function CreatePostSearch({
   field,
   onClick,
 }: {
@@ -45,7 +45,10 @@ export default function SearchTrack({
         <SearchResults<TrackSearchResult> className="bg-muted ring-ring/50 ring-1">
           {(result) =>
             (
-              <SearchResultItem onClick={() => handleClick(result)}>
+              <SearchResultItem
+                onClick={() => handleClick(result)}
+                className="hover:bg-foreground/5 flex items-center space-x-2 p-2"
+              >
                 <img
                   src={result.image_url}
                   alt="track"
@@ -64,7 +67,12 @@ export default function SearchTrack({
         </SearchResults>
       </Search>
 
-      {field.state.value && <SearchTrackSelection field={field} />}
+      {field.state.value && (
+        <GeneralTrackCard
+          trackId={field.state.value}
+          className="max-w-auto mt-3"
+        />
+      )}
     </div>
   );
 }

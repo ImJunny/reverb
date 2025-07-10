@@ -4,12 +4,12 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { FormErrorList } from "@/components/page/form-errors";
-import SearchTrack from "@/components/post/create-post/search-track/search-track";
 import { Switch } from "@/components/ui/switch";
 import { useMutation } from "@tanstack/react-query";
 import { createPostMutationOptions } from "@/lib/api-options";
 import { toast } from "sonner";
 import { useRouter } from "@tanstack/react-router";
+import CreatePostSearch from "@/components/post/create-post/create-post-search";
 
 const contentTypes = [
   { type: "text", label: "Text" },
@@ -152,7 +152,7 @@ export default function CreatePostForm() {
                     }}
                   >
                     {(field) => (
-                      <SearchTrack
+                      <CreatePostSearch
                         field={field}
                         onClick={(id) => field.handleChange(id)}
                       />

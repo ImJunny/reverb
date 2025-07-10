@@ -6,8 +6,9 @@ function Input({
   className,
   type,
   label,
+  hideLabel,
   ...props
-}: React.ComponentProps<"input"> & { label?: string }) {
+}: React.ComponentProps<"input"> & { label?: string; hideLabel?: boolean }) {
   return (
     <div className="relative">
       <input
@@ -22,7 +23,9 @@ function Input({
         {...props}
         onFocus={(e) => {
           if (props.onFocus) props.onFocus(e);
-          e.target.placeholder = "";
+          if (!hideLabel) {
+            e.target.placeholder = "";
+          }
         }}
         onBlur={(e) => {
           if (props.onBlur) props.onBlur(e);
@@ -36,9 +39,11 @@ function Input({
         )}
       >
         <div className="bg-input/50 absolute bottom-0 flex h-4/7 w-full" />
-        <span className={cn("relative z-1 mx-[3px]")}>
-          {label ?? props.placeholder}
-        </span>
+        {!hideLabel && (
+          <span className={cn("relative z-1 mx-[3px]")}>
+            {label ?? props.placeholder}
+          </span>
+        )}
       </div>
     </div>
   );

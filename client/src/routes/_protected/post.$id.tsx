@@ -29,7 +29,7 @@ function RouteComponent() {
 
   return (
     <BackgroundWrapper type="blur" className="p-3">
-      <Card className="flex w-full max-w-2xl rounded-xs p-0" transparent>
+      <Card className="flex w-full max-w-2xl rounded-xs p-0">
         <div className="flex flex-col p-3">
           <div className="flex items-center justify-between">
             <div className="flex items-center text-xs">
@@ -90,7 +90,7 @@ function RouteComponent() {
       </Card>
 
       <div className="sticky top-3 ml-3 hidden w-72 flex-col space-y-3 self-start md:flex">
-        <Card className="flex-col space-y-2 rounded-xs md:flex" transparent>
+        <Card className="flex-col space-y-2 rounded-xs md:flex">
           <div className="flex space-x-3">
             <img
               src="https://picsum.photos/seed/123/200/300"

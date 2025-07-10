@@ -69,7 +69,7 @@ function SidebarCategory({ options }: { options: Option[] }) {
             <TooltipTrigger className="w-full" asChild>
               <Link
                 to={option.to}
-                className="[&.active]:bg-accent hover:bg-accent/50 flex items-center gap-4 rounded-sm px-3 py-3 text-sm [&.active]:font-semibold"
+                className="[&.active]:bg-accent hover:bg-accent/50 flex items-center gap-4 rounded-xs px-3 py-3 text-sm [&.active]:font-semibold"
               >
                 {option.icon}
                 <span className="hidden sm:block">{option.label}</span>

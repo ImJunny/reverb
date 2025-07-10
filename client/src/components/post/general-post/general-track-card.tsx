@@ -61,7 +61,9 @@ export default function GeneralTrackCard({
   };
 
   if (isFetching) {
-    return <Skeleton className="h-20 w-full rounded-xs" />;
+    return (
+      <Skeleton className={cn("h-20 w-full max-w-112 rounded-xs", className)} />
+    );
   }
 
   return (
@@ -71,7 +73,7 @@ export default function GeneralTrackCard({
         e.stopPropagation();
       }}
       className={cn(
-        "bg-background flex max-w-112 cursor-default flex-row rounded-xs shadow-lg ring-2 ring-black/5",
+        "bg-background flex w-full max-w-112 cursor-default flex-row rounded-xs shadow-lg ring-2 ring-black/5",
         className,
       )}
       style={{

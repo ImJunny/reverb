@@ -1,6 +1,6 @@
 import { ChevronLeft, ChevronRight, Plus } from "lucide-react";
 import ProfileDropdown from "./profile-dropdown";
-import SearchBar from "./search-bar";
+import HeaderSearch from "./header-search";
 import Logo from "@/assets/logo.svg?react";
 import { useRouter } from "@tanstack/react-router";
 import SidebarToggle from "../sidebar/sidebar-toggle";
@@ -12,7 +12,7 @@ export default function Header() {
   };
 
   return (
-    <nav className="bg-background sticky top-0 z-1 flex h-16 items-center gap-6 p-3">
+    <nav className="bg-background sticky top-0 z-10 flex h-16 items-center gap-6 p-3">
       <div className="ml-3 hidden flex-col space-y-1 sm:flex">
         <Logo className="h-6 w-auto cursor-pointer" onClick={handleClick} />
       </div>
@@ -35,7 +35,7 @@ export default function Header() {
         </button>
       </div>
 
-      <SearchBar />
+      <HeaderSearch />
       <div className="flex h-full items-center space-x-3">
         <SidebarToggle />
         <button

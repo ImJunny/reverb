@@ -69,8 +69,12 @@ export function Search<T>({
 // Search Input
 export function SearchInput({
   label,
+  hideLabel,
   ...props
-}: InputHTMLAttributes<HTMLInputElement> & { label?: string }) {
+}: InputHTMLAttributes<HTMLInputElement> & {
+  label?: string;
+  hideLabel?: boolean;
+}) {
   const { setInput, setShowResults } = useSearch();
 
   return (
@@ -78,6 +82,7 @@ export function SearchInput({
       onChange={(e) => setInput(e.target.value)}
       onFocus={() => setShowResults(true)}
       label={label}
+      hideLabel={hideLabel}
       {...props}
     />
   );
@@ -121,11 +126,7 @@ export function SearchResultItem({
     onClick?.(e);
   };
   return (
-    <div
-      onClick={handleClick}
-      className={`group hover:bg-foreground/5 flex items-center space-x-2 rounded-sm p-2 ${className}`}
-      {...props}
-    >
+    <div onClick={handleClick} className={className} {...props}>
       {children}
     </div>
   );
