@@ -1,5 +1,5 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { Separator } from "../ui/separator";
+import { Separator } from "../../ui/separator";
 import { cn } from "@/lib/utils";
 import { ListPlus, Pause, Play, Plus, PlusCircle, User } from "lucide-react";
 import { formatDuration } from "@/lib/scripts/formatDuration";
@@ -12,16 +12,12 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import type { PlaylistItem } from "shared/types";
+import type { TrackSuggestion } from "shared/types";
 
 export default function TrackSuggestionsRender({
   items,
-  minimal,
-  children,
 }: {
-  items: PlaylistItem[];
-  minimal?: boolean;
-  children?: React.ReactNode;
+  items: TrackSuggestion[];
 }) {
   const { audioRef, trackInfo, setTrackInfo, playing, setPlaying } = useAudio();
   const { firstOpen, setOpen, setFirstOpen } = useSidebar();
@@ -38,7 +34,7 @@ export default function TrackSuggestionsRender({
     }
   };
 
-  const handleClick = (item: PlaylistItem) => {
+  const handleClick = (item: TrackSuggestion) => {
     if (trackInfo?.id === item.id) {
       togglePlayback();
     } else {
@@ -72,15 +68,14 @@ export default function TrackSuggestionsRender({
         <Separator className="mt-2" />
       </div>
 
-      <ScrollArea className={cn("h-full", minimal && "max-h-63")}>
+      <ScrollArea className={cn("h-full max-h-63")}>
         <div className={cn("flex flex-col")}>
           {items.map((item, idx) => (
             <ContextMenu key={item.id}>
               <ContextMenuTrigger>
                 <div
                   className={cn(
-                    "group hover:bg-foreground/5 flex h-11 items-center space-x-3 rounded-sm px-3",
-                    minimal && "h-9",
+                    "group hover:bg-foreground/5 flex h-9 items-center space-x-3 rounded-sm px-3",
                   )}
                 >
                   <div className="flex w-5 items-center justify-center">

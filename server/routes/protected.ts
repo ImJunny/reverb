@@ -24,6 +24,7 @@ import {
   createPost,
   getHomePosts,
   getPost,
+  getPostTrackSuggestions,
 } from "@server/procedures/protected/post";
 import { zValidator } from "@hono/zod-validator";
 import { CreatePostSchema } from "@server/zod-schemas/schemas";
@@ -47,7 +48,8 @@ const summaryRoute = new Hono()
 const postsRoute = new Hono()
   .post("/create", zValidator("json", CreatePostSchema), createPost)
   .get("/home_posts", getHomePosts)
-  .get("/post/:id", getPost);
+  .get("/post/:id", getPost)
+  .get("/track_suggestions/:id", getPostTrackSuggestions);
 
 // Protected API
 export const protectedApi = new Hono()

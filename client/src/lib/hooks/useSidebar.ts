@@ -1,5 +1,4 @@
 import type { SidebarType } from "@/components/sidebar/sidebar-provider";
-
 import {
   createContext,
   useContext,

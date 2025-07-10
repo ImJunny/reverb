@@ -148,7 +148,7 @@ export default function TracksRender({
                   </span>
                 </div>
               </ContextMenuTrigger>
-              <ContextMenuContent className="bg-card rounded-xs border-none shadow-lg">
+              <ContextMenuContent className="bg-card rounded-xxs border-none shadow-lg">
                 <ContextMenuItem>
                   <Plus />
                   Add to playlist

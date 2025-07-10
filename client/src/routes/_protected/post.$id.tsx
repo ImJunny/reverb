@@ -17,7 +17,7 @@ import {
 } from "lucide-react";
 import RecentlyViewedCard from "@/components/page/recenty-viewed-card";
 import GeneralTrackCard from "@/components/post/general-post/general-track-card";
-// import TracksRender from "@/components/playlist/tracks-render";
+import TrackSuggestionPopover from "@/components/post/track-suggestions/track-suggestion-popover";
 
 export const Route = createFileRoute("/_protected/post/$id")({
   component: RouteComponent,
@@ -67,13 +67,21 @@ function RouteComponent() {
           </div>
         </div>
 
-        {/* <Separator />
-        <div className="flex flex-col space-y-3 p-3">
-          <h2>Suggestions • {"5"}</h2>
-          <Card className="rounded-xs">
-            <TracksRender items={playlistItems} minimal />
-          </Card>
-        </div> */}
+        {post?.allow_suggestions && (
+          <>
+            <Separator />
+            <div className="flex flex-col space-y-3 p-3">
+              <div className="flex items-center justify-between">
+                <h2>Suggestions • {"5"}</h2>
+                <TrackSuggestionPopover />
+              </div>
+
+              <Card className="rounded-xs">
+                {/* <TrackSuggestionsRender postId={post?.id} /> */}
+              </Card>
+            </div>
+          </>
+        )}
 
         <Separator />
         <div className="flex flex-col space-y-3 p-3">

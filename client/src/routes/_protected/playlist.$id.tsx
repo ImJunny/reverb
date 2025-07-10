@@ -5,9 +5,7 @@ import {
   playlistItemsQueryOptions,
 } from "@/lib/api-options";
 import { cn } from "@/lib/utils";
-import TracksRender, {
-  TracksRenderFull,
-} from "@/components/track/tracks-render";
+import TracksRender from "@/components/track/tracks-render";
 import { useBackground } from "@/lib/hooks/useBackground";
 import { useEffect } from "react";
 import BackgroundWrapper from "@/components/page/background-wrapper";

@@ -2,10 +2,11 @@ import {
   createPostDB,
   getHomePostsDB,
   getPostDB,
+  getPostTrackSuggestionsDB,
 } from "@server/db/actions/post-actions";
 import { getSpotifyPlaylistData } from "@server/lib/spotify-helpers";
 import type { ProtectedContext } from "@server/utils/auth-middleware";
-import type { PlaylistData, Post } from "shared/types";
+import type { PlaylistData, Post, TrackSuggestion } from "shared/types";
 
 // Create post; body validated by zValidator
 export async function createPost(c: ProtectedContext) {
@@ -51,17 +52,21 @@ export async function getPost(c: ProtectedContext) {
   }
 }
 
-export async function getPlaylistData(c: ProtectedContext) {
-  const playlistId = c.req.param("id");
-  if (!playlistId) return c.json({ message: "Playlist ID is required" }, 400);
-
+export async function getPostTrackSuggestions(c: ProtectedContext) {
   try {
-    const accessToken = c.get("access_token");
-    const playlistData = await getSpotifyPlaylistData(accessToken, playlistId);
-    return c.json(playlistData, 200);
+    const postId = c.req.param("id");
+    if (!postId) return c.json({ message: "Post ID is required" }, 400);
+
+    const suggestions = await getPostTrackSuggestionsDB(postId);
+    const formattedData: TrackSuggestion[] = suggestions.map((item) => ({
+      id: item.id,
+      track_id: item.track_id,
+      user_id: item.user_id,
+    }));
+    return c.json(formattedData, 200);
   } catch (error: any) {
     return c.json(
-      { message: "Failed to fetch playlist info", error: error.message },
+      { message: "Failed to retrieve track suggestions", error: error.message },
       500
     );
   }

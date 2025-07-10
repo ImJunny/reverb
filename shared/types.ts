@@ -89,3 +89,9 @@ export type Track = {
   duration_ms: number;
   external_urls: { spotify: string };
 };
+
+export type TrackSuggestion = {
+  id: string;
+  track_id: string;
+  user_id: string | null;
+};

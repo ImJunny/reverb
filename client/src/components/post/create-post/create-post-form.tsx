@@ -154,7 +154,7 @@ export default function CreatePostForm() {
                     {(field) => (
                       <SearchTrack
                         field={field}
-                        onSelect={(id) => field.handleChange(id)}
+                        onClick={(id) => field.handleChange(id)}
                       />
                     )}
                   </form.Field>

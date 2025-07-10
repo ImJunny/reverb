@@ -1,6 +1,6 @@
-import { desc, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { db } from "..";
-import { postsTable } from "../schema";
+import { postsTable, trackSuggestionsTable } from "../schema";
 import { v4 as uuidv4 } from "uuid";
 
 export async function createPostDB(
@@ -35,4 +35,13 @@ export async function getPostDB(id: string) {
     .where(eq(postsTable.id, id))
     .then((res) => res[0]);
   return post;
+}
+
+export async function getPostTrackSuggestionsDB(id: string) {
+  const suggestions = await db
+    .select()
+    .from(trackSuggestionsTable)
+    .where(eq(trackSuggestionsTable.post_id, id))
+    .orderBy(desc(trackSuggestionsTable.created_at));
+  return suggestions;
 }
