@@ -23,7 +23,7 @@ export default function GeneralTrackCard({
   );
 
   const { data: color = "#000000", isFetching: colorFetching } =
-    useAverageColor(trackData?.album.image_url);
+    useAverageColor(trackData?.album.image_url, { saturate: 10 });
 
   if (!trackData) return null;
 
@@ -37,12 +37,12 @@ export default function GeneralTrackCard({
         e.stopPropagation();
       }}
       className={cn(
-        "bg-background flex w-full cursor-default flex-row rounded-xs shadow-lg ring-2 ring-black/5",
+        "bg-background flex w-full cursor-default flex-row rounded-xs p-3 shadow-lg ring-2 ring-black/5",
         className,
       )}
       style={{
         backgroundColor: color
-          ? `color-mix(in srgb, ${color} 55%, #000 45%)`
+          ? `color-mix(in srgb, ${color} 75%, #000 25%)`
           : undefined,
       }}
       {...props}

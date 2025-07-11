@@ -17,7 +17,7 @@ export default function PlaylistRender({ playlistId }: { playlistId: string }) {
     playlistItemsQueryOptions(playlistId),
   );
   const { data: color = "#000000", isFetching: colorFetching } =
-    useAverageColor(playlistData?.image_url);
+    useAverageColor(playlistData?.image_url, { saturate: 10 });
 
   const { setImageUrl } = useBackground();
   useEffect(() => {

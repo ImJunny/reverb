@@ -1,7 +1,7 @@
 import { boolean, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
 
 // ENUMS
-const summaryTypeEnum = pgEnum("type", ["track", "artist"]);
+const summaryTypeEnum = pgEnum("summary_type", ["track", "artist"]);
 const postTypeEnum = pgEnum("post_type", ["text", "track_id", "playlist_id"]);
 
 // TABLES
@@ -11,11 +11,12 @@ export const usersTable = pgTable("users", {
   refresh_token: text().notNull(),
   expires_at: timestamp().notNull(),
   created_at: timestamp().defaultNow().notNull(),
+  image_url: text(),
 });
 
 export const summariesTable = pgTable("summaries", {
   id: text().primaryKey(),
-  type: summaryTypeEnum("type").notNull(),
+  type: summaryTypeEnum().notNull(),
   summary: text().notNull(),
   created_at: timestamp().defaultNow().notNull(),
 });
@@ -23,7 +24,7 @@ export const summariesTable = pgTable("summaries", {
 export const postsTable = pgTable("posts", {
   id: text().primaryKey(),
   title: text().notNull(),
-  type: postTypeEnum("type").notNull(),
+  type: postTypeEnum().notNull(),
   content: text(),
   allow_suggestions: boolean(),
   created_at: timestamp().defaultNow().notNull(),

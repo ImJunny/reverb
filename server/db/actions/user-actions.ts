@@ -14,6 +14,7 @@ export async function getRefreshTokenDB(userId: string) {
 
 export async function createUserDB(
   userId: string,
+  imageUrl: string | null,
   accessToken: string,
   refreshToken: string,
   expiresAt: Date

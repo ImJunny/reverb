@@ -49,14 +49,16 @@ export async function getSpotifyTokenData(code: string) {
 }
 
 // Get user id from access token
-export async function getSpotifyUserId(accessToken: string) {
+export async function getSpotifyCurrentUser(
+  accessToken: string
+): Promise<SpotifyApi.CurrentUsersProfileResponse> {
   const res = await axios.get("https://api.spotify.com/v1/me", {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
   });
   const data = await res.data;
-  return data.id;
+  return data;
 }
 
 // Get user top tracks from access token

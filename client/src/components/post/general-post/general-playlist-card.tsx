@@ -20,7 +20,7 @@ export default function GeneralPlaylistCard({
     staleTime: 1000 * 60 * 5,
   });
   const { data: color = "#000000", isFetching: colorFetching } =
-    useAverageColor(playlistData?.image_url);
+    useAverageColor(playlistData?.image_url, { saturate: 10 });
 
   if (!playlistData || colorFetching)
     return <Skeleton className={cn("h-28 w-full rounded-xs", className)} />;
