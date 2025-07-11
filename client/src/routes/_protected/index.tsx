@@ -12,6 +12,7 @@ export const Route = createFileRoute("/_protected/")({
 function RouteComponent() {
   const { data: posts } = useQuery({
     ...homePostsQueryOptions(),
+    staleTime: 1000 * 60 * 5,
   });
 
   return (

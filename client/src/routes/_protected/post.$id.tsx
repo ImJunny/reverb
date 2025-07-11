@@ -43,12 +43,13 @@ function RouteComponent() {
             </div>
             <Ellipsis size={20} className="text-muted-foreground" />
           </div>
-          <h1 className="my-2 text-xl font-semibold">{post?.title}</h1>
-          <div className="mb-3 flex items-center space-x-2">
+          <div className="my-2 flex items-center space-x-2">
             <Badge>Help</Badge>
             <Badge className="text-secondary-foreground bg-white/20">Rnb</Badge>
             <Badge className="text-secondary-foreground bg-white/20">Pop</Badge>
           </div>
+          <h1 className="mb-2 text-xl font-semibold">{post?.title}</h1>
+
           {post?.type === "text" && (
             <p className="text-muted-foreground text-sm">{post?.content}</p>
           )}

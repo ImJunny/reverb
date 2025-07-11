@@ -4,11 +4,7 @@ import {
   getSpotifyPlaylistItems,
 } from "@server/lib/spotify-helpers";
 import type { ProtectedContext } from "@server/utils/auth-middleware";
-import type {
-  PlaylistItem,
-  PlaylistData,
-  GeneralPlaylistData,
-} from "shared/types";
+import type { PlaylistData, GeneralPlaylistData, Track } from "shared/types";
 
 // Fetch current user's playlists
 export async function getCurrentUserPlaylists(c: ProtectedContext) {
@@ -81,13 +77,12 @@ export async function getPlaylistItems(c: ProtectedContext) {
       accessToken,
       playlistId
     );
-    const formattedData: PlaylistItem[] = playlistItems.items.map((item) => ({
+    const formattedData: Track[] = playlistItems.items.map((item) => ({
       id: item.track!.id,
       name: item.track!.name,
       artists: item.track!.artists.map((artist) => ({
         id: artist.id,
         name: artist.name,
-        external_urls: artist.external_urls,
       })),
       duration_ms: item.track!.duration_ms,
       album: {
@@ -95,6 +90,7 @@ export async function getPlaylistItems(c: ProtectedContext) {
         name: item.track!.album.name,
         image_url: item.track!.album.images[0]?.url ?? "",
       },
+      external_urls: item.track!.external_urls,
     }));
 
     return c.json(formattedData, 200);

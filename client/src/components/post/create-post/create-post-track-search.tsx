@@ -4,32 +4,26 @@ import type { AnyFieldApi } from "@tanstack/react-form";
 import {
   Search,
   SearchInput,
-  SearchResultItem,
+  SearchResultsItem,
   SearchResults,
 } from "@/components/search/search";
 import type { TrackSearchResult } from "shared/types";
-import { useCreatePost } from "@/lib/hooks/useCreatePost";
 import { cn } from "@/lib/utils";
 import GeneralTrackCard from "../general-post/general-track-card";
+import { useRef } from "react";
+import PlaybackToggle from "@/components/track/playback-toggle";
 
-export default function CreatePostSearch({
+export default function CreatePostTrackSearch({
   field,
   onClick,
 }: {
-  field: AnyFieldApi;
+  field?: AnyFieldApi;
   onClick: (id: string) => void;
 }) {
-  const { setSelectedTrackInfo } = useCreatePost();
-
   const handleClick = (result: TrackSearchResult) => {
-    onClick?.(result.id);
-    setSelectedTrackInfo?.({
-      id: result.id,
-      image_url: result.image_url,
-      name: result.name,
-      artists: result.artists.map((artist) => artist.name),
-    });
+    onClick(result.id);
   };
+  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div>
@@ -37,41 +31,54 @@ export default function CreatePostSearch({
         queryOptions={
           trackSearchQueryOptions as (query: string) => UseQueryOptions
         }
+        className={cn(field?.state.value && "hidden")}
       >
-        <SearchInput
-          placeholder="Search song, artist, album..."
-          label="Search"
-        />
+        <SearchInput placeholder="Search song" label="Search" ref={inputRef} />
         <SearchResults<TrackSearchResult> className="bg-muted ring-ring/50 ring-1">
           {(result) =>
             (
-              <SearchResultItem
+              <SearchResultsItem
                 onClick={() => handleClick(result)}
                 className="hover:bg-foreground/5 flex items-center space-x-2 p-2"
+                clearInput
               >
                 <img
                   src={result.image_url}
                   alt="track"
                   className={cn("rounded-xxs h-9 w-9 object-cover")}
                 />
-
                 <div className="flex flex-col text-xs">
-                  <span className={"text-sm"}>{result.name}</span>
+                  <span className="text-sm">{result.name}</span>
                   <span className="text-muted-foreground text-xs">
                     {result.artists.map((artist) => artist.name).join(", ")}
                   </span>
                 </div>
-              </SearchResultItem>
+              </SearchResultsItem>
             ) as React.ReactNode
           }
         </SearchResults>
       </Search>
 
-      {field.state.value && (
-        <GeneralTrackCard
-          trackId={field.state.value}
-          className="max-w-auto mt-3"
-        />
+      {field?.state.value && (
+        <div className="flex flex-col space-y-2">
+          <GeneralTrackCard trackId={field.state.value}>
+            {(trackData) => (
+              <div className="mr-3 ml-auto flex items-center space-x-5">
+                <PlaybackToggle trackData={trackData!} size={24} />
+                <button
+                  onClick={() => {
+                    field.handleChange(undefined);
+                    inputRef.current?.focus();
+                  }}
+                >
+                  <p className="text-muted-foreground hover:text-foreground cursor-pointer text-xs">
+                    Change
+                  </p>
+                </button>
+              </div>
+            )}
+          </GeneralTrackCard>
+        </div>
       )}
     </div>
   );

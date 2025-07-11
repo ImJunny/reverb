@@ -1,4 +1,10 @@
-import { createContext, useContext } from "react";
+import {
+  createContext,
+  useContext,
+  type Dispatch,
+  type RefObject,
+  type SetStateAction,
+} from "react";
 
 export type SearchContextType<T> = {
   input: string;
@@ -7,8 +13,8 @@ export type SearchContextType<T> = {
   data: T | undefined;
   isFetched: boolean;
   showResults: boolean;
-  setShowResults: (value: boolean) => void;
-  resultsRef: React.RefObject<HTMLDivElement | null>;
+  setShowResults: Dispatch<SetStateAction<boolean>>;
+  resultsRef: RefObject<HTMLDivElement | null>;
 };
 
 export const SearchContext = createContext<

@@ -13,6 +13,7 @@ import type { Post } from "shared/types";
 import GeneralPlaylistCard from "./general-post/general-playlist-card";
 import GeneralTrackCard from "./general-post/general-track-card";
 import { formatTimeAgo } from "@/lib/scripts/formatTimeAgo";
+import PlaybackToggle from "../track/playback-toggle";
 
 export default function GeneralPostCard({ post }: { post: Post }) {
   return (
@@ -48,10 +49,21 @@ export default function GeneralPostCard({ post }: { post: Post }) {
           </p>
         )}
         {post.type === "track_id" && (
-          <GeneralTrackCard trackId={post.content!} className="mt-2" />
+          <GeneralTrackCard trackId={post.content!} className="mt-2 max-w-112">
+            {(trackData) => (
+              <PlaybackToggle
+                trackData={trackData!}
+                size={24}
+                className="mr-3"
+              />
+            )}
+          </GeneralTrackCard>
         )}
         {post.type === "playlist_id" && (
-          <GeneralPlaylistCard playlistId={post.content!} className="mt-2" />
+          <GeneralPlaylistCard
+            playlistId={post.content!}
+            className="mt-2 max-w-112"
+          />
         )}
         <div className="mt-3 flex items-center space-x-4">
           <Heart size={20} />

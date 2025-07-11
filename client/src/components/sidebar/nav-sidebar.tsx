@@ -20,29 +20,29 @@ const sidebar_options = {
     {
       to: "/",
       label: "Home",
-      icon: <Home size={20} />,
+      icon: <Home size={16} />,
     },
     {
       to: "/explore",
       label: "Explore",
-      icon: <Compass size={20} />,
+      icon: <Compass size={16} />,
     },
     {
       to: "/groups",
       label: "Groups",
-      icon: <Users size={20} />,
+      icon: <Users size={16} />,
     },
     {
       to: "/messages",
       label: "Messages",
-      icon: <MessageCircleMore size={20} />,
+      icon: <MessageCircleMore size={16} />,
     },
   ],
   personal: [
     {
       to: "/playlists",
       label: "Playlists",
-      icon: <DiscAlbum size={20} />,
+      icon: <DiscAlbum size={16} />,
     },
   ],
 };
@@ -69,7 +69,7 @@ function SidebarCategory({ options }: { options: Option[] }) {
             <TooltipTrigger className="w-full" asChild>
               <Link
                 to={option.to}
-                className="[&.active]:bg-accent hover:bg-accent/50 flex items-center gap-4 rounded-xs px-3 py-3 text-sm [&.active]:font-semibold"
+                className="[&.active]:bg-accent hover:bg-accent/50 flex items-center gap-4 rounded-xs px-3 py-2 text-sm [&.active]:font-semibold"
               >
                 {option.icon}
                 <span className="hidden sm:block">{option.label}</span>

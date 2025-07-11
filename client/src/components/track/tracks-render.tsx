@@ -1,10 +1,9 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "../ui/separator";
 import { cn } from "@/lib/utils";
-import { ListPlus, Pause, Play, Plus, PlusCircle, User } from "lucide-react";
+import { ListPlus, Plus, PlusCircle, User } from "lucide-react";
 import { formatDuration } from "@/lib/scripts/formatDuration";
 import { useAudio } from "@/lib/hooks/useAudio";
-import { useSidebar } from "@/lib/hooks/useSidebar";
 import {
   ContextMenu,
   ContextMenuContent,
@@ -12,49 +11,19 @@ import {
   ContextMenuSeparator,
   ContextMenuTrigger,
 } from "@/components/ui/context-menu";
-import type { PlaylistItem } from "shared/types";
+import type { Track } from "shared/types";
+import PlaybackToggle from "./playback-toggle";
 
 export default function TracksRender({
   items,
   minimal,
   children,
 }: {
-  items: PlaylistItem[];
+  items: Track[];
   minimal?: boolean;
   children?: React.ReactNode;
 }) {
-  const { audioRef, trackInfo, setTrackInfo, playing, setPlaying } = useAudio();
-  const { firstOpen, setOpen, setFirstOpen } = useSidebar();
-
-  const togglePlayback = () => {
-    if (!audioRef.current) return;
-
-    if (playing) {
-      audioRef.current.pause();
-      setPlaying(false);
-    } else {
-      audioRef.current.play();
-      setPlaying(true);
-    }
-  };
-
-  const handleClick = (item: PlaylistItem) => {
-    if (trackInfo?.id === item.id) {
-      togglePlayback();
-    } else {
-      setTrackInfo({
-        id: item.id,
-        name: item.name,
-        artists: item.artists.map((artist) => artist.name),
-        image_url: item.album.image_url,
-      });
-    }
-
-    if (firstOpen) {
-      setOpen(true);
-      setFirstOpen(false);
-    }
-  };
+  const { trackInfo } = useAudio();
 
   if (!items) return <></>;
 
@@ -84,20 +53,11 @@ export default function TracksRender({
                   )}
                 >
                   <div className="flex w-5 items-center justify-center">
-                    <button onClick={() => handleClick(item)}>
-                      {playing && trackInfo?.id === item.id ? (
-                        <Pause
-                          size={16}
-                          className="hover:fill-foreground fill-muted-foreground hidden text-transparent group-hover:block hover:cursor-pointer"
-                        />
-                      ) : (
-                        <Play
-                          size={16}
-                          className="hover:fill-foreground fill-muted-foreground hidden text-transparent group-hover:block hover:cursor-pointer"
-                        />
-                      )}
-                    </button>
-
+                    <PlaybackToggle
+                      trackData={item}
+                      size={16}
+                      className="hover:fill-foreground fill-muted-foreground hidden text-transparent group-hover:block hover:cursor-pointer"
+                    />
                     <p
                       className={cn(
                         "text-muted-foreground text-xs font-light group-hover:hidden",
