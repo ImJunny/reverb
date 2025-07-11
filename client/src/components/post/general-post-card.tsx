@@ -18,7 +18,7 @@ import PlaybackToggle from "../track/playback-toggle";
 export default function GeneralPostCard({ post }: { post: Post }) {
   return (
     <Link to={`/post/${post.id}` as string} className="no-underline">
-      <Card className="hover:bg-card-hover rounded-xs shadow-xl ring-1 ring-black/5">
+      <Card className="hover:bg-card-hover rounded-xs shadow-xl ring-1 ring-black/25">
         <div className="flex items-center justify-between">
           <div className="flex items-center text-xs">
             <img
@@ -66,11 +66,11 @@ export default function GeneralPostCard({ post }: { post: Post }) {
           />
         )}
         <div className="mt-3 flex items-center space-x-4">
-          <Heart size={20} />
-          <MessageCircle size={20} />
-          <Disc size={20} />
-          <Bookmark size={20} />
-          <Share size={20} />
+          <Heart size={16} />
+          <MessageCircle size={16} />
+          <Disc size={16} />
+          <Bookmark size={16} />
+          <Share size={16} />
         </div>
       </Card>
     </Link>

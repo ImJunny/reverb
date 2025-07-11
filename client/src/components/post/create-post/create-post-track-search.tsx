@@ -36,7 +36,7 @@ export default function CreatePostTrackSearch({
         )}
       >
         <SearchInput placeholder="Search song" ref={inputRef} />
-        <SearchResults<TrackSearchResult> className="bg-muted ring-ring/50 ring-1">
+        <SearchResults<TrackSearchResult> className="bg-popover ring-ring/50 ring-1">
           {(result) =>
             (
               <SearchResultsItem

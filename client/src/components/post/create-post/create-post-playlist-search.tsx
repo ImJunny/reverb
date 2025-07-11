@@ -34,7 +34,7 @@ export default function CreatePostPlaylistSearch({
         )}
       >
         <SearchFilterInput placeholder="Search playlist" ref={inputRef} />
-        <SearchFilterResults<GeneralPlaylistData> className="bg-muted ring-ring/50 max-h-65 ring-1">
+        <SearchFilterResults<GeneralPlaylistData> className="bg-popover ring-ring/50 max-h-65 ring-1">
           {(result) => (
             <SearchFilterResultsItem
               className="hover:bg-foreground/5 flex items-center space-x-2 p-2"

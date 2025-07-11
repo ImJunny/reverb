@@ -65,7 +65,7 @@ function RouteComponent() {
         </div>
       </div>
 
-      <div className="flex w-full justify-center bg-black/25">
+      <div className="bg-muted/30 flex w-full justify-center">
         <div className="mx-3 w-full max-w-5xl justify-center pb-3">
           <TracksRender items={playlistItems} />
         </div>

@@ -51,7 +51,7 @@ const recentPosts = [
 
 export default function RecentlyViewedCard() {
   return (
-    <Card className="flex flex-col overflow-hidden rounded-xs p-0 text-xs">
+    <Card className="flex flex-col overflow-hidden rounded-xs p-0 text-xs shadow-xl ring-1 ring-black/25">
       <div className="bg-card flex items-center justify-between px-3 pt-3 pb-1">
         <h1>Recently viewed</h1>
         <p className="text-muted-foreground">Clear</p>

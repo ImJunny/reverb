@@ -18,10 +18,9 @@ export default function GeneralTrackCard({
   children,
   ...props
 }: GeneralTrackCardProps) {
-  const { data: trackData, isFetching } = useQuery({
-    ...trackDataQueryOptions(trackId),
-    staleTime: 1000 * 60 * 5,
-  });
+  const { data: trackData, isFetching } = useQuery(
+    trackDataQueryOptions(trackId),
+  );
 
   const { data: color = "#000000", isFetching: colorFetching } =
     useAverageColor(trackData?.album.image_url);
