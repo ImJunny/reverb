@@ -6,6 +6,10 @@ import {
   generateArtistSummary,
   generateTrackSummary,
 } from "@server/lib/groq-helpers";
+import {
+  getSpotifyArtistData,
+  getSpotifyArtistMonthlyListeners,
+} from "@server/lib/spotify-helpers";
 import type { ProtectedContext } from "@server/utils/auth-middleware";
 
 // Get track and artist summaries used in the listening panel
@@ -39,9 +43,13 @@ export async function getArtistSummary(c: ProtectedContext) {
     const trackName = c.req.query("trackName");
     const artistId = c.req.query("artistId");
     const artistName = c.req.query("artistName");
+    const accessToken = c.get("access_token");
 
-    if (!artistName || !artistId || !trackName)
-      return c.json({ message: "Missing artist information" }, 400);
+    if (!artistName || !artistId || !trackName || !accessToken)
+      return c.json(
+        { message: "Missing artist information or access token" },
+        400
+      );
 
     let artistSummaryEntry = await selectSummary(artistId);
     let summary: string | null | undefined = artistSummaryEntry?.summary;
@@ -49,8 +57,11 @@ export async function getArtistSummary(c: ProtectedContext) {
       summary = await generateArtistSummary(trackName!, artistName!);
       await insertSummary(artistId, "artist", summary!);
     }
-
-    return c.json({ summary }, 200);
+    const artistData = await getSpotifyArtistData(accessToken, artistId);
+    const monthlyListeners = await getSpotifyArtistMonthlyListeners(
+      artistData.external_urls.spotify
+    );
+    return c.json({ summary, monthly_listeners: monthlyListeners }, 200);
   } catch (error: any) {
     return c.json(
       { message: "Failed to fetch artist summary", error: error.message },

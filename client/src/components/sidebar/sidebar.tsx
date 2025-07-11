@@ -16,7 +16,7 @@ export default function RightSidebarWrapper() {
   if (!open) return null;
 
   return (
-    <div className="bg-muted hidden h-full w-full max-w-80 flex-col overflow-hidden rounded-sm lg:flex">
+    <div className="bg-muted hidden h-full w-full max-w-84 flex-col overflow-hidden rounded-sm lg:flex">
       {/* Header */}
       <div className="text-muted-foreground mt-3 mb-3 flex shrink-0 items-center px-3 text-xs font-semibold">
         {sidebarTypes.map((sidebarType) => (

@@ -18,7 +18,7 @@ import PlaybackToggle from "../track/playback-toggle";
 export default function GeneralPostCard({ post }: { post: Post }) {
   return (
     <Link to={`/post/${post.id}` as string} className="no-underline">
-      <Card className="hover:bg-card rounded-xs p-3 shadow-xl ring-1 ring-black/5">
+      <Card className="hover:bg-card-hover rounded-xs shadow-xl ring-1 ring-black/5">
         <div className="flex items-center justify-between">
           <div className="flex items-center text-xs">
             <img

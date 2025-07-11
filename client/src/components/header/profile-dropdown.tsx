@@ -35,7 +35,7 @@ export default function ProfileDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         sideOffset={14}
-        className="bg-card rounded-xxs w-42 border-none shadow-lg"
+        className="rounded-xxs w-42 border-none shadow-lg"
       >
         <DropdownMenuItem asChild>
           <Link to="/profile" className="">

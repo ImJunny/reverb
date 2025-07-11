@@ -194,6 +194,40 @@ export async function getSpotifyTrackPreviewUrl(
   return previewUrl;
 }
 
+// Get artist monthly listeners
+export async function getSpotifyArtistMonthlyListeners(
+  url: string
+): Promise<number | null> {
+  try {
+    const response = await axios.get(url);
+    const html = response.data;
+    const $ = cheerio.load(html);
+
+    let listeners: number | null = null;
+
+    // Look for any element that contains the text "monthly listeners"
+    const textElement = $("*")
+      .filter((_, el) =>
+        $(el).text().toLowerCase().includes("monthly listeners")
+      )
+      .first();
+
+    if (textElement.length > 0) {
+      const text = textElement.text(); // Example: "7,345,123 monthly listeners"
+      const match = text.replace(/,/g, "").match(/(\d+)\s*monthly listeners/i);
+
+      if (match && match[1]) {
+        listeners = parseInt(match[1], 10);
+      }
+    }
+
+    return listeners;
+  } catch (error) {
+    console.error("Error scraping Spotify:", error);
+    return null;
+  }
+}
+
 // Get track data
 export async function getSpotifyTrackData(
   accessToken: string,

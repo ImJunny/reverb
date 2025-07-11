@@ -4,14 +4,17 @@ import { playlistDataQueryOptions } from "@/lib/api-options";
 import { useAverageColor } from "@/lib/hooks/useAverageColor";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { type HTMLAttributes } from "react";
+import { type HTMLAttributes, type ReactNode } from "react";
+import type { PlaylistData } from "shared/types";
 
 export default function GeneralPlaylistCard({
   playlistId,
   className,
+  children,
 }: {
   playlistId: string;
-} & HTMLAttributes<HTMLDivElement>) {
+  children?: ((playlistData: PlaylistData) => ReactNode) | ReactNode;
+} & Omit<HTMLAttributes<HTMLDivElement>, "children">) {
   const { data: playlistData } = useQuery({
     ...playlistDataQueryOptions(playlistId),
     staleTime: 1000 * 60 * 5,
@@ -50,6 +53,9 @@ export default function GeneralPlaylistCard({
           {playlistData.total} songs
         </p>
       </div>
+      {typeof children === "function"
+        ? (children as (playlistData: PlaylistData) => ReactNode)(playlistData)
+        : children}
     </Card>
   );
 }

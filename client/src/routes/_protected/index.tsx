@@ -24,7 +24,7 @@ function RouteComponent() {
       <div className="flex w-full max-w-2xl flex-col space-y-2">
         {posts?.map((post) => <GeneralPostCard key={post.id} post={post} />)}
       </div>
-      <div className="sticky top-3 ml-3 hidden w-72 flex-col space-y-3 self-start md:flex">
+      <div className="sticky top-3 ml-3 hidden w-74 flex-col space-y-3 self-start md:flex">
         <RecentlyViewedCard />
       </div>
     </BackgroundWrapper>

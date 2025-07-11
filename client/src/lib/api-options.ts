@@ -55,6 +55,7 @@ export const trackPreviewQueryOptions = (trackId: string | undefined) =>
       if (!res.ok) throw new Error("Failed to fetch track preview");
       return res.json();
     },
+    staleTime: Infinity,
   });
 
 export const trackDataQueryOptions = (trackId: string | undefined) =>
@@ -68,6 +69,7 @@ export const trackDataQueryOptions = (trackId: string | undefined) =>
       if (!res.ok) throw new Error("Failed to fetch track data");
       return res.json();
     },
+    staleTime: Infinity,
   });
 
 export const artistDataQueryOptions = (artistId: string | undefined) =>
@@ -81,6 +83,7 @@ export const artistDataQueryOptions = (artistId: string | undefined) =>
       if (!res.ok) throw new Error("Failed to fetch artist data");
       return res.json();
     },
+    staleTime: Infinity,
   });
 
 export const artistDataFromTrackIdQueryOptions = (
@@ -96,6 +99,7 @@ export const artistDataFromTrackIdQueryOptions = (
       if (!res.ok) throw new Error("Failed to fetch artist data from track ID");
       return res.json();
     },
+    staleTime: Infinity,
   });
 
 export const trackSummaryQueryOptions = (
@@ -113,6 +117,7 @@ export const trackSummaryQueryOptions = (
       if (!res.ok) throw new Error("Failed to fetch track summary");
       return res.json();
     },
+    staleTime: Infinity,
   });
 
 export const artistSummaryQueryOptions = (
@@ -131,6 +136,7 @@ export const artistSummaryQueryOptions = (
       if (!res.ok) throw new Error("Failed to fetch artist summary");
       return res.json();
     },
+    staleTime: Infinity,
   });
 
 export const trackSearchQueryOptions = (query: string) =>

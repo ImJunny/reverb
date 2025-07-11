@@ -31,9 +31,11 @@ export default function CreatePostTrackSearch({
         queryOptions={
           trackSearchQueryOptions as (query: string) => UseQueryOptions
         }
-        className={cn(field?.state.value && "hidden")}
+        className={cn(
+          field?.state.value && "pointer-events-none h-0 opacity-0",
+        )}
       >
-        <SearchInput placeholder="Search song" label="Search" ref={inputRef} />
+        <SearchInput placeholder="Search song" ref={inputRef} />
         <SearchResults<TrackSearchResult> className="bg-muted ring-ring/50 ring-1">
           {(result) =>
             (
@@ -63,7 +65,7 @@ export default function CreatePostTrackSearch({
         <div className="flex flex-col space-y-2">
           <GeneralTrackCard trackId={field.state.value}>
             {(trackData) => (
-              <div className="mr-3 ml-auto flex items-center space-x-5">
+              <div className="mr-3 ml-auto flex items-center space-x-3">
                 <PlaybackToggle trackData={trackData!} size={24} />
                 <button
                   onClick={() => {

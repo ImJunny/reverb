@@ -5,7 +5,7 @@ import type { GeneralPlaylistData } from "shared/types";
 export function PlaylistCard({ playlist }: { playlist: GeneralPlaylistData }) {
   return (
     <Link to="/playlist/$id" params={{ id: playlist.id }} className="shrink-0">
-      <Card className="flex cursor-pointer flex-col space-y-2 rounded-xs">
+      <Card className="hover:bg-card-hover flex cursor-pointer flex-col space-y-2 rounded-xs">
         {playlist.image_url ? (
           <img
             src={playlist.image_url}

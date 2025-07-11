@@ -9,6 +9,8 @@ import { useQuery } from "@tanstack/react-query";
 import type { GeneralPlaylistData } from "shared/types";
 import GeneralPlaylistCard from "../general-post/general-playlist-card";
 import type { AnyFieldApi } from "@tanstack/react-form";
+import { cn } from "@/lib/utils";
+import { useRef } from "react";
 
 export default function CreatePostPlaylistSearch({
   field,
@@ -20,11 +22,18 @@ export default function CreatePostPlaylistSearch({
   const { data } = useQuery({ ...currentUserPlaylistsQueryOptions });
   // should filter owned playlists through the server, but im lazy so ill do it later
   const playlists = data?.filter((playlist) => playlist.self);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   return (
     <div>
-      <SearchFilter data={playlists} searchKey="name">
-        <SearchFilterInput placeholder="Search playlist" label="Playlist" />
+      <SearchFilter
+        data={playlists}
+        searchKey="name"
+        className={cn(
+          field?.state.value && "pointer-events-none h-0 opacity-0",
+        )}
+      >
+        <SearchFilterInput placeholder="Search playlist" ref={inputRef} />
         <SearchFilterResults<GeneralPlaylistData> className="bg-muted ring-ring/50 max-h-65 ring-1">
           {(result) => (
             <SearchFilterResultsItem
@@ -44,7 +53,21 @@ export default function CreatePostPlaylistSearch({
       </SearchFilter>
 
       {field?.state.value && (
-        <GeneralPlaylistCard playlistId={field.state.value} className="mt-3" />
+        <GeneralPlaylistCard playlistId={field.state.value}>
+          <div className="flex items-center">
+            <button
+              onClick={() => {
+                field.handleChange(undefined);
+                inputRef.current?.focus();
+              }}
+              className="mr-3"
+            >
+              <p className="text-muted-foreground hover:text-foreground cursor-pointer text-xs">
+                Change
+              </p>
+            </button>
+          </div>
+        </GeneralPlaylistCard>
       )}
     </div>
   );
