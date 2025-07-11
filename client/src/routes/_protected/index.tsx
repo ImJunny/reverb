@@ -4,6 +4,7 @@ import RecentlyViewedCard from "@/components/page/recenty-viewed-card";
 import GeneralPostCard from "@/components/post/general-post-card";
 import { useQuery } from "@tanstack/react-query";
 import { homePostsQueryOptions } from "@/lib/api-options";
+import GeneralPostCardSkeleton from "@/components/post/general-post-card-skeleton";
 
 export const Route = createFileRoute("/_protected/")({
   component: RouteComponent,
@@ -12,6 +13,7 @@ export const Route = createFileRoute("/_protected/")({
 function RouteComponent() {
   const { data: posts } = useQuery({
     ...homePostsQueryOptions(),
+    staleTime: 1000 * 60 * 5,
   });
 
   return (
@@ -21,9 +23,13 @@ function RouteComponent() {
       options={{ resetColor: true }}
     >
       <div className="flex w-full max-w-2xl flex-col space-y-2">
-        {posts?.map((post) => <GeneralPostCard key={post.id} post={post} />)}
+        {posts
+          ? posts?.map((post) => <GeneralPostCard key={post.id} post={post} />)
+          : Array.from({ length: 5 }).map((_, idx) => (
+              <GeneralPostCardSkeleton key={idx} />
+            ))}
       </div>
-      <div className="sticky top-3 ml-3 hidden w-72 flex-col space-y-3 self-start md:flex">
+      <div className="sticky top-3 ml-3 hidden w-74 flex-col space-y-3 self-start md:flex">
         <RecentlyViewedCard />
       </div>
     </BackgroundWrapper>

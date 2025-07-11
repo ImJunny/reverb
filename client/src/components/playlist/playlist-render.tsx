@@ -8,14 +8,18 @@ import {
   playlistDataQueryOptions,
   playlistItemsQueryOptions,
 } from "@/lib/api-options";
+import { useAverageColor } from "@/lib/hooks/useAverageColor";
+import { Skeleton } from "../ui/skeleton";
 
 export default function PlaylistRender({ playlistId }: { playlistId: string }) {
   const { data: playlistData } = useQuery(playlistDataQueryOptions(playlistId));
   const { data: playlistItems } = useQuery(
     playlistItemsQueryOptions(playlistId),
   );
+  const { data: color = "#000000", isFetching: colorFetching } =
+    useAverageColor(playlistData?.image_url);
 
-  const { color, setImageUrl } = useBackground();
+  const { setImageUrl } = useBackground();
   useEffect(() => {
     (async () => {
       if (playlistData?.image_url) {
@@ -24,7 +28,8 @@ export default function PlaylistRender({ playlistId }: { playlistId: string }) {
     })();
   }, [playlistData, setImageUrl]);
 
-  if (!playlistData || !playlistItems) return null;
+  if (!playlistData || !playlistItems || colorFetching)
+    return <Skeleton className="h-104 w-full rounded-xs" />;
 
   return (
     <Card

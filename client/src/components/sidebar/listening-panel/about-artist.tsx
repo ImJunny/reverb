@@ -44,7 +44,10 @@ export default function AboutArtist() {
 
       <div className="p-3">
         <h4 className="mb-2 text-sm font-semibold">{artistData.name}</h4>
-        <p className="text-muted-foreground text-xs">
+        <p className="text-muted-foreground text-sm tracking-tight">
+          {summaryData.monthly_listeners?.toLocaleString()} monthly listeners
+        </p>
+        <p className="text-muted-foreground mt-2 text-xs">
           {summaryData.summary ?? "No summary available."}
         </p>
       </div>

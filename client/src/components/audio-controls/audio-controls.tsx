@@ -92,7 +92,7 @@ export default function AudioControls() {
               <AudioBar />
             </div>
 
-            <VolumeBar className="mr-1" />
+            <VolumeBar className="mr-3" />
           </div>
         </div>
       )}

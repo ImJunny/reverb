@@ -4,7 +4,7 @@ import { useState, type ReactNode } from "react";
 import {
   Search,
   SearchInput,
-  SearchResultItem,
+  SearchResultsItem,
   SearchResults,
 } from "../search/search";
 import { trackSearchQueryOptions } from "@/lib/api-options";
@@ -28,7 +28,7 @@ export default function HeaderSearch() {
       </SearchBar>
       <SearchResults<TrackSearchResult> className="bg-popover mt-2 rounded-xs">
         {(result) => (
-          <SearchResultItem className="hover:bg-foreground/5 flex items-center space-x-2 p-2">
+          <SearchResultsItem className="hover:bg-foreground/5 flex items-center space-x-2 p-2">
             <img
               src={result.image_url}
               alt="track"
@@ -41,7 +41,7 @@ export default function HeaderSearch() {
                 {result.artists.map((artist) => artist.name).join(", ")}
               </span>
             </div>
-          </SearchResultItem>
+          </SearchResultsItem>
         )}
       </SearchResults>
     </Search>

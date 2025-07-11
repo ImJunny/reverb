@@ -9,7 +9,10 @@ export const Route = createFileRoute("/_protected/playlists")({
 });
 
 function RouteComponent() {
-  const { data } = useQuery(currentUserPlaylistsQueryOptions);
+  const { data } = useQuery({
+    ...currentUserPlaylistsQueryOptions,
+    staleTime: 1000 * 60 * 5,
+  });
 
   return (
     <BackgroundWrapper
@@ -17,8 +20,7 @@ function RouteComponent() {
       type="gradient"
       options={{ resetColor: true }}
     >
-      <h1 className="text-lg font-semibold">Your playlists</h1>
-      <div className="mt-1 flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-2">
         {data?.map((playlist) => (
           <PlaylistCard key={playlist.id} playlist={playlist} />
         ))}

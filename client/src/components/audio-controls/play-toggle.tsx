@@ -17,10 +17,7 @@ export default function PlayToggle() {
   };
 
   return (
-    <button
-      onClick={togglePlayback}
-      className="cursor-pointer self-center rounded-full"
-    >
+    <button onClick={togglePlayback} className="cursor-pointer rounded-full">
       {playing ? (
         <Pause className="fill-white stroke-0" size={28} />
       ) : (

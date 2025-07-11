@@ -1,36 +1,29 @@
 import Card from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  playlistDataQueryOptions,
-  playlistItemsQueryOptions,
-} from "@/lib/api-options";
-import { getAverageColor } from "@/lib/scripts/getAverageColor";
+import { playlistDataQueryOptions } from "@/lib/api-options";
+import { useAverageColor } from "@/lib/hooks/useAverageColor";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState, type HTMLAttributes } from "react";
+import { type HTMLAttributes, type ReactNode } from "react";
+import type { PlaylistData } from "shared/types";
 
 export default function GeneralPlaylistCard({
   playlistId,
   className,
+  children,
 }: {
   playlistId: string;
-} & HTMLAttributes<HTMLDivElement>) {
+  children?: ((playlistData: PlaylistData) => ReactNode) | ReactNode;
+} & Omit<HTMLAttributes<HTMLDivElement>, "children">) {
   const { data: playlistData } = useQuery({
     ...playlistDataQueryOptions(playlistId),
+    staleTime: 1000 * 60 * 5,
   });
+  const { data: color = "#000000", isFetching: colorFetching } =
+    useAverageColor(playlistData?.image_url);
 
-  const [color, setColor] = useState<string | null>(null);
-  const imageUrl = playlistData?.image_url;
-  useEffect(() => {
-    (async () => {
-      if (imageUrl) {
-        const avgColor = await getAverageColor(imageUrl);
-        setColor(avgColor);
-      }
-    })();
-  }, [imageUrl]);
-
-  if (!playlistData) return <Skeleton className="h-28 w-full rounded-xs" />;
+  if (!playlistData || colorFetching)
+    return <Skeleton className={cn("h-28 w-full rounded-xs", className)} />;
 
   return (
     <Card
@@ -60,6 +53,9 @@ export default function GeneralPlaylistCard({
           {playlistData.total} songs
         </p>
       </div>
+      {typeof children === "function"
+        ? (children as (playlistData: PlaylistData) => ReactNode)(playlistData)
+        : children}
     </Card>
   );
 }

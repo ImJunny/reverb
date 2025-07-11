@@ -18,6 +18,7 @@ import {
 import RecentlyViewedCard from "@/components/page/recenty-viewed-card";
 import GeneralTrackCard from "@/components/post/general-post/general-track-card";
 import TrackSuggestionPopover from "@/components/post/track-suggestions/track-suggestion-popover";
+import PlaybackToggle from "@/components/track/playback-toggle";
 
 export const Route = createFileRoute("/_protected/post/$id")({
   component: RouteComponent,
@@ -43,17 +44,29 @@ function RouteComponent() {
             </div>
             <Ellipsis size={20} className="text-muted-foreground" />
           </div>
-          <h1 className="my-2 text-xl font-semibold">{post?.title}</h1>
-          <div className="mb-3 flex items-center space-x-2">
+          <div className="my-2 flex items-center space-x-2">
             <Badge>Help</Badge>
             <Badge className="text-secondary-foreground bg-white/20">Rnb</Badge>
             <Badge className="text-secondary-foreground bg-white/20">Pop</Badge>
           </div>
+          <h1 className="mb-2 text-xl font-semibold">{post?.title}</h1>
+
           {post?.type === "text" && (
             <p className="text-muted-foreground text-sm">{post?.content}</p>
           )}
           {post?.type === "track_id" && (
-            <GeneralTrackCard trackId={post.content!} />
+            <GeneralTrackCard
+              trackId={post.content!}
+              className="mt-2 max-w-112"
+            >
+              {(trackData) => (
+                <PlaybackToggle
+                  trackData={trackData!}
+                  size={24}
+                  className="mr-3"
+                />
+              )}
+            </GeneralTrackCard>
           )}
           {post?.type === "playlist_id" && (
             <PlaylistRender playlistId={post.content!} />
@@ -89,7 +102,7 @@ function RouteComponent() {
         </div>
       </Card>
 
-      <div className="sticky top-3 ml-3 hidden w-72 flex-col space-y-3 self-start md:flex">
+      <div className="sticky top-3 ml-3 hidden w-74 flex-col space-y-3 self-start md:flex">
         <Card className="flex-col space-y-2 rounded-xs md:flex">
           <div className="flex space-x-3">
             <img
@@ -116,7 +129,7 @@ function RouteComponent() {
             </div>
           </div>
           <p className="text-xs">Just another listener here...</p>
-          <Button>Follow</Button>
+          <Button className="h-6">Follow</Button>
         </Card>
 
         <RecentlyViewedCard />

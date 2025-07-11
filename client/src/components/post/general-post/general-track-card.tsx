@@ -1,70 +1,34 @@
 import Card from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trackDataQueryOptions } from "@/lib/api-options";
-import { useAudio } from "@/lib/hooks/useAudio";
-import { useSidebar } from "@/lib/hooks/useSidebar";
-import { getAverageColor } from "@/lib/scripts/getAverageColor";
+import { useAverageColor } from "@/lib/hooks/useAverageColor";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
-import { Pause, Play } from "lucide-react";
-import { useEffect, useState, type HTMLAttributes } from "react";
+import { type HTMLAttributes, type ReactNode } from "react";
 import type { Track } from "shared/types";
+
+type GeneralTrackCardProps = {
+  trackId: string;
+  children?: (trackData: Track) => ReactNode;
+} & Omit<HTMLAttributes<HTMLDivElement>, "children">;
 
 export default function GeneralTrackCard({
   trackId,
   className,
-}: { trackId: string } & HTMLAttributes<HTMLDivElement>) {
+  children,
+  ...props
+}: GeneralTrackCardProps) {
   const { data: trackData, isFetching } = useQuery(
     trackDataQueryOptions(trackId),
   );
 
-  const { audioRef, trackInfo, setTrackInfo, playing, setPlaying } = useAudio();
-  const { firstOpen, setOpen, setFirstOpen } = useSidebar();
-  const [color, setColor] = useState("#000000");
+  const { data: color = "#000000", isFetching: colorFetching } =
+    useAverageColor(trackData?.album.image_url);
 
-  useEffect(() => {
-    if (!trackData) return;
-    (async () => {
-      const temp = await getAverageColor(trackData.album.image_url);
-      setColor(temp);
-    })();
-  }, [trackData]);
+  if (!trackData) return null;
 
-  const togglePlayback = () => {
-    if (!audioRef.current) return;
-
-    if (playing) {
-      audioRef.current.pause();
-      setPlaying(false);
-    } else {
-      audioRef.current.play();
-      setPlaying(true);
-    }
-  };
-
-  const handleClick = (item: Track) => {
-    if (trackInfo?.id === item.id) {
-      togglePlayback();
-    } else {
-      setTrackInfo({
-        id: item.id,
-        name: item.name,
-        artists: item.artists.map((artist) => artist.name),
-        image_url: item.album.image_url,
-      });
-    }
-
-    if (firstOpen) {
-      setOpen(true);
-      setFirstOpen(false);
-    }
-  };
-
-  if (isFetching) {
-    return (
-      <Skeleton className={cn("h-20 w-full max-w-112 rounded-xs", className)} />
-    );
-  }
+  if (isFetching || colorFetching)
+    return <Skeleton className={cn("h-20 w-full rounded-xs", className)} />;
 
   return (
     <Card
@@ -73,7 +37,7 @@ export default function GeneralTrackCard({
         e.stopPropagation();
       }}
       className={cn(
-        "bg-background flex w-full max-w-112 cursor-default flex-row rounded-xs shadow-lg ring-2 ring-black/5",
+        "bg-background flex w-full cursor-default flex-row rounded-xs shadow-lg ring-2 ring-black/5",
         className,
       )}
       style={{
@@ -81,38 +45,21 @@ export default function GeneralTrackCard({
           ? `color-mix(in srgb, ${color} 55%, #000 45%)`
           : undefined,
       }}
+      {...props}
     >
       <img
         src={trackData?.album.image_url || ""}
         alt="Track"
-        className="rounded-xx s h-14 w-14 object-cover shadow-md"
+        className="rounded-xxs h-14 w-14 object-cover shadow-md"
       />
       <div className="ml-3 flex flex-1 flex-col">
         <p className="text-muted-foreground text-xs">Song</p>
-        <h3 className={cn("mt-auto text-sm font-semibold")}>
-          {trackData?.name}
-        </h3>
+        <h3 className="mt-auto text-sm font-semibold">{trackData?.name}</h3>
         <p className="text-muted-foreground text-xs">
           {trackData?.artists.map((artist) => artist.name).join(", ")}
         </p>
       </div>
-      <button
-        type="button"
-        onClick={() => handleClick(trackData!)}
-        className="mr-4 ml-auto"
-      >
-        {playing && trackInfo?.id === trackData?.id ? (
-          <Pause
-            size={24}
-            className="hover:fill-foreground fill-muted-foreground stroke-none hover:cursor-pointer"
-          />
-        ) : (
-          <Play
-            size={24}
-            className="hover:fill-foreground fill-muted-foreground stroke-none hover:cursor-pointer"
-          />
-        )}
-      </button>
+      {children?.(trackData)}
     </Card>
   );
 }

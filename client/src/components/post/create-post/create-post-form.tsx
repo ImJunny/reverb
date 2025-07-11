@@ -9,7 +9,16 @@ import { useMutation } from "@tanstack/react-query";
 import { createPostMutationOptions } from "@/lib/api-options";
 import { toast } from "sonner";
 import { useRouter } from "@tanstack/react-router";
-import CreatePostSearch from "@/components/post/create-post/create-post-search";
+import CreatePostTrackSearch from "@/components/post/create-post/create-post-track-search";
+import { useQueryClient } from "@tanstack/react-query";
+import CreatePostPlaylistSearch from "./create-post-playlist-search";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 const contentTypes = [
   { type: "text", label: "Text" },
@@ -20,7 +29,13 @@ export type ContentType = (typeof contentTypes)[number];
 
 export default function CreatePostForm() {
   const router = useRouter();
-  const { mutate, isPending } = useMutation(createPostMutationOptions());
+  const queryClient = useQueryClient();
+  const { mutate, isPending } = useMutation({
+    ...createPostMutationOptions(),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["home-posts"] });
+    },
+  });
   const form = useForm({
     defaultValues: {
       title: "",
@@ -78,27 +93,6 @@ export default function CreatePostForm() {
         }}
         className="mt-2 flex flex-col space-y-3"
       >
-        <form.Field
-          name="title"
-          validators={{
-            onChange: ({ value }) => {
-              if (!value) {
-                return "Title is required.";
-              }
-            },
-          }}
-        >
-          {(field) => (
-            <Input
-              placeholder="Title*"
-              name={field.name}
-              value={field.state.value}
-              onBlur={field.handleBlur}
-              onChange={(e) => field.handleChange(e.target.value)}
-            />
-          )}
-        </form.Field>
-
         <form.Field name="type">
           {(field) => (
             <div className="text-muted-foreground mb-3 flex shrink-0 items-center text-xs font-semibold">
@@ -118,13 +112,33 @@ export default function CreatePostForm() {
             </div>
           )}
         </form.Field>
+        <form.Field
+          name="title"
+          validators={{
+            onChange: ({ value }) => {
+              if (!value || value.trim() === "") {
+                return "Title is required.";
+              }
+            },
+          }}
+        >
+          {(field) => (
+            <Input
+              placeholder="Title"
+              name={field.name}
+              value={field.state.value}
+              onBlur={field.handleBlur}
+              onChange={(e) => field.handleChange(e.target.value)}
+            />
+          )}
+        </form.Field>
 
         <form.Subscribe selector={(state) => state.values.type}>
           {(type) => {
             switch (type) {
               case "text":
                 return (
-                  <form.Field name="text">
+                  <form.Field name="text" key="text">
                     {(field) => (
                       <Textarea
                         placeholder="Body text (optional)"
@@ -142,8 +156,9 @@ export default function CreatePostForm() {
                 return (
                   <form.Field
                     name="track_id"
+                    key="track_id"
                     validators={{
-                      onChange: ({ value }) => {
+                      onSubmit: ({ value }) => {
                         if (form.state.values.type !== "track_id") return null;
                         if (!value) {
                           return "Song selection is required.";
@@ -152,7 +167,7 @@ export default function CreatePostForm() {
                     }}
                   >
                     {(field) => (
-                      <CreatePostSearch
+                      <CreatePostTrackSearch
                         field={field}
                         onClick={(id) => field.handleChange(id)}
                       />
@@ -163,8 +178,9 @@ export default function CreatePostForm() {
                 return (
                   <form.Field
                     name="playlist_id"
+                    key="playlist_id"
                     validators={{
-                      onChange: ({ value }) => {
+                      onSubmit: ({ value }) => {
                         if (form.state.values.type !== "playlist_id")
                           return null;
                         if (!value) {
@@ -174,11 +190,9 @@ export default function CreatePostForm() {
                     }}
                   >
                     {(field) => (
-                      <Input
-                        placeholder="Playlist ID"
-                        value={field.state.value}
-                        onBlur={field.handleBlur}
-                        onChange={(e) => field.handleChange(e.target.value)}
+                      <CreatePostPlaylistSearch
+                        field={field}
+                        onClick={(id) => field.handleChange(id)}
                       />
                     )}
                   </form.Field>
@@ -188,13 +202,26 @@ export default function CreatePostForm() {
             }
           }}
         </form.Subscribe>
-
+        {/* <form.Field name="type">
+          {(field) => (
+            <Select>
+              <SelectTrigger className="w-[180px]">
+                <SelectValue placeholder="Category" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="light">Help</SelectItem>
+                <SelectItem value="dark">Discussion</SelectItem>
+                <SelectItem value="system">Showcase</SelectItem>
+              </SelectContent>
+            </Select>
+          )}
+        </form.Field> */}
         <form.Field name="allow_suggestions">
           {(field) => (
             <div className="flex items-center space-x-3">
               <div>
                 <p className="text-muted-foreground text-sm">
-                  Allow song suggestions to your post?
+                  Allow user song suggestions to your post?
                 </p>
               </div>
               <Switch

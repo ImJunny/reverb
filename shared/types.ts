@@ -27,18 +27,6 @@ export type PlaylistData = {
   };
 };
 
-export type PlaylistItem = {
-  id: string;
-  name: string;
-  artists: { id: string; name: string; external_urls: { spotify: string } }[];
-  duration_ms: number;
-  album: {
-    id: string;
-    name: string;
-    image_url: string;
-  };
-};
-
 export type UserProfile = {
   id: string;
   display_name: string;

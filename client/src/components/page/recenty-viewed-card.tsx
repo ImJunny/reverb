@@ -51,15 +51,15 @@ const recentPosts = [
 
 export default function RecentlyViewedCard() {
   return (
-    <Card className="flex flex-col rounded-xs p-0 text-xs">
-      <div className="mb-1 flex items-center justify-between px-3 pt-3">
+    <Card className="flex flex-col overflow-hidden rounded-xs p-0 text-xs shadow-xl ring-1 ring-black/25">
+      <div className="bg-card flex items-center justify-between px-3 pt-3 pb-1">
         <h1>Recently viewed</h1>
         <p className="text-muted-foreground">Clear</p>
       </div>
-      <div className="text-muted-foreground flex flex-col space-y-2">
+      <div className="text-muted-foreground flex flex-col">
         {recentPosts.map((post, idx) => (
-          <div key={post.id}>
-            <div className="px-3">
+          <div key={post.id} className="hover:bg-card-hover">
+            <div className="cursor-pointer px-3">
               <div className="flex flex-col space-y-2 py-2">
                 <div className="flex items-center space-x-2">
                   <img
@@ -70,7 +70,7 @@ export default function RecentlyViewedCard() {
                   <p className="text-foreground">{post.username}</p>
                   <p className="text-muted-foreground">• {post.timeAgo}</p>
                 </div>
-                <p>{post.title}</p>
+                <p className="line-clamp-2 text-sm">{post.title}</p>
                 <div className="flex space-x-2">
                   <p>{post.likes} likes</p>
                   <p>{post.comments} comments</p>
