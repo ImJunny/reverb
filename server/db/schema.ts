@@ -1,8 +1,26 @@
-import { boolean, pgEnum, pgTable, text, timestamp } from "drizzle-orm/pg-core";
+import { Table } from "drizzle-orm";
+import {
+  boolean,
+  pgEnum,
+  pgTable,
+  text,
+  timestamp,
+  unique,
+} from "drizzle-orm/pg-core";
 
 // ENUMS
-const summaryTypeEnum = pgEnum("summary_type", ["track", "artist"]);
-const postTypeEnum = pgEnum("post_type", ["text", "track_id", "playlist_id"]);
+export const summaryTypeEnum = pgEnum("summary_type", ["track", "artist"]);
+export const postTypeEnum = pgEnum("post_type", [
+  "text",
+  "track_id",
+  "playlist_id",
+]);
+export const recentlyViewedTypeEnum = pgEnum("recently_viewed_type", [
+  "post",
+  "playlist",
+  "user",
+  "artist",
+]);
 
 // TABLES
 export const usersTable = pgTable("users", {
@@ -17,7 +35,7 @@ export const usersTable = pgTable("users", {
 export const summariesTable = pgTable("summaries", {
   id: text().primaryKey(),
   type: summaryTypeEnum().notNull(),
-  summary: text().notNull(),
+  summary: text(),
   created_at: timestamp().defaultNow().notNull(),
 });
 
@@ -42,5 +60,33 @@ export const trackSuggestionsTable = pgTable("track_suggestions", {
     onDelete: "cascade",
   }),
   track_id: text().notNull(),
+  created_at: timestamp().defaultNow().notNull(),
+});
+
+export const recentlyViewedTable = pgTable(
+  "recently_viewed",
+  {
+    id: text().primaryKey(),
+    user_id: text().references(() => usersTable.user_id, {
+      onDelete: "cascade",
+    }),
+    type: recentlyViewedTypeEnum().notNull(),
+    content_id: text().notNull(),
+    created_at: timestamp().defaultNow().notNull(),
+  },
+  (table) => ({
+    unique_user_view: unique().on(table.user_id, table.content_id),
+  })
+);
+
+export const commentsTable = pgTable("comments", {
+  id: text().primaryKey(),
+  post_id: text().references(() => postsTable.id, {
+    onDelete: "cascade",
+  }),
+  user_id: text().references(() => usersTable.user_id, {
+    onDelete: "cascade",
+  }),
+  text: text().notNull(),
   created_at: timestamp().defaultNow().notNull(),
 });

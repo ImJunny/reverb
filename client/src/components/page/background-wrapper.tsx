@@ -1,40 +1,25 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useBackground } from "@/lib/hooks/useBackground";
 import { cn } from "@/lib/utils";
-import { useEffect, type ReactNode } from "react";
+import { type ReactNode } from "react";
 
 type BackgroundWrapperProps = {
-  type?: "default" | "gradient" | "blur";
-  moving?: boolean;
-  options?: {
-    resetColor: boolean;
-  };
   children?: ReactNode;
   className?: string;
 };
 
 // BackgroundWrapper component that provides a background for the content
 export default function BackgroundWrapper({
-  type = "default",
-  moving = false,
-  options,
   children,
   className,
 }: BackgroundWrapperProps) {
-  const { color, imageUrl } = useBackground();
-  const { resetColor } = useBackground();
-
-  useEffect(() => {
-    if (options?.resetColor) {
-      resetColor();
-    }
-  }, [resetColor, options?.resetColor]);
+  const { color, imageUrl, type, moving } = useBackground();
 
   return (
-    <ScrollArea className="bg-muted relative flex h-full flex-1 overflow-hidden rounded-sm">
+    <ScrollArea className="bg-muted relative flex h-full flex-1 overflow-hidden rounded-sm transition-all duration-1000">
       {!moving && (
         <SpecialBackgroundWrapper
-          type={type}
+          type={type ?? "default"}
           color={color}
           imageUrl={imageUrl}
         />
@@ -43,7 +28,7 @@ export default function BackgroundWrapper({
       <div className="relative h-full w-full">
         {moving && (
           <SpecialBackgroundWrapper
-            type={type}
+            type={type ?? "default"}
             color={color}
             imageUrl={imageUrl}
           />
@@ -88,7 +73,7 @@ function GradientBackground({
 }) {
   return (
     <div
-      className="absolute inset-0 z-1 h-full"
+      className="absolute inset-0 z-1 h-full transition-all duration-1000"
       style={{
         backgroundImage: `linear-gradient(to top, var(--muted), var(--muted) ${compact ? "70%" : ""}, ${color}) `,
       }}

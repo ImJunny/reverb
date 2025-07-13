@@ -1,7 +1,8 @@
 import Card from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trackDataQueryOptions } from "@/lib/api-options";
-import { useAverageColor } from "@/lib/hooks/useAverageColor";
+import { useBackgroundChange } from "@/lib/hooks/useBackgroundChange";
+import { increaseSaturation } from "@/lib/scripts/increateSaturation";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { type HTMLAttributes, type ReactNode } from "react";
@@ -10,24 +11,30 @@ import type { Track } from "shared/types";
 type GeneralTrackCardProps = {
   trackId: string;
   children?: (trackData: Track) => ReactNode;
+  affectBackground?: boolean;
 } & Omit<HTMLAttributes<HTMLDivElement>, "children">;
 
 export default function GeneralTrackCard({
   trackId,
   className,
   children,
+  affectBackground = false,
   ...props
 }: GeneralTrackCardProps) {
   const { data: trackData, isFetching } = useQuery(
     trackDataQueryOptions(trackId),
   );
 
-  const { data: color = "#000000", isFetching: colorFetching } =
-    useAverageColor(trackData?.album.image_url, { saturate: 10 });
+  const { color } = useBackgroundChange({
+    imageUrl: trackData?.album.image_url,
+    saturate: 10,
+    type: "gradient",
+    affectBackground,
+  });
 
   if (!trackData) return null;
 
-  if (isFetching || colorFetching)
+  if (isFetching || !color)
     return <Skeleton className={cn("h-20 w-full rounded-xs", className)} />;
 
   return (
@@ -42,7 +49,7 @@ export default function GeneralTrackCard({
       )}
       style={{
         backgroundColor: color
-          ? `color-mix(in srgb, ${color} 75%, #000 25%)`
+          ? `color-mix(in srgb, ${increaseSaturation(color, 10)} 75%, #000 25%)`
           : undefined,
       }}
       {...props}

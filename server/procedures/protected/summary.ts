@@ -24,6 +24,7 @@ export async function getTrackSummary(c: ProtectedContext) {
 
     let trackSummaryEntry = await selectSummary(trackId);
     let summary: string | null | undefined = trackSummaryEntry?.summary;
+
     if (!trackSummaryEntry) {
       summary = await generateTrackSummary(trackName!, artistName!);
       await insertSummary(trackId, "track", summary!);
@@ -53,7 +54,12 @@ export async function getArtistSummary(c: ProtectedContext) {
 
     let artistSummaryEntry = await selectSummary(artistId);
     let summary: string | null | undefined = artistSummaryEntry?.summary;
-    if (!artistSummaryEntry) {
+    const oneDayInMs = 24 * 60 * 60 * 1000;
+    if (
+      !artistSummaryEntry ||
+      new Date(artistSummaryEntry.created_at).getTime() <
+        Date.now() - oneDayInMs
+    ) {
       summary = await generateArtistSummary(trackName!, artistName!);
       await insertSummary(artistId, "artist", summary!);
     }

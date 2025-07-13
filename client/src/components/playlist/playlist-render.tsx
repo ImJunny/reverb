@@ -1,34 +1,26 @@
 import Card from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import TracksRender from "../track/tracks-render";
-import { useEffect } from "react";
-import { useBackground } from "@/lib/hooks/useBackground";
 import { useQuery } from "@tanstack/react-query";
 import {
   playlistDataQueryOptions,
   playlistItemsQueryOptions,
 } from "@/lib/api-options";
-import { useAverageColor } from "@/lib/hooks/useAverageColor";
 import { Skeleton } from "../ui/skeleton";
+import { useBackgroundChange } from "@/lib/hooks/useBackgroundChange";
 
 export default function PlaylistRender({ playlistId }: { playlistId: string }) {
   const { data: playlistData } = useQuery(playlistDataQueryOptions(playlistId));
   const { data: playlistItems } = useQuery(
     playlistItemsQueryOptions(playlistId),
   );
-  const { data: color = "#000000", isFetching: colorFetching } =
-    useAverageColor(playlistData?.image_url, { saturate: 10 });
 
-  const { setImageUrl } = useBackground();
-  useEffect(() => {
-    (async () => {
-      if (playlistData?.image_url) {
-        setImageUrl(playlistData.image_url);
-      }
-    })();
-  }, [playlistData, setImageUrl]);
+  const { color } = useBackgroundChange({
+    imageUrl: playlistData?.image_url,
+    type: "blur",
+  });
 
-  if (!playlistData || !playlistItems || colorFetching)
+  if (!playlistData || !playlistItems || !color)
     return <Skeleton className="h-104 w-full rounded-xs" />;
 
   return (

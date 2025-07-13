@@ -6,6 +6,10 @@ type BackgroundContextType = {
   resetColor: () => void;
   imageUrl: string;
   setImageUrl: (url: string) => void;
+  type: "default" | "gradient" | "blur";
+  setType: (type: "default" | "gradient" | "blur") => void;
+  moving: boolean;
+  setMoving: (moving: boolean) => void;
 };
 
 export const BackgroundContext = createContext<

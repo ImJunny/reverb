@@ -4,13 +4,13 @@ import type { GeneralPlaylistData } from "shared/types";
 
 export function PlaylistCard({ playlist }: { playlist: GeneralPlaylistData }) {
   return (
-    <Link to="/playlist/$id" params={{ id: playlist.id }} className="shrink-0">
+    <Link to="/playlist/$id" params={{ id: playlist.id }}>
       <Card className="hover:bg-card-hover flex cursor-pointer flex-col space-y-2 rounded-xs">
         {playlist.image_url ? (
           <img
             src={playlist.image_url}
             alt={playlist.name}
-            className="aspect-square h-32 w-full rounded-sm object-cover"
+            className="rounded-xxs aspect-square h-32 w-full object-cover"
           />
         ) : (
           <div className="bg-muted aspect-square h-32 w-full rounded-sm" />

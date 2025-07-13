@@ -1,6 +1,11 @@
 // This is the main entry point for the server. RPC should be prioritized over REST.
 import { Hono } from "hono";
-import { getUserProfile } from "../procedures/protected/user";
+import {
+  createRecentlyViewed,
+  getRecentlyViewed,
+  getRecentlyViewedPosts,
+  getUserProfile,
+} from "../procedures/protected/user";
 import {
   getCurrentUserPlaylists,
   getPlaylistData,
@@ -21,16 +26,30 @@ import {
   getTrackSummary,
 } from "@server/procedures/protected/summary";
 import {
+  createComment,
   createPost,
   getHomePosts,
   getPost,
+  getPostComments,
   getPostTrackSuggestions,
 } from "@server/procedures/protected/post";
 import { zValidator } from "@hono/zod-validator";
-import { CreatePostSchema } from "@server/zod-schemas/schemas";
+import {
+  CreatePostSchema,
+  CreateRecentlyViewedSchema,
+} from "@server/zod-schemas/schemas";
 
 // Protected API routes
-const usersRoute = new Hono().get("/profile", getUserProfile);
+const usersRoute = new Hono()
+  .get("/profile", getUserProfile)
+  .post(
+    // unused
+    "/create_view",
+    zValidator("json", CreateRecentlyViewedSchema),
+    createRecentlyViewed
+  )
+  .get("/recently_viewed", getRecentlyViewed)
+  .get("/recently_viewed_posts", getRecentlyViewedPosts);
 const playlistsRoute = new Hono()
   .get("/current_user_playlists", getCurrentUserPlaylists)
   .get("/playlist_data/:id", getPlaylistData)
@@ -49,7 +68,9 @@ const postsRoute = new Hono()
   .post("/create", zValidator("json", CreatePostSchema), createPost)
   .get("/home_posts", getHomePosts)
   .get("/post/:id", getPost)
-  .get("/track_suggestions/:id", getPostTrackSuggestions);
+  .get("/track_suggestions/:id", getPostTrackSuggestions)
+  .get("/comments/:id", getPostComments)
+  .post("/create_comment", createComment);
 
 // Protected API
 export const protectedApi = new Hono()

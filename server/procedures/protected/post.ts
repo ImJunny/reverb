@@ -1,12 +1,13 @@
 import {
+  createCommentDB,
   createPostDB,
   getHomePostsDB,
+  getPostCommentsDB,
   getPostDB,
   getPostTrackSuggestionsDB,
 } from "@server/db/actions/post-actions";
-import { getSpotifyPlaylistData } from "@server/lib/spotify-helpers";
 import type { ProtectedContext } from "@server/utils/auth-middleware";
-import type { PlaylistData, Post, TrackSuggestion } from "shared/types";
+import type { TrackSuggestion } from "shared/types";
 
 // Create post; body validated by zValidator
 export async function createPost(c: ProtectedContext) {
@@ -67,6 +68,41 @@ export async function getPostTrackSuggestions(c: ProtectedContext) {
   } catch (error: any) {
     return c.json(
       { message: "Failed to retrieve track suggestions", error: error.message },
+      500
+    );
+  }
+}
+
+export async function createComment(c: ProtectedContext) {
+  try {
+    const userId = c.get("user_id");
+    const postId = c.req.param("id");
+    if (!postId) return c.json({ message: "Post ID is required" }, 400);
+
+    const body = await c.req.json();
+    const { text } = body;
+    if (!text) return c.json({ message: "Comment text is required" }, 400);
+
+    await createCommentDB(postId, userId, text);
+    return c.json(200);
+  } catch (error: any) {
+    return c.json(
+      { message: "Failed to create comment", error: error.message },
+      500
+    );
+  }
+}
+
+export async function getPostComments(c: ProtectedContext) {
+  try {
+    const postId = c.req.param("id");
+    if (!postId) return c.json({ message: "Post ID is required" }, 400);
+
+    const comments = await getPostCommentsDB(postId);
+    return c.json(comments, 200);
+  } catch (error: any) {
+    return c.json(
+      { message: "Failed to retrieve comments", error: error.message },
       500
     );
   }
