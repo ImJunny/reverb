@@ -114,15 +114,15 @@ export function FullPostCard({ post }: { post: Post }) {
 function CommentInput() {
   const [focused, setFocused] = useState(false);
   return (
-    <div className="relative">
+    <div className="focus-within:ring-ring/50 focus-within:bg-input/50 relative flex flex-col rounded-xs focus-within:ring-[1px]">
       <Textarea
         placeholder="Leave a comment..."
         label="Comment"
-        className={cn("peer h-9 resize-none", focused && "h-20")}
+        className={cn("peer h-9 resize-none ring-0", focused && "h-20")}
         onFocus={() => setFocused(true)}
         onBlur={() => setFocused(false)}
       />
-      <button className="text-primary absolute top-2 right-2 z-10 hidden items-center justify-center peer-focus:flex">
+      <button className="text-primary hidden items-center justify-center self-end peer-focus-within:flex">
         <Send size={20} />
       </button>
     </div>

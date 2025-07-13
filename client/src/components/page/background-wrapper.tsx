@@ -14,7 +14,6 @@ export default function BackgroundWrapper({
   className,
 }: BackgroundWrapperProps) {
   const { color, imageUrl, type, moving } = useBackground();
-
   return (
     <ScrollArea className="bg-muted relative flex h-full flex-1 overflow-hidden rounded-sm transition-all duration-1000">
       {!moving && (
@@ -73,7 +72,7 @@ function GradientBackground({
 }) {
   return (
     <div
-      className="absolute inset-0 z-1 h-full transition-all duration-1000"
+      className="absolute inset-0 z-1 h-full"
       style={{
         backgroundImage: `linear-gradient(to top, var(--muted), var(--muted) ${compact ? "70%" : ""}, ${color}) `,
       }}

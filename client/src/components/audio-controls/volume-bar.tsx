@@ -15,7 +15,7 @@ export default function VolumeBar({
   const { audioRef } = useAudio();
   const barRef = useRef<HTMLDivElement | null>(null);
   const [isDragging, setIsDragging] = useState(false);
-  const [volume, setVolume] = useState(1);
+  const [volume, setVolume] = useState(0.01);
   const [storedVolume, setStoredVolume] = useState(1);
 
   useEffect(() => {

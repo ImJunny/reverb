@@ -12,6 +12,7 @@ import { useRouter } from "@tanstack/react-router";
 import CreatePostTrackSearch from "@/components/post/create-post/create-post-track-search";
 import { useQueryClient } from "@tanstack/react-query";
 import CreatePostPlaylistSearch from "./create-post-playlist-search";
+import { useBackgroundChange } from "@/lib/hooks/useBackgroundChange";
 // import {
 //   Select,
 //   SelectContent,
@@ -28,6 +29,9 @@ const contentTypes = [
 export type ContentType = (typeof contentTypes)[number];
 
 export default function CreatePostForm() {
+  useBackgroundChange({
+    type: "default",
+  });
   const router = useRouter();
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({

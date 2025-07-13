@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useAverageColor } from "./useAverageColor";
 import { useBackground } from "./useBackground";
 
@@ -13,7 +14,7 @@ export function useBackgroundChange(options: {
     imageUrl,
     type,
     affectBackground = true,
-    moving,
+    moving = false,
     resetColor,
   } = options;
   const {
@@ -25,13 +26,25 @@ export function useBackgroundChange(options: {
   } = useBackground();
   const { data: color } = useAverageColor(imageUrl, options);
 
-  if (affectBackground) {
-    if (color) setColor(color);
-    if (imageUrl) setImageUrl(imageUrl);
-    if (type) setType(type);
-    if (moving) setMoving(true);
-    if (resetColor) resetBackgroundColor();
-  }
+  useEffect(() => {
+    if (affectBackground && color) setColor(color);
+  }, [color, affectBackground, setColor]);
+
+  useEffect(() => {
+    if (affectBackground && imageUrl) setImageUrl(imageUrl);
+  }, [imageUrl, affectBackground, setImageUrl]);
+
+  useEffect(() => {
+    if (affectBackground && type) setType(type);
+  }, [type, affectBackground, setType]);
+
+  useEffect(() => {
+    if (affectBackground) setMoving(moving);
+  }, [moving, affectBackground, setMoving]);
+
+  useEffect(() => {
+    if (affectBackground && resetColor) resetBackgroundColor();
+  }, [resetColor, affectBackground, resetBackgroundColor]);
 
   return { color };
 }

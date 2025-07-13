@@ -19,10 +19,10 @@ function RouteComponent() {
   useBackgroundChange({
     type: "gradient",
     resetColor: true,
+    moving: false,
   });
-
   return (
-    <div className="flex p-3">
+    <div className="flex w-full justify-center p-3">
       <div className="flex w-full max-w-2xl flex-col space-y-2">
         {posts
           ? posts?.map((post) => <GeneralPostCard key={post.id} post={post} />)
