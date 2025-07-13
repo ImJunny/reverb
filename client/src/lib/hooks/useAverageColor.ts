@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAverageColor } from "../scripts/getAverageColor";
-import { increaseSaturation } from "../scripts/increateSaturation";
+import { increaseSaturation } from "../scripts/increaseSaturation";
 
 export function useAverageColor(
   image_url: string | undefined,

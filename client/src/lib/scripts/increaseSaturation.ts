@@ -76,8 +76,16 @@ function hslToHex(h: number, s: number, l: number) {
   return "#" + toHex(r) + toHex(g) + toHex(b);
 }
 
-export function increaseSaturation(hex: string, amount: number = 20): string {
+// export function increaseSaturation(hex: string, amount: number): string {
+//   const [h = 0, sOrig = 0, l = 0] = hexToHsl(hex);
+//   if (sOrig == 0) return hex;
+//   const s = Math.min(100, sOrig + amount);
+//   return hslToHex(h, s, l);
+// }
+
+export function increaseSaturation(hex: string, cap: number): string {
   const [h = 0, sOrig = 0, l = 0] = hexToHsl(hex);
-  const s = Math.min(100, sOrig + amount);
+  if (sOrig == 0) return hex;
+  const s = Math.min(100, sOrig + cap * (1 - sOrig / 100));
   return hslToHex(h, s, l);
 }
