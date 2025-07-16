@@ -151,7 +151,8 @@ export default function CreatePostForm() {
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChange={(e) => field.handleChange(e.target.value)}
-                        className="h-26 resize-none"
+                        className="resize-none"
+                        scrollable={false}
                       />
                     )}
                   </form.Field>

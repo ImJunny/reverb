@@ -1,8 +1,9 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, isNull, sql, lt, asc } from "drizzle-orm";
 import { db } from "..";
 import {
   commentsTable,
   postsTable,
+  repliesTable,
   trackSuggestionsTable,
   usersTable,
 } from "../schema";
@@ -94,10 +95,61 @@ export async function getPostCommentsDB(postId: string) {
       text: commentsTable.text,
       created_at: commentsTable.created_at,
       user_image_url: usersTable.image_url,
+      reply_count: sql<number>`
+  (SELECT COUNT(*) FROM ${repliesTable} WHERE replies.comment_id = ${commentsTable.id})
+`,
     })
     .from(commentsTable)
     .innerJoin(usersTable, eq(commentsTable.user_id, usersTable.user_id))
-    .where(eq(commentsTable.post_id, postId))
+    .where(and(eq(commentsTable.post_id, postId)))
     .orderBy(desc(commentsTable.created_at));
   return comments;
+}
+
+export async function createReplyDB(
+  commentId: string,
+  userId: string,
+  text: string,
+  tagUserId?: string
+) {
+  const result = await db
+    .insert(repliesTable)
+    .values({
+      id: uuidv4(),
+      comment_id: commentId,
+      user_id: userId,
+      text,
+      created_at: new Date(),
+      tag_user_id: tagUserId,
+    })
+    .returning();
+  return result[0];
+}
+
+export async function getCommentRepliesDB(
+  commentId: string,
+  cursor?: string,
+  limit: number = 2
+) {
+  const replies = await db
+    .select({
+      id: repliesTable.id,
+      comment_id: repliesTable.comment_id,
+      user_id: repliesTable.user_id,
+      text: repliesTable.text,
+      created_at: repliesTable.created_at,
+      user_image_url: usersTable.image_url,
+      tag_user_id: repliesTable.tag_user_id,
+    })
+    .from(repliesTable)
+    .where(
+      and(
+        eq(repliesTable.comment_id, commentId),
+        cursor ? lt(repliesTable.created_at, new Date(cursor)) : sql`true`
+      )
+    )
+    .innerJoin(usersTable, eq(repliesTable.user_id, usersTable.user_id))
+    .orderBy(desc(repliesTable.created_at))
+    .limit(limit);
+  return replies;
 }

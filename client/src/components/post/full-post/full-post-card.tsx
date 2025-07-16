@@ -8,30 +8,15 @@ import {
   Ellipsis,
   Heart,
   MessageCircle,
-  Send,
   Share,
 } from "lucide-react";
 import GeneralTrackCard from "@/components/post/general-post/general-track-card";
 import TrackSuggestionPopover from "@/components/post/track-suggestions/track-suggestion-popover";
 import PlaybackToggle from "@/components/track/playback-toggle";
 import type { Post } from "shared/types";
-import { useMutation } from "@tanstack/react-query";
-import { createCommentMutationOptions } from "@/lib/api-options";
-import { Textarea } from "@/components/ui/textarea";
-import { cn } from "@/lib/utils";
-import { useState } from "react";
+import CommentSection from "./comment-section";
 
 export function FullPostCard({ post }: { post: Post }) {
-  const { mutate: createCommentMutation } = useMutation(
-    createCommentMutationOptions(),
-  );
-  const handleCreateComment = (content: string) => {
-    createCommentMutation({
-      postId: post.id,
-      content,
-    });
-  };
-
   return (
     <Card className="flex w-full max-w-2xl rounded-xs p-0">
       <div className="flex flex-col p-3">
@@ -103,28 +88,8 @@ export function FullPostCard({ post }: { post: Post }) {
       )}
 
       <Separator />
-      <div className="flex flex-col space-y-3 p-3">
-        <h2>Comments • {"5"}</h2>
-        <CommentInput />
-      </div>
-    </Card>
-  );
-}
 
-function CommentInput() {
-  const [focused, setFocused] = useState(false);
-  return (
-    <div className="focus-within:ring-ring/50 focus-within:bg-input/50 relative flex flex-col rounded-xs focus-within:ring-[1px]">
-      <Textarea
-        placeholder="Leave a comment..."
-        label="Comment"
-        className={cn("peer h-9 resize-none ring-0", focused && "h-20")}
-        onFocus={() => setFocused(true)}
-        onBlur={() => setFocused(false)}
-      />
-      <button className="text-primary hidden items-center justify-center self-end peer-focus-within:flex">
-        <Send size={20} />
-      </button>
-    </div>
+      <CommentSection postId={post.id} />
+    </Card>
   );
 }

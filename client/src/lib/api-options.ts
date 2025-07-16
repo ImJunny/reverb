@@ -277,3 +277,45 @@ export const createCommentMutationOptions = () => {
     },
   };
 };
+
+export const createReplyMutationOptions = () => {
+  return {
+    mutationKey: ["create-reply"],
+    mutationFn: async (data: {
+      commentId: string;
+      content: string;
+      tagUserId: string | undefined;
+    }) => {
+      const res = await api.protected.post.create_reply.$post({
+        json: {
+          comment_id: data.commentId,
+          content: data.content,
+          tag_user_id: data.tagUserId ?? null,
+        },
+      });
+      if (!res.ok) throw new Error("Failed to create reply");
+      return res.json();
+    },
+  };
+};
+
+export const commentRepliesQueryOptions = (
+  commentId: string,
+  cursor?: string,
+  limit?: number,
+) =>
+  queryOptions({
+    queryKey: ["comment-replies", commentId],
+    queryFn: async () => {
+      if (!commentId) throw new Error("Comment ID is required");
+      const res = await api.protected.post.comment_replies.$get({
+        query: {
+          id: commentId,
+          limit,
+          cursor,
+        },
+      });
+      if (!res.ok) throw new Error("Failed to fetch comment replies");
+      return res.json();
+    },
+  });

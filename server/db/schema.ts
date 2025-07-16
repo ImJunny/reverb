@@ -90,3 +90,18 @@ export const commentsTable = pgTable("comments", {
   text: text().notNull(),
   created_at: timestamp().defaultNow().notNull(),
 });
+
+export const repliesTable = pgTable("replies", {
+  id: text().primaryKey(),
+  comment_id: text().references(() => commentsTable.id, {
+    onDelete: "cascade",
+  }),
+  tag_user_id: text().references(() => usersTable.user_id, {
+    onDelete: "set null",
+  }),
+  user_id: text().references(() => usersTable.user_id, {
+    onDelete: "cascade",
+  }),
+  text: text().notNull(),
+  created_at: timestamp().defaultNow().notNull(),
+});

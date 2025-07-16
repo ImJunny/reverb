@@ -2,7 +2,7 @@ import Card from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trackDataQueryOptions } from "@/lib/api-options";
 import { useBackgroundChange } from "@/lib/hooks/useBackgroundChange";
-import { increaseSaturation } from "@/lib/scripts/increaseSaturation";
+import { enhanceColor } from "@/lib/scripts/enhanceColor";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { type HTMLAttributes, type ReactNode } from "react";
@@ -27,7 +27,6 @@ export default function GeneralTrackCard({
 
   const { color } = useBackgroundChange({
     imageUrl: trackData?.album.image_url,
-    saturate: 20,
     type: "gradient",
     affectBackground,
   });
@@ -49,7 +48,7 @@ export default function GeneralTrackCard({
       )}
       style={{
         backgroundColor: color
-          ? `color-mix(in srgb, ${increaseSaturation(color, 10)} 75%, #000 25%)`
+          ? `color-mix(in srgb, ${enhanceColor(color, 20)} 75%, #000 25%)`
           : undefined,
       }}
       {...props}

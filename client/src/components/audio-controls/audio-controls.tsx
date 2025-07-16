@@ -33,7 +33,7 @@ export default function AudioControls() {
   }, [previewData, audioRef]);
 
   useEffect(() => {
-    if (audioRef.current) audioRef.current.volume = 0.01;
+    if (audioRef.current) audioRef.current.volume = 0.005;
   }, [audioRef]);
 
   // Pause and reset current time when track changes ONLY if preview is NOT cached

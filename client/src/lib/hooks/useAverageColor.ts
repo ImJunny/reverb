@@ -1,10 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { getAverageColor } from "../scripts/getAverageColor";
-import { increaseSaturation } from "../scripts/increaseSaturation";
+import { enhanceColor } from "../scripts/enhanceColor";
 
 export function useAverageColor(
   image_url: string | undefined,
-  options?: { saturate?: number },
+  options?: { enhanceCap?: number },
 ) {
   return useQuery({
     enabled: !!image_url,
@@ -13,8 +13,7 @@ export function useAverageColor(
       if (!image_url) throw new Error("No image_url");
 
       let color = await getAverageColor(image_url);
-      if (options?.saturate)
-        color = increaseSaturation(color, options.saturate);
+      if (options?.enhanceCap) color = enhanceColor(color, options.enhanceCap);
       return color;
     },
     staleTime: Infinity,

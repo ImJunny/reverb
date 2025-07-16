@@ -22,7 +22,6 @@ export default function GeneralPlaylistCard({
 
   const { color } = useBackgroundChange({
     imageUrl: playlistData?.image_url,
-    saturate: 10,
     affectBackground: false,
   });
 

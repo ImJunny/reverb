@@ -28,6 +28,8 @@ import {
 import {
   createComment,
   createPost,
+  createReply,
+  getCommentReplies,
   getHomePosts,
   getPost,
   getPostComments,
@@ -70,7 +72,9 @@ const postsRoute = new Hono()
   .get("/post/:id", getPost)
   .get("/track_suggestions/:id", getPostTrackSuggestions)
   .get("/comments/:id", getPostComments)
-  .post("/create_comment", createComment);
+  .post("/create_comment", createComment)
+  .get("/comment_replies", getCommentReplies)
+  .post("/create_reply", createReply);
 
 // Protected API
 export const protectedApi = new Hono()

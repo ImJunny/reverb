@@ -5,7 +5,7 @@ import { useBackground } from "./useBackground";
 export function useBackgroundChange(options: {
   imageUrl?: string | undefined;
   type?: "default" | "blur" | "gradient";
-  saturate?: number;
+  enhanceCap?: number;
   affectBackground?: boolean;
   moving?: boolean;
   resetColor?: boolean;

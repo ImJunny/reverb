@@ -76,16 +76,15 @@ function hslToHex(h: number, s: number, l: number) {
   return "#" + toHex(r) + toHex(g) + toHex(b);
 }
 
-// export function increaseSaturation(hex: string, amount: number): string {
-//   const [h = 0, sOrig = 0, l = 0] = hexToHsl(hex);
-//   if (sOrig == 0) return hex;
-//   const s = Math.min(100, sOrig + amount);
-//   return hslToHex(h, s, l);
-// }
-
-export function increaseSaturation(hex: string, cap: number): string {
-  const [h = 0, sOrig = 0, l = 0] = hexToHsl(hex);
-  if (sOrig == 0) return hex;
-  const s = Math.min(100, sOrig + cap * (1 - sOrig / 100));
-  return hslToHex(h, s, l);
+export function enhanceColor(hex: string, cap: number): string {
+  const [h = 0, s = 0, l = 0] = hexToHsl(hex);
+  let lNew = l;
+  if (h >= 20 && h <= 75) {
+    if (l > 58) lNew = 58;
+  } else {
+    if (l > 62) lNew = 62;
+  }
+  if (s == 0) return hex;
+  const sNew = Math.min(100, s + cap * Math.pow(1 - s / 100, 1.3));
+  return hslToHex(h, sNew, lNew);
 }
