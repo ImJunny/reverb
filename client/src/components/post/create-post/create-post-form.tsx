@@ -218,14 +218,15 @@ export default function CreatePostForm() {
             }
           }}
         </form.Subscribe>
-        <div className="flex w-full space-x-2">
+
+        <div className="flex items-start gap-2">
           <form.Field name="category">
             {(field) => (
               <Select
                 onValueChange={(value) => field.handleChange(value as Category)}
                 value={field.state.value}
               >
-                <SelectTrigger className="w-[180px]">
+                <SelectTrigger className="w-48 min-w-[12rem]">
                   <SelectValue placeholder="Category" />
                 </SelectTrigger>
                 <SelectContent>
@@ -238,6 +239,7 @@ export default function CreatePostForm() {
               </Select>
             )}
           </form.Field>
+
           <form.Field name="tags">
             {(field) => (
               <CreatePostTagInput

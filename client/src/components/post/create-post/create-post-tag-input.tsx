@@ -15,7 +15,6 @@ export default function CreatePostTagInput({
       onChange={onChange}
       placeholder="Add tags"
       label="Tags"
-      className="w-full"
     />
   );
 }

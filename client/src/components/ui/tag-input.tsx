@@ -80,17 +80,19 @@ export function TagInput({
   }, []);
 
   return (
-    <div className={cn("relative w-full", className)} ref={containerRef}>
+    <div
+      className={cn("relative min-w-0 flex-1", className)}
+      ref={containerRef}
+    >
       <div
         className={cn(
-          "bg-input peer flex h-9 rounded-xs text-sm shadow-sm transition-colors",
+          "bg-input peer flex h-9 items-center rounded-xs text-sm shadow-sm transition-colors",
           "focus-within:ring-ring/50 focus-within:bg-input/50 focus-within:ring-[1px] focus-within:outline-none",
-          "overflow-hidden",
         )}
       >
         <div
           ref={scrollContainerRef}
-          className="scrollbar-none mx-3 flex w-full min-w-0 items-center gap-2 overflow-x-auto overflow-y-hidden whitespace-nowrap"
+          className="scrollbar-none flex w-full items-center gap-2 overflow-x-auto px-3 whitespace-nowrap"
           onClick={handleFocus}
         >
           {selected.map((tag) => (
@@ -107,7 +109,7 @@ export function TagInput({
               }}
               className="cursor-pointer"
             >
-              <Badge className="flex items-center gap-1" variant="secondary">
+              <Badge className="flex items-center gap-1">
                 {tag.label}
                 <X size={12} />
               </Badge>
