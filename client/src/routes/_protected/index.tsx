@@ -1,10 +1,10 @@
-import BackgroundWrapper from "@/components/page/background-wrapper";
 import { createFileRoute } from "@tanstack/react-router";
 import RecentlyViewedCard from "@/components/page/recenty-viewed-card";
 import GeneralPostCard from "@/components/post/general-post-card";
 import { useQuery } from "@tanstack/react-query";
 import { homePostsQueryOptions } from "@/lib/api-options";
 import GeneralPostCardSkeleton from "@/components/post/general-post-card-skeleton";
+import { useBackgroundChange } from "@/lib/hooks/useBackgroundChange";
 
 export const Route = createFileRoute("/_protected/")({
   component: RouteComponent,
@@ -16,12 +16,13 @@ function RouteComponent() {
     staleTime: 1000 * 60 * 5,
   });
 
+  useBackgroundChange({
+    type: "gradient",
+    resetColor: true,
+    moving: false,
+  });
   return (
-    <BackgroundWrapper
-      className="p-3"
-      type="gradient"
-      options={{ resetColor: true }}
-    >
+    <div className="flex w-full justify-center p-3">
       <div className="flex w-full max-w-2xl flex-col space-y-2">
         {posts
           ? posts?.map((post) => <GeneralPostCard key={post.id} post={post} />)
@@ -32,6 +33,6 @@ function RouteComponent() {
       <div className="sticky top-3 ml-3 hidden w-74 flex-col space-y-3 self-start md:flex">
         <RecentlyViewedCard />
       </div>
-    </BackgroundWrapper>
+    </div>
   );
 }

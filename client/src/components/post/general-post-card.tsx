@@ -22,9 +22,12 @@ export default function GeneralPostCard({ post }: { post: Post }) {
         <div className="flex items-center justify-between">
           <div className="flex items-center text-xs">
             <img
-              src={`https://www.picsum.photos/200/200?random=${post.id}`}
+              src={
+                post.user_image_url ||
+                `https://www.picsum.photos/200/200?random=${post.id}`
+              }
               alt="Avatar"
-              className="h-6 w-6 rounded-full"
+              className="h-6 w-6 rounded-full object-cover"
             />
             <span className="ml-2">@johnsmith</span>
             <span className="text-muted-foreground">
@@ -68,7 +71,7 @@ export default function GeneralPostCard({ post }: { post: Post }) {
         <div className="mt-3 flex items-center space-x-4">
           <Heart size={16} />
           <MessageCircle size={16} />
-          <Disc size={16} />
+          {post.allow_suggestions && <Disc size={16} />}
           <Bookmark size={16} />
           <Share size={16} />
         </div>

@@ -1,7 +1,7 @@
 import Card from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { playlistDataQueryOptions } from "@/lib/api-options";
-import { useAverageColor } from "@/lib/hooks/useAverageColor";
+import { useBackgroundChange } from "@/lib/hooks/useBackgroundChange";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { type HTMLAttributes, type ReactNode } from "react";
@@ -19,10 +19,13 @@ export default function GeneralPlaylistCard({
     ...playlistDataQueryOptions(playlistId),
     staleTime: 1000 * 60 * 5,
   });
-  const { data: color = "#000000", isFetching: colorFetching } =
-    useAverageColor(playlistData?.image_url);
 
-  if (!playlistData || colorFetching)
+  const { color } = useBackgroundChange({
+    imageUrl: playlistData?.image_url,
+    affectBackground: false,
+  });
+
+  if (!playlistData || !color)
     return <Skeleton className={cn("h-28 w-full rounded-xs", className)} />;
 
   return (
@@ -44,12 +47,12 @@ export default function GeneralPlaylistCard({
       <img
         src={playlistData.image_url}
         alt={playlistData.name}
-        className={cn("rounded-xxs h-22 w-22 object-cover shadow-md")}
+        className={cn("rounded-xxs h-28 w-28 object-cover shadow-md")}
       />
       <div className="flex flex-1 flex-col">
         <p className="text-muted-foreground text-xs">Playlist</p>
-        <h1 className="mt-auto text-2xl font-bold">{playlistData.name}</h1>
-        <p className="text-muted-foreground mb-3 text-xs">
+        <h1 className="mt-4 text-2xl font-bold">{playlistData.name}</h1>
+        <p className="text-muted-foreground text-xs">
           {playlistData.total} songs
         </p>
       </div>

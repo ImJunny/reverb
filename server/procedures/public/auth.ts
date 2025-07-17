@@ -3,7 +3,7 @@ import { deleteCookie, getCookie, setCookie } from "hono/cookie";
 import {
   getSpotifyAuthorizationUrl,
   getSpotifyTokenData,
-  getSpotifyUserId,
+  getSpotifyCurrentUser,
 } from "@server/lib/spotify-helpers";
 import { createUserDB } from "@server/db/actions/user-actions";
 
@@ -20,9 +20,9 @@ export async function handleCallback(c: Context) {
 
   try {
     const tokenData = await getSpotifyTokenData(code);
-    const userId = await getSpotifyUserId(tokenData.access_token);
+    const userData = await getSpotifyCurrentUser(tokenData.access_token);
 
-    setCookie(c, "user_id", userId, {
+    setCookie(c, "user_id", userData.id, {
       httpOnly: true,
       secure: true,
       sameSite: "Lax",
@@ -30,7 +30,8 @@ export async function handleCallback(c: Context) {
     });
 
     await createUserDB(
-      userId,
+      userData.id,
+      userData.images?.[0]?.url || null,
       tokenData.access_token,
       tokenData.refresh_token,
       new Date(Date.now() + tokenData.expires_in * 1000)

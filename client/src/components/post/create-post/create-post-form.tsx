@@ -12,13 +12,14 @@ import { useRouter } from "@tanstack/react-router";
 import CreatePostTrackSearch from "@/components/post/create-post/create-post-track-search";
 import { useQueryClient } from "@tanstack/react-query";
 import CreatePostPlaylistSearch from "./create-post-playlist-search";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { useBackgroundChange } from "@/lib/hooks/useBackgroundChange";
+// import {
+//   Select,
+//   SelectContent,
+//   SelectItem,
+//   SelectTrigger,
+//   SelectValue,
+// } from "@/components/ui/select";
 
 const contentTypes = [
   { type: "text", label: "Text" },
@@ -28,6 +29,9 @@ const contentTypes = [
 export type ContentType = (typeof contentTypes)[number];
 
 export default function CreatePostForm() {
+  useBackgroundChange({
+    type: "default",
+  });
   const router = useRouter();
   const queryClient = useQueryClient();
   const { mutate, isPending } = useMutation({
@@ -147,7 +151,8 @@ export default function CreatePostForm() {
                         value={field.state.value}
                         onBlur={field.handleBlur}
                         onChange={(e) => field.handleChange(e.target.value)}
-                        className="h-26 resize-none"
+                        className="resize-none"
+                        scrollable={false}
                       />
                     )}
                   </form.Field>
@@ -158,7 +163,7 @@ export default function CreatePostForm() {
                     name="track_id"
                     key="track_id"
                     validators={{
-                      onSubmit: ({ value }) => {
+                      onChange: ({ value }) => {
                         if (form.state.values.type !== "track_id") return null;
                         if (!value) {
                           return "Song selection is required.";
@@ -180,7 +185,7 @@ export default function CreatePostForm() {
                     name="playlist_id"
                     key="playlist_id"
                     validators={{
-                      onSubmit: ({ value }) => {
+                      onChange: ({ value }) => {
                         if (form.state.values.type !== "playlist_id")
                           return null;
                         if (!value) {

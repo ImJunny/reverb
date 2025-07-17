@@ -18,7 +18,6 @@ export async function generateTrackSummary(
     ],
     model: "gemma2-9b-it",
   });
-
   if (chatCompletion.choices[0]?.message.content === "null") return null;
   return chatCompletion.choices[0]?.message.content;
 }
@@ -31,9 +30,10 @@ export async function generateArtistSummary(
     messages: [
       {
         role: "user",
-        content: `What is the artist ${artistName} (who made the song ${trackName}) known for?. 
+        content: `What is the artist ${artistName} (who made the song ${trackName}) known for?. Do not metion the song 
+        itself unless it is a significant part of their career (ex: debut single, breakthrough hit, etc.).
         Give me a 2-3 sentence summary about their background, style of music, and more. 
-        If not enough information is found or you feel it is not 100% accurate, respond with one word only: null.`,
+        If not enough information is found or you feel it is not 100% accurate, respond with only the word 'null'.`,
       },
     ],
     model: "gemma2-9b-it",

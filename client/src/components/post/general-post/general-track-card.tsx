@@ -1,7 +1,8 @@
 import Card from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { trackDataQueryOptions } from "@/lib/api-options";
-import { useAverageColor } from "@/lib/hooks/useAverageColor";
+import { useBackgroundChange } from "@/lib/hooks/useBackgroundChange";
+import { enhanceColor } from "@/lib/scripts/enhanceColor";
 import { cn } from "@/lib/utils";
 import { useQuery } from "@tanstack/react-query";
 import { type HTMLAttributes, type ReactNode } from "react";
@@ -10,24 +11,29 @@ import type { Track } from "shared/types";
 type GeneralTrackCardProps = {
   trackId: string;
   children?: (trackData: Track) => ReactNode;
+  affectBackground?: boolean;
 } & Omit<HTMLAttributes<HTMLDivElement>, "children">;
 
 export default function GeneralTrackCard({
   trackId,
   className,
   children,
+  affectBackground = false,
   ...props
 }: GeneralTrackCardProps) {
   const { data: trackData, isFetching } = useQuery(
     trackDataQueryOptions(trackId),
   );
 
-  const { data: color = "#000000", isFetching: colorFetching } =
-    useAverageColor(trackData?.album.image_url);
+  const { color } = useBackgroundChange({
+    imageUrl: trackData?.album.image_url,
+    type: "gradient",
+    affectBackground,
+  });
 
   if (!trackData) return null;
 
-  if (isFetching || colorFetching)
+  if (isFetching || !color)
     return <Skeleton className={cn("h-20 w-full rounded-xs", className)} />;
 
   return (
@@ -37,12 +43,12 @@ export default function GeneralTrackCard({
         e.stopPropagation();
       }}
       className={cn(
-        "bg-background flex w-full cursor-default flex-row rounded-xs shadow-lg ring-2 ring-black/5",
+        "bg-background flex w-full cursor-default flex-row rounded-xs p-3 shadow-lg ring-2 ring-black/5",
         className,
       )}
       style={{
         backgroundColor: color
-          ? `color-mix(in srgb, ${color} 55%, #000 45%)`
+          ? `color-mix(in srgb, ${enhanceColor(color, 20)} 75%, #000 25%)`
           : undefined,
       }}
       {...props}

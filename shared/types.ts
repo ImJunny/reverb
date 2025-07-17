@@ -55,6 +55,11 @@ export type CreatePost = {
   allow_suggestions: boolean;
 };
 
+export type CreateView = {
+  type: "post" | "playlist" | "user" | "artist";
+  content_id: string;
+};
+
 export type Post = {
   id: string;
   title: string;
@@ -63,6 +68,7 @@ export type Post = {
   allow_suggestions: boolean | null;
   created_at: string | null;
   user_id: string | null;
+  user_image_url: string | null;
 };
 
 export type Track = {
@@ -82,4 +88,14 @@ export type TrackSuggestion = {
   id: string;
   track_id: string;
   user_id: string | null;
+};
+
+export type Comment = {
+  id: string;
+  parent_comment_id: string | null;
+  user_id: string | null;
+  text: string;
+  created_at: string;
+  user_image_url: string | null;
+  reply_count?: number | null;
 };

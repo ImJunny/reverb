@@ -1,6 +1,6 @@
 import { queryOptions } from "@tanstack/react-query";
 import { api } from "../utils/client";
-import type { CreatePost } from "shared/types";
+import type { CreatePost, CreateView } from "shared/types";
 
 export const currentUserProfileQueryOptions = queryOptions({
   queryKey: ["current-user-profile"],
@@ -170,6 +170,22 @@ export const createPostMutationOptions = () => {
   };
 };
 
+export const createRecentlyViewedMutationOptions = () => {
+  return {
+    mutationKey: ["create-recently-viewed"],
+    mutationFn: async (data: CreateView) => {
+      const res = await api.protected.user.create_view.$post({
+        json: {
+          type: data.type,
+          content_id: data.content_id,
+        },
+      });
+      if (!res.ok) throw new Error("Failed to create recently viewed item");
+      return res.json();
+    },
+  };
+};
+
 export const homePostsQueryOptions = () =>
   queryOptions({
     queryKey: ["home-posts"],
@@ -202,6 +218,99 @@ export const postTrackSuggestionsQueryOptions = (postId: string) =>
         param: { id: postId },
       });
       if (!res.ok) throw new Error("Failed to fetch track suggestions");
+      return res.json();
+    },
+  });
+
+export const recentlyViewedQueryOptions = (
+  type: "post" | "playlist" | "user" | "artist",
+  limit?: number,
+) =>
+  queryOptions({
+    queryKey: ["recently-viewed", type, limit],
+    queryFn: async () => {
+      const res = await api.protected.user.recently_viewed.$get({
+        query: { type, limit },
+      });
+      if (!res.ok) throw new Error("Failed to fetch recently viewed items");
+      return res.json();
+    },
+  });
+
+export const recentlyViewedPostsQueryOptions = (limit?: number) =>
+  queryOptions({
+    queryKey: ["recently-viewed-posts"],
+    queryFn: async () => {
+      const res = await api.protected.user.recently_viewed_posts.$get({
+        query: { limit },
+      });
+      if (!res.ok) throw new Error("Failed to fetch recently viewed posts");
+      return res.json();
+    },
+  });
+
+export const commentsQueryOptions = (postId: string) =>
+  queryOptions({
+    queryKey: ["post-comments", postId],
+    queryFn: async () => {
+      if (!postId) throw new Error("Post ID is required");
+      const res = await api.protected.comment.comments[":id"].$get({
+        param: { id: postId },
+      });
+      if (!res.ok) throw new Error("Failed to fetch post comments");
+      return res.json();
+    },
+  });
+
+export const createCommentMutationOptions = () => {
+  return {
+    mutationKey: ["create-comment"],
+    mutationFn: async (data: { postId: string; content: string }) => {
+      const res = await api.protected.comment.create_comment.$post({
+        json: {
+          post_id: data.postId,
+          content: data.content,
+        },
+      });
+      if (!res.ok) throw new Error("Failed to create comment");
+      return res.json();
+    },
+  };
+};
+
+export const createReplyMutationOptions = () => {
+  return {
+    mutationKey: ["create-reply"],
+    mutationFn: async (data: { commentId: string; content: string }) => {
+      const res = await api.protected.comment.create_reply.$post({
+        json: {
+          comment_id: data.commentId,
+          content: data.content,
+        },
+      });
+      if (!res.ok) throw new Error("Failed to create reply");
+      return res.json();
+    },
+  };
+};
+
+export const repliesQueryOptions = (
+  commentId: string,
+  cursor?: string,
+  limit?: number,
+) =>
+  queryOptions({
+    queryKey: ["comment-replies", commentId],
+    queryFn: async () => {
+      if (!commentId) throw new Error("Comment ID is required");
+      const res = await api.protected.comment.comment_replies.$get({
+        query: {
+          id: commentId,
+          limit,
+          cursor,
+        },
+      });
+      if (!res.ok) throw new Error("Failed to fetch comment replies");
       return res.json();
     },
   });

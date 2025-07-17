@@ -6,10 +6,8 @@ import {
 } from "@/lib/api-options";
 import { cn } from "@/lib/utils";
 import TracksRender from "@/components/track/tracks-render";
-import { useBackground } from "@/lib/hooks/useBackground";
-import { useEffect } from "react";
-import BackgroundWrapper from "@/components/page/background-wrapper";
 import { Button } from "@/components/ui/button";
+import { useBackgroundChange } from "@/lib/hooks/useBackgroundChange";
 
 export const Route = createFileRoute("/_protected/playlist/$id")({
   component: RouteComponent,
@@ -20,18 +18,16 @@ function RouteComponent() {
   const { data: playlistData } = useQuery(playlistDataQueryOptions(id));
   const { data: playlistItems } = useQuery(playlistItemsQueryOptions(id));
 
-  const { setImageUrl } = useBackground();
-
-  useEffect(() => {
-    if (playlistData?.image_url) {
-      setImageUrl(playlistData.image_url);
-    }
-  }, [playlistData, setImageUrl]);
+  useBackgroundChange({
+    imageUrl: playlistData?.image_url,
+    type: "blur",
+    moving: true,
+  });
 
   if (!playlistData || !playlistItems) return <></>;
 
   return (
-    <BackgroundWrapper type="blur" moving className="flex h-full flex-col">
+    <div className="flex h-full w-full flex-col">
       <div className="relative mx-3 mt-8 mb-4 flex w-full justify-center">
         <div className="mx-3 flex w-full max-w-5xl space-x-4">
           {playlistData.image_url ? (
@@ -70,6 +66,6 @@ function RouteComponent() {
           <TracksRender items={playlistItems} />
         </div>
       </div>
-    </BackgroundWrapper>
+    </div>
   );
 }

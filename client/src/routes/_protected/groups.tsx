@@ -1,4 +1,3 @@
-import BackgroundWrapper from "@/components/page/background-wrapper";
 import Card from "@/components/ui/card";
 import { createFileRoute } from "@tanstack/react-router";
 
@@ -40,47 +39,56 @@ type GroupData = {
 
 function RouteComponent() {
   return (
-    <BackgroundWrapper
-      className="flex flex-col items-center p-3"
-      type="gradient"
-      options={{ resetColor: true }}
-    >
-      <div className="w-full max-w-6xl">
-        <h1 className="text-4xl font-bold">Groups</h1>
+    <div className="mt-3 flex w-full flex-col items-center space-y-5">
+      <div className="flex w-full max-w-6xl flex-col space-y-2">
+        <div className="grid grid-cols-4 gap-2">
+          {groups.slice(0, 6).map((group) => (
+            <GroupCard key={group.id} data={group} compact />
+          ))}
+        </div>
       </div>
-      <div className="mt-3 flex flex-col space-y-5">
-        <GroupSection title="Your Groups" />
-        <GroupSection title="Recommended For You" />
-      </div>
-    </BackgroundWrapper>
-  );
-}
-
-function GroupSection({ title }: { title: string }) {
-  return (
-    <div className="flex flex-col space-y-2">
-      <h2 className="text-lg font-semibold">{title}</h2>
-      <div className="flex flex-wrap gap-2">
-        {groups
-          .slice(0, Math.floor(Math.random() * groups.length) + 4)
-          .map((group) => (
+      <div className="flex w-full max-w-6xl flex-col space-y-2">
+        <h2 className="text-lg font-semibold">Recommended For You</h2>
+        <div className="grid grid-cols-3 gap-2">
+          {groups.slice(0, 6).map((group) => (
             <GroupCard key={group.id} data={group} />
           ))}
+        </div>
       </div>
     </div>
   );
 }
 
-function GroupCard({ data }: { data: GroupData }) {
+function GroupCard({ data, compact }: { data: GroupData; compact?: boolean }) {
+  if (compact)
+    return (
+      <Card
+        transparent
+        className="hover:bg-card-hover flex w-full cursor-pointer flex-row items-center gap-3 rounded-xs shadow-xl ring-1 ring-black/25"
+      >
+        <img
+          src={`https://www.picsum.photos/200/200?random=${Math.random()}`}
+          alt={data.name}
+          className="h-14 w-14 rounded-sm object-cover"
+        />
+        <div>
+          <p className="text-sm font-semibold">{data.name}</p>
+          <p className="text-muted-foreground mt-1 text-xs">
+            {data.users} Users
+          </p>
+        </div>
+      </Card>
+    );
+
   return (
-    <Card className="hover:bg-card-hover flex w-80 cursor-pointer flex-row items-center gap-3 rounded-xs shadow-xl ring-1 ring-black/25">
+    <Card className="hover:bg-card-hover flex w-full cursor-pointer flex-row items-center gap-3 rounded-xs shadow-xl ring-1 ring-black/25">
       <img
         src={`https://www.picsum.photos/200/200?random=${Math.random()}`}
         alt={data.name}
-        className="h-16 w-16 rounded-full object-cover"
+        className="h-24 w-24 rounded-sm object-cover"
       />
       <div>
-        <p className="text-sm">{data.name}</p>
+        <p className="font-semibold">{data.name}</p>
         <p className="text-muted-foreground text-xs">{data.description}</p>
         <p className="text-muted-foreground mt-1 text-xs">{data.users} Users</p>
       </div>

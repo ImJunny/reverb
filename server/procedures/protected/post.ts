@@ -4,9 +4,8 @@ import {
   getPostDB,
   getPostTrackSuggestionsDB,
 } from "@server/db/actions/post-actions";
-import { getSpotifyPlaylistData } from "@server/lib/spotify-helpers";
 import type { ProtectedContext } from "@server/utils/auth-middleware";
-import type { PlaylistData, Post, TrackSuggestion } from "shared/types";
+import type { TrackSuggestion } from "shared/types";
 
 // Create post; body validated by zValidator
 export async function createPost(c: ProtectedContext) {

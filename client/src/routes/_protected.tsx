@@ -7,6 +7,7 @@ import { AudioProvider } from "@/components/audio-controls/audio-provider";
 import AudioControls from "@/components/audio-controls/audio-controls";
 import RightSidebarWrapper from "@/components/sidebar/sidebar";
 import { SidebarProvider } from "@/components/sidebar/sidebar-provider";
+import BackgroundWrapper from "@/components/page/background-wrapper";
 
 export const Route = createFileRoute("/_protected")({
   beforeLoad: async () => {
@@ -30,9 +31,9 @@ function RootComponent() {
             <Header />
             <div className="mx-2 mb-2 flex flex-1 gap-x-2 overflow-hidden">
               <Sidebar />
-              <div className="w-full">
+              <BackgroundWrapper>
                 <Outlet />
-              </div>
+              </BackgroundWrapper>
               <RightSidebarWrapper />
             </div>
             <AudioControls />
