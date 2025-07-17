@@ -48,7 +48,8 @@ export async function getCommentsDB(postId: string) {
 export async function createReplyDB(
   commentId: string,
   userId: string,
-  text: string
+  text: string,
+  taggedUserId?: string | null
 ) {
   const result = await db
     .insert(commentsTable)
@@ -58,6 +59,7 @@ export async function createReplyDB(
       user_id: userId,
       text,
       created_at: new Date(),
+      tagged_user_id: taggedUserId ?? null,
     })
     .returning();
   return result[0];
@@ -77,6 +79,7 @@ export async function getRepliesDB(
       created_at: commentsTable.created_at,
       user_image_url: usersTable.image_url,
       reply_count: sql<number>`NULL`,
+      tagged_user_id: commentsTable.tagged_user_id,
     })
     .from(commentsTable)
     .innerJoin(usersTable, eq(commentsTable.user_id, usersTable.user_id))

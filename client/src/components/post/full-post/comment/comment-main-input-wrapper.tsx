@@ -1,7 +1,7 @@
 import CommentTextarea from "./comment-textarea";
 import { useState } from "react";
 import { Input } from "@/components/ui/input";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { createCommentMutationOptions } from "@/lib/api-options";
 
 export default function CommentMainInputWrapper({
@@ -11,6 +11,7 @@ export default function CommentMainInputWrapper({
 }) {
   const { mutate } = useMutation(createCommentMutationOptions());
   const [commenting, setCommenting] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleSubmit = (content: string) => {
     if (!content.trim()) return;
@@ -19,6 +20,9 @@ export default function CommentMainInputWrapper({
       {
         onSuccess: () => {
           setCommenting(false);
+          queryClient.invalidateQueries({
+            queryKey: ["post-comments", postId],
+          });
         },
         onError: (error) => {
           console.error("Failed to create comment:", error);

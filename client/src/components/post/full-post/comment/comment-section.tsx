@@ -21,8 +21,7 @@ export default function CommentSection({ postId }: { postId: string }) {
           <CommentEntry
             key={comment.id}
             comment={comment}
-            postId={postId}
-            type="comment"
+            parentComment={comment}
           />
         ))
       )}

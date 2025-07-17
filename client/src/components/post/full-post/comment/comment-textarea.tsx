@@ -44,7 +44,13 @@ export default function CommentTextarea({
         >
           Cancel
         </Button>
-        <Button onClick={() => onSubmit?.(input)} className="h-6 px-2">
+        <Button
+          onClick={() => {
+            onSubmit?.(input);
+            setInput("");
+          }}
+          className="h-6 px-2"
+        >
           {label}
         </Button>
       </div>

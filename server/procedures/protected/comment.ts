@@ -45,7 +45,7 @@ export async function createReply(c: ProtectedContext) {
   try {
     const userId = c.get("user_id");
     const body = await c.req.json();
-    const { comment_id, content, tag_user_id } = body;
+    const { comment_id, content, tagged_user_id } = body;
     if (!comment_id || !content)
       return c.json({ message: "Comment ID and content are required" }, 400);
 
@@ -53,7 +53,7 @@ export async function createReply(c: ProtectedContext) {
       comment_id,
       userId,
       content,
-      tag_user_id
+      tagged_user_id
     );
     return c.json(result, 200);
   } catch (error: any) {

@@ -35,7 +35,7 @@ export default function GeneralPlaylistCard({
         e.stopPropagation();
       }}
       className={cn(
-        "relative flex cursor-default flex-row space-x-3 rounded-xs p-3 shadow-lg ring-1 ring-black/5",
+        "rounded-xxs relative flex cursor-default flex-row space-x-3 p-3 shadow-lg ring-1 ring-black/5",
         className,
       )}
       style={{

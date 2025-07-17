@@ -281,11 +281,16 @@ export const createCommentMutationOptions = () => {
 export const createReplyMutationOptions = () => {
   return {
     mutationKey: ["create-reply"],
-    mutationFn: async (data: { commentId: string; content: string }) => {
+    mutationFn: async (data: {
+      commentId: string;
+      content: string;
+      taggedUserId?: string | null;
+    }) => {
       const res = await api.protected.comment.create_reply.$post({
         json: {
           comment_id: data.commentId,
           content: data.content,
+          tagged_user_id: data.taggedUserId,
         },
       });
       if (!res.ok) throw new Error("Failed to create reply");

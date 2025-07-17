@@ -13,13 +13,15 @@ import CreatePostTrackSearch from "@/components/post/create-post/create-post-tra
 import { useQueryClient } from "@tanstack/react-query";
 import CreatePostPlaylistSearch from "./create-post-playlist-search";
 import { useBackgroundChange } from "@/lib/hooks/useBackgroundChange";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
+import CreatePostTagInput from "./create-post-tag-input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import type { Tag } from "shared/types";
 
 const contentTypes = [
   { type: "text", label: "Text" },
@@ -27,6 +29,13 @@ const contentTypes = [
   { type: "playlist_id", label: "Playlist" },
 ] as const;
 export type ContentType = (typeof contentTypes)[number];
+
+const categories = [
+  { value: "discussion", label: "Discussion" },
+  { value: "help", label: "Help" },
+  { value: "showcase", label: "Showcase" },
+] as const;
+export type Category = (typeof categories)[number]["value"] | undefined;
 
 export default function CreatePostForm() {
   useBackgroundChange({
@@ -43,16 +52,18 @@ export default function CreatePostForm() {
   const form = useForm({
     defaultValues: {
       title: "",
-      type: "text" as "text" | "track_id" | "playlist_id",
+      type: "text" as ContentType["type"],
       allow_suggestions: false,
       text: "",
       track_id: "",
       playlist_id: "",
+      category: undefined as Category | undefined,
+      tags: [] as Tag[],
     },
     onSubmit: async ({ value }) => {
       const formattedData = {
         title: value.title,
-        type: value.type as "text" | "track_id" | "playlist_id",
+        type: value.type as ContentType["type"],
         allow_suggestions: value.allow_suggestions,
         content:
           value.type === "text"
@@ -207,20 +218,36 @@ export default function CreatePostForm() {
             }
           }}
         </form.Subscribe>
-        {/* <form.Field name="type">
-          {(field) => (
-            <Select>
-              <SelectTrigger className="w-[180px]">
-                <SelectValue placeholder="Category" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="light">Help</SelectItem>
-                <SelectItem value="dark">Discussion</SelectItem>
-                <SelectItem value="system">Showcase</SelectItem>
-              </SelectContent>
-            </Select>
-          )}
-        </form.Field> */}
+        <div className="flex w-full space-x-2">
+          <form.Field name="category">
+            {(field) => (
+              <Select
+                onValueChange={(value) => field.handleChange(value as Category)}
+                value={field.state.value}
+              >
+                <SelectTrigger className="w-[180px]">
+                  <SelectValue placeholder="Category" />
+                </SelectTrigger>
+                <SelectContent>
+                  {categories.map((category) => (
+                    <SelectItem key={category.value} value={category.value}>
+                      {category.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          </form.Field>
+          <form.Field name="tags">
+            {(field) => (
+              <CreatePostTagInput
+                onChange={(values) => field.handleChange(values as Tag[])}
+                value={field.state.value}
+              />
+            )}
+          </form.Field>
+        </div>
+
         <form.Field name="allow_suggestions">
           {(field) => (
             <div className="flex items-center space-x-3">

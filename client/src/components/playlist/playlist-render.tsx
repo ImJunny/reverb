@@ -17,7 +17,7 @@ export default function PlaylistRender({ playlistId }: { playlistId: string }) {
 
   const { color } = useBackgroundChange({
     imageUrl: playlistData?.image_url,
-    type: "blur",
+    type: "gradient",
   });
 
   if (!playlistData || !playlistItems || !color)
@@ -25,7 +25,7 @@ export default function PlaylistRender({ playlistId }: { playlistId: string }) {
 
   return (
     <Card
-      className="flex w-full overflow-hidden rounded-xs p-0"
+      className="rounded-xxs flex w-full overflow-hidden p-0"
       style={{
         backgroundColor: color
           ? `color-mix(in srgb, ${color} 95%, white 5%)`

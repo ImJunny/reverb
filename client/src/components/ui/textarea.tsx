@@ -26,13 +26,14 @@ function Textarea({
         ref={ref}
         className={cn(
           "peer bg-input placeholder:text-muted-foreground selection:bg-primary selection:text-primary-foreground flex w-full min-w-0 rounded-xs px-3 py-2 text-base shadow-xs transition-[color,box-shadow] duration-0 outline-none disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 md:text-sm",
-          "focus-visible:ring-ring/50 focus-visible:ring-[1px]",
+          "focus-visible:ring-ring/50 focus:bg-input/50 focus-visible:ring-[1px]",
           "aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 resize-none",
           scrollable
             ? "overflow-auto" // fixed height + scroll
             : "overflow-hidden", // grow-to-fit
           className,
         )}
+        {...props}
         onInput={(e) => {
           handleInput(e);
           props.onInput?.(e);
@@ -45,7 +46,6 @@ function Textarea({
           props.onBlur?.(e);
           e.currentTarget.placeholder = props.placeholder || "";
         }}
-        {...props}
       />
       <div
         className={cn(

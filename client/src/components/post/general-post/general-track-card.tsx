@@ -43,7 +43,7 @@ export default function GeneralTrackCard({
         e.stopPropagation();
       }}
       className={cn(
-        "bg-background flex w-full cursor-default flex-row rounded-xs p-3 shadow-lg ring-2 ring-black/5",
+        "bg-background rounded-xxs flex w-full cursor-default flex-row p-3 shadow-lg ring-2 ring-black/5",
         className,
       )}
       style={{

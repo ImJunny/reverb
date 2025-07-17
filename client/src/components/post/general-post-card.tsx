@@ -37,7 +37,9 @@ export default function GeneralPostCard({ post }: { post: Post }) {
           <Ellipsis size={20} className="text-muted-foreground" />
         </div>
 
-        <h1 className="mt-2 text-lg font-semibold">{post.title}</h1>
+        <h1 className="mt-2 line-clamp-1 text-lg font-semibold">
+          {post.title}
+        </h1>
         {/* <div className="mb-3 flex items-center space-x-2">
           <Badge>{post.tags[0]}</Badge>
           {post.tags.slice(1).map((tag, idx) => (

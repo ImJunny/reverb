@@ -2,30 +2,30 @@ import {
   createReplyMutationOptions,
   repliesQueryOptions,
 } from "@/lib/api-options";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Heart } from "lucide-react";
 import { useEffect, useState } from "react";
 import type { Comment } from "shared/types";
 import CommentTextarea from "./comment-textarea";
 import { formatTimeAgo } from "@/lib/scripts/formatTimeAgo";
+import ReplyEntry from "./reply-entry";
 
 export default function CommentEntry({
   comment,
-  postId,
-  type,
+  parentComment,
 }: {
   comment: Comment;
-  postId: string;
-  type: "comment" | "reply";
+  parentComment: Comment;
 }) {
-  const [isReplying, setIsReplying] = useState(false);
+  const queryClient = useQueryClient();
+  const [replying, setReplying] = useState(false);
   const [replyCount, setReplyCount] = useState(comment.reply_count || 0);
   const [cursor, setCursor] = useState<string | undefined>(undefined);
   const [replies, setReplies] = useState<Comment[]>([]);
   const [initialized, setInitialized] = useState(false);
 
   const { data: repliesData, refetch: fetchReplies } = useQuery({
-    ...repliesQueryOptions(comment.id, cursor, 3),
+    ...repliesQueryOptions(comment.id, cursor, 4),
     enabled: false,
   });
 
@@ -34,11 +34,19 @@ export default function CommentEntry({
   const handleSubmit = (content: string) => {
     if (!content.trim()) return;
     mutate(
-      { commentId: comment.id, content },
       {
-        onSuccess: () => {
-          setIsReplying(false);
-          fetchReplies();
+        commentId: parentComment!.id,
+        content,
+        taggedUserId:
+          comment.user_id === parentComment.user_id ? null : comment.user_id,
+      },
+      {
+        onSuccess: (data: Comment) => {
+          setReplying(false);
+          setReplies((prev) => [data, ...prev]);
+          queryClient.invalidateQueries({
+            queryKey: ["comment-replies", parentComment!.id],
+          });
         },
       },
     );
@@ -47,10 +55,13 @@ export default function CommentEntry({
   useEffect(() => {
     if (repliesData) {
       setReplies((prev) => [...prev, ...repliesData]);
-      setReplyCount((prev) => prev - repliesData.length);
       setCursor(repliesData[repliesData.length - 1]?.created_at);
     }
-  }, [repliesData, setReplies]);
+  }, [repliesData]);
+
+  useEffect(() => {
+    setReplyCount(comment.reply_count! - replies.length);
+  }, [replies.length, comment.reply_count]);
 
   return (
     <div className="flex p-3 text-xs">
@@ -69,7 +80,10 @@ export default function CommentEntry({
               &nbsp;• {formatTimeAgo(comment.created_at)}
             </span>
           </div>
-          <p className="text-sm">{comment?.text}</p>
+          <p className="text-sm">
+            <span className="text-rose-500">{comment.tagged_user_id}</span>{" "}
+            {comment.text}
+          </p>
           <div className="text-muted-foreground mt-2 flex items-center space-x-4">
             <div className="flex items-center space-x-2">
               <Heart size={14} className="text-muted-foreground" />
@@ -77,33 +91,34 @@ export default function CommentEntry({
             </div>
 
             <button
-              onClick={() => setIsReplying(true)}
+              onClick={() => setReplying(true)}
               className="cursor-pointer"
             >
               <p>Reply</p>
             </button>
           </div>
           <CommentTextarea
-            show={isReplying}
+            show={replying}
             label="Reply"
             onSubmit={(content) => {
               handleSubmit(content);
             }}
-            onCancel={() => setIsReplying(false)}
+            onCancel={() => setReplying(false)}
+            className="mt-3"
           />
           <div className="mt-2">
             {replies?.map((reply: Comment) => (
-              <CommentEntry
+              <ReplyEntry
                 key={reply.id}
                 comment={reply}
-                postId={postId}
-                type="reply"
+                parentComment={parentComment}
+                setReplies={setReplies}
               />
             ))}
           </div>
 
           <div className="ml-3 cursor-pointer self-start font-semibold">
-            {type === "reply" ? null : replyCount > 0 && !initialized ? (
+            {replyCount > 0 && !initialized ? (
               <p
                 onClick={() => {
                   fetchReplies();

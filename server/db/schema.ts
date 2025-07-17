@@ -91,4 +91,7 @@ export const commentsTable = pgTable("comments", {
   text: text().notNull(),
   created_at: timestamp().defaultNow().notNull(),
   parent_comment_id: text(), // reference to parent comment (optional)
+  tagged_user_id: text().references(() => usersTable.user_id, {
+    onDelete: "set null",
+  }),
 });
