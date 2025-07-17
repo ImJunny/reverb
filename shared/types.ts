@@ -91,21 +91,11 @@ export type TrackSuggestion = {
 };
 
 export type Comment = {
-  id: any;
-  post_id: any;
-  user_id: any;
-  text: any;
-  created_at: any;
-  user_image_url: string | null;
-  reply_count: number;
-};
-
-export type Reply = {
   id: string;
-  comment_id: string | null;
+  parent_comment_id: string | null;
   user_id: string | null;
   text: string;
   created_at: string;
   user_image_url: string | null;
-  tag_user_id: string | null;
+  reply_count?: number | null;
 };

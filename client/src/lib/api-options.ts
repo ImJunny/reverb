@@ -249,12 +249,12 @@ export const recentlyViewedPostsQueryOptions = (limit?: number) =>
     },
   });
 
-export const postCommentsQueryOptions = (postId: string) =>
+export const commentsQueryOptions = (postId: string) =>
   queryOptions({
     queryKey: ["post-comments", postId],
     queryFn: async () => {
       if (!postId) throw new Error("Post ID is required");
-      const res = await api.protected.post.comments[":id"].$get({
+      const res = await api.protected.comment.comments[":id"].$get({
         param: { id: postId },
       });
       if (!res.ok) throw new Error("Failed to fetch post comments");
@@ -266,7 +266,7 @@ export const createCommentMutationOptions = () => {
   return {
     mutationKey: ["create-comment"],
     mutationFn: async (data: { postId: string; content: string }) => {
-      const res = await api.protected.post.create_comment.$post({
+      const res = await api.protected.comment.create_comment.$post({
         json: {
           post_id: data.postId,
           content: data.content,
@@ -281,16 +281,11 @@ export const createCommentMutationOptions = () => {
 export const createReplyMutationOptions = () => {
   return {
     mutationKey: ["create-reply"],
-    mutationFn: async (data: {
-      commentId: string;
-      content: string;
-      tagUserId: string | undefined;
-    }) => {
-      const res = await api.protected.post.create_reply.$post({
+    mutationFn: async (data: { commentId: string; content: string }) => {
+      const res = await api.protected.comment.create_reply.$post({
         json: {
           comment_id: data.commentId,
           content: data.content,
-          tag_user_id: data.tagUserId ?? null,
         },
       });
       if (!res.ok) throw new Error("Failed to create reply");
@@ -299,7 +294,7 @@ export const createReplyMutationOptions = () => {
   };
 };
 
-export const commentRepliesQueryOptions = (
+export const repliesQueryOptions = (
   commentId: string,
   cursor?: string,
   limit?: number,
@@ -308,7 +303,7 @@ export const commentRepliesQueryOptions = (
     queryKey: ["comment-replies", commentId],
     queryFn: async () => {
       if (!commentId) throw new Error("Comment ID is required");
-      const res = await api.protected.post.comment_replies.$get({
+      const res = await api.protected.comment.comment_replies.$get({
         query: {
           id: commentId,
           limit,

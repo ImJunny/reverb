@@ -1,6 +1,7 @@
 import { Table } from "drizzle-orm";
 import {
   boolean,
+  foreignKey,
   pgEnum,
   pgTable,
   text,
@@ -89,19 +90,5 @@ export const commentsTable = pgTable("comments", {
   }),
   text: text().notNull(),
   created_at: timestamp().defaultNow().notNull(),
-});
-
-export const repliesTable = pgTable("replies", {
-  id: text().primaryKey(),
-  comment_id: text().references(() => commentsTable.id, {
-    onDelete: "cascade",
-  }),
-  tag_user_id: text().references(() => usersTable.user_id, {
-    onDelete: "set null",
-  }),
-  user_id: text().references(() => usersTable.user_id, {
-    onDelete: "cascade",
-  }),
-  text: text().notNull(),
-  created_at: timestamp().defaultNow().notNull(),
+  parent_comment_id: text(), // reference to parent comment (optional)
 });

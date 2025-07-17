@@ -2,13 +2,14 @@ import { formatDistanceToNow } from "date-fns";
 
 export const formatTimeAgo = (createdAt: string | Date) => {
   return formatDistanceToNow(new Date(createdAt), {
-    addSuffix: true,
     includeSeconds: false,
+    addSuffix: true,
   })
-    .replace(/(\d+)\s*minutes?/, "$1m")
-    .replace(/(\d+)\s*hours?/, "$1h")
-    .replace(/(\d+)\s*days?/, "$1d")
-    .replace(/(\d+)\s*months?/, "$1mo")
-    .replace(/(\d+)\s*years?/, "$1y")
-    .replace(/(\d+)\s*seconds?/, "$1s");
+    .replace(/(\d+)\s*minutes?/, "$1 min")
+    .replace(/(\d+)\s*hours?/, "$1 hr")
+    .replace(/(\d+)\s*days?/, "$1 d")
+    .replace(/(\d+)\s*months?/, "$1 mo")
+    .replace(/(\d+)\s*years?/, "$1 y")
+    .replace(/(\d+)\s*seconds?/, "$1 s")
+    .replace("about ", "");
 };

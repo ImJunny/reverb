@@ -26,13 +26,9 @@ import {
   getTrackSummary,
 } from "@server/procedures/protected/summary";
 import {
-  createComment,
   createPost,
-  createReply,
-  getCommentReplies,
   getHomePosts,
   getPost,
-  getPostComments,
   getPostTrackSuggestions,
 } from "@server/procedures/protected/post";
 import { zValidator } from "@hono/zod-validator";
@@ -40,6 +36,12 @@ import {
   CreatePostSchema,
   CreateRecentlyViewedSchema,
 } from "@server/zod-schemas/schemas";
+import {
+  createComment,
+  createReply,
+  getComments,
+  getReplies,
+} from "@server/procedures/protected/comment";
 
 // Protected API routes
 const usersRoute = new Hono()
@@ -70,10 +72,11 @@ const postsRoute = new Hono()
   .post("/create", zValidator("json", CreatePostSchema), createPost)
   .get("/home_posts", getHomePosts)
   .get("/post/:id", getPost)
-  .get("/track_suggestions/:id", getPostTrackSuggestions)
-  .get("/comments/:id", getPostComments)
+  .get("/track_suggestions/:id", getPostTrackSuggestions);
+const commentsRoute = new Hono()
+  .get("/comments/:id", getComments)
   .post("/create_comment", createComment)
-  .get("/comment_replies", getCommentReplies)
+  .get("/comment_replies", getReplies)
   .post("/create_reply", createReply);
 
 // Protected API
@@ -84,4 +87,5 @@ export const protectedApi = new Hono()
   .route("/track", tracksRoute)
   .route("/artist", artistsRoute)
   .route("/summary", summaryRoute)
-  .route("/post", postsRoute);
+  .route("/post", postsRoute)
+  .route("/comment", commentsRoute);

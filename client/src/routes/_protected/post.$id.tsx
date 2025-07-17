@@ -30,11 +30,13 @@ function RouteComponent() {
 
   return (
     <div className="flex w-full justify-center p-3">
-      {isLoading || !post ? (
-        <Skeleton className="rounded-xxs h-150 w-full max-w-2xl" />
-      ) : (
-        <FullPostCard post={post} />
-      )}
+      <div className="mb-60 flex w-full max-w-2xl">
+        {isLoading || !post ? (
+          <Skeleton className="rounded-xxs h-150 w-full" />
+        ) : (
+          <FullPostCard post={post} />
+        )}
+      </div>
 
       <div className="sticky top-3 ml-3 hidden w-74 flex-col space-y-3 self-start md:flex">
         <Card className="flex-col space-y-2 rounded-xs md:flex">

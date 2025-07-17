@@ -14,11 +14,11 @@ import GeneralTrackCard from "@/components/post/general-post/general-track-card"
 import TrackSuggestionPopover from "@/components/post/track-suggestions/track-suggestion-popover";
 import PlaybackToggle from "@/components/track/playback-toggle";
 import type { Post } from "shared/types";
-import CommentSection from "./comment-section";
+import CommentSection from "./comment/comment-section";
 
 export function FullPostCard({ post }: { post: Post }) {
   return (
-    <Card className="flex w-full max-w-2xl rounded-xs p-0">
+    <Card className="flex w-full rounded-xs p-0">
       <div className="flex flex-col p-3">
         <div className="flex items-center justify-between">
           <div className="flex items-center text-xs">
