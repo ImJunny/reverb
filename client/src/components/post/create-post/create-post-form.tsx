@@ -13,7 +13,6 @@ import CreatePostTrackSearch from "@/components/post/create-post/create-post-tra
 import { useQueryClient } from "@tanstack/react-query";
 import CreatePostPlaylistSearch from "./create-post-playlist-search";
 import { useBackgroundChange } from "@/lib/hooks/useBackgroundChange";
-import CreatePostTagInput from "./create-post-tag-input";
 import {
   Select,
   SelectContent,
@@ -21,7 +20,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import type { Tag } from "shared/types";
+import { tags, type Tag } from "shared/types";
+import { TagInput } from "@/components/ui/tag-input";
 
 const contentTypes = [
   { type: "text", label: "Text" },
@@ -58,7 +58,7 @@ export default function CreatePostForm() {
       track_id: "",
       playlist_id: "",
       category: undefined as Category | undefined,
-      tags: [] as Tag[],
+      tags: [] as Tag["value"][],
     },
     onSubmit: async ({ value }) => {
       const formattedData = {
@@ -71,6 +71,8 @@ export default function CreatePostForm() {
             : value.type === "track_id"
               ? value.track_id
               : value.playlist_id,
+        category: value.category,
+        tags: value.tags,
       };
       mutate(formattedData, {
         onSuccess: () => {
@@ -242,9 +244,14 @@ export default function CreatePostForm() {
 
           <form.Field name="tags">
             {(field) => (
-              <CreatePostTagInput
-                onChange={(values) => field.handleChange(values as Tag[])}
-                value={field.state.value}
+              <TagInput
+                options={[...tags]}
+                selected={field.state.value}
+                onChange={(values) =>
+                  field.handleChange(values as Tag["value"][])
+                }
+                placeholder="Add tags"
+                label="Tags"
               />
             )}
           </form.Field>

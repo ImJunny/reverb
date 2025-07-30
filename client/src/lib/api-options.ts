@@ -162,6 +162,8 @@ export const createPostMutationOptions = () => {
           type: data.type,
           allow_suggestions: data.allow_suggestions,
           content: data.content,
+          category: data.category,
+          tags: data.tags,
         },
       });
       if (!res.ok) throw new Error("Failed to create post");
@@ -205,19 +207,6 @@ export const postQueryOptions = (postId: string) =>
         param: { id: postId },
       });
       if (!res.ok) throw new Error("Failed to fetch post");
-      return res.json();
-    },
-  });
-
-export const postTrackSuggestionsQueryOptions = (postId: string) =>
-  queryOptions({
-    queryKey: ["post-track-suggestions", postId],
-    queryFn: async () => {
-      if (!postId) throw new Error("Post ID is required");
-      const res = await api.protected.post.track_suggestions[":id"].$get({
-        param: { id: postId },
-      });
-      if (!res.ok) throw new Error("Failed to fetch track suggestions");
       return res.json();
     },
   });

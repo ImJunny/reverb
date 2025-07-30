@@ -4,9 +4,11 @@ import { commentsQueryOptions } from "@/lib/api-options";
 import CommentMainInputWrapper from "./comment-main-input-wrapper";
 
 export default function CommentSection({ postId }: { postId: string }) {
-  const { data: comments } = useQuery({
+  const { data: comments, isFetchedAfterMount } = useQuery({
     ...commentsQueryOptions(postId),
   });
+
+  if (!isFetchedAfterMount) return null;
 
   return (
     <div className="flex flex-col space-y-3 p-3">

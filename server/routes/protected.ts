@@ -29,7 +29,6 @@ import {
   createPost,
   getHomePosts,
   getPost,
-  getPostTrackSuggestions,
 } from "@server/procedures/protected/post";
 import { zValidator } from "@hono/zod-validator";
 import {
@@ -71,8 +70,7 @@ const summaryRoute = new Hono()
 const postsRoute = new Hono()
   .post("/create", zValidator("json", CreatePostSchema), createPost)
   .get("/home_posts", getHomePosts)
-  .get("/post/:id", getPost)
-  .get("/track_suggestions/:id", getPostTrackSuggestions);
+  .get("/post/:id", getPost);
 const commentsRoute = new Hono()
   .get("/comments/:id", getComments)
   .post("/create_comment", createComment)

@@ -11,7 +11,6 @@ import {
   Share,
 } from "lucide-react";
 import GeneralTrackCard from "@/components/post/general-post/general-track-card";
-import TrackSuggestionPopover from "@/components/post/track-suggestions/track-suggestion-popover";
 import PlaybackToggle from "@/components/track/playback-toggle";
 import type { Post } from "shared/types";
 import CommentSection from "./comment/comment-section";
@@ -34,10 +33,13 @@ export function FullPostCard({ post }: { post: Post }) {
           </div>
           <Ellipsis size={20} className="text-muted-foreground" />
         </div>
-        <div className="my-2 flex items-center space-x-2">
-          <Badge>Help</Badge>
-          <Badge className="text-secondary-foreground bg-white/20">Rnb</Badge>
-          <Badge className="text-secondary-foreground bg-white/20">Pop</Badge>
+        <div className="mt-2 mb-2 flex items-center space-x-2">
+          <Badge className="capitalize">{post.category}</Badge>
+          {post.tags.map((tag, idx) => (
+            <Badge key={idx} className="text-secondary-foreground bg-white/20">
+              {tag.label}
+            </Badge>
+          ))}
         </div>
         <h1 className="mb-2 text-xl font-semibold">{post?.title}</h1>
 
@@ -70,22 +72,6 @@ export function FullPostCard({ post }: { post: Post }) {
           <Share size={20} />
         </div>
       </div>
-
-      {post?.allow_suggestions && (
-        <>
-          <Separator />
-          <div className="flex flex-col space-y-3 p-3">
-            <div className="flex items-center justify-between">
-              <h2>Suggestions • {"5"}</h2>
-              <TrackSuggestionPopover />
-            </div>
-
-            <Card className="rounded-xs">
-              {/* <TrackSuggestionsRender postId={post?.id} /> */}
-            </Card>
-          </div>
-        </>
-      )}
 
       <Separator />
 

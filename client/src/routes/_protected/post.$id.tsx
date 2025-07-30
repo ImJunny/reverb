@@ -32,7 +32,7 @@ function RouteComponent() {
     <div className="flex w-full justify-center p-3">
       <div className="mb-60 flex w-full max-w-2xl">
         {isLoading || !post ? (
-          <Skeleton className="rounded-xxs h-150 w-full" />
+          <Skeleton className="rounded-xxs h-100 w-full" />
         ) : (
           <FullPostCard post={post} />
         )}

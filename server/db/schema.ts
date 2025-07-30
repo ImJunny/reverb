@@ -2,8 +2,10 @@ import { Table } from "drizzle-orm";
 import {
   boolean,
   foreignKey,
+  integer,
   pgEnum,
   pgTable,
+  serial,
   text,
   timestamp,
   unique,
@@ -22,8 +24,13 @@ export const recentlyViewedTypeEnum = pgEnum("recently_viewed_type", [
   "user",
   "artist",
 ]);
+export const categoryEnum = pgEnum("category", [
+  "discussion",
+  "help",
+  "showcase",
+]);
 
-// TABLES
+// BASE TABLES
 export const usersTable = pgTable("users", {
   user_id: text().primaryKey(),
   access_token: text().notNull(),
@@ -50,18 +57,7 @@ export const postsTable = pgTable("posts", {
   user_id: text().references(() => usersTable.user_id, {
     onDelete: "set null",
   }),
-});
-
-export const trackSuggestionsTable = pgTable("track_suggestions", {
-  id: text().primaryKey(),
-  user_id: text().references(() => usersTable.user_id, {
-    onDelete: "set null",
-  }),
-  post_id: text().references(() => postsTable.id, {
-    onDelete: "cascade",
-  }),
-  track_id: text().notNull(),
-  created_at: timestamp().defaultNow().notNull(),
+  category: categoryEnum().notNull(),
 });
 
 export const recentlyViewedTable = pgTable(
@@ -94,4 +90,21 @@ export const commentsTable = pgTable("comments", {
   tagged_user_id: text().references(() => usersTable.user_id, {
     onDelete: "set null",
   }),
+});
+
+export const postTagsTable = pgTable("post_tags", {
+  id: text().primaryKey(),
+  post_id: text().references(() => postsTable.id, {
+    onDelete: "cascade",
+  }),
+  tag_type: text().references(() => tagTypesTable.value, {
+    onDelete: "cascade",
+  }),
+});
+
+// TYPE TABLES
+export const tagTypesTable = pgTable("tag_types", {
+  id: serial("id").primaryKey(),
+  value: text("value").notNull().unique(),
+  label: text("label").notNull(),
 });

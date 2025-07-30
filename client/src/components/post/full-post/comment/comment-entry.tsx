@@ -63,6 +63,7 @@ export default function CommentEntry({
     setReplyCount(comment.reply_count! - replies.length);
   }, [replies.length, comment.reply_count]);
 
+  console.log(replyCount);
   return (
     <div className="flex p-3 text-xs">
       <div className="flex w-full items-start space-x-3">
@@ -131,12 +132,11 @@ export default function CommentEntry({
               <p
                 onClick={() => {
                   fetchReplies();
-                  setInitialized(true);
                 }}
               >
                 {replyCount} more {replyCount > 1 ? "replies" : "reply"}
               </p>
-            ) : (
+            ) : replyCount === 0 && !!repliesData ? (
               <p
                 onClick={() => {
                   setReplies([]);
@@ -147,7 +147,7 @@ export default function CommentEntry({
               >
                 Hide all
               </p>
-            )}
+            ) : null}
           </div>
         </div>
       </div>

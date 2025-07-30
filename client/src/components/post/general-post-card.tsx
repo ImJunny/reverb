@@ -14,6 +14,7 @@ import GeneralPlaylistCard from "./general-post/general-playlist-card";
 import GeneralTrackCard from "./general-post/general-track-card";
 import { formatTimeAgo } from "@/lib/scripts/formatTimeAgo";
 import PlaybackToggle from "../track/playback-toggle";
+import { Badge } from "../ui/badge";
 
 export default function GeneralPostCard({ post }: { post: Post }) {
   return (
@@ -37,17 +38,15 @@ export default function GeneralPostCard({ post }: { post: Post }) {
           <Ellipsis size={20} className="text-muted-foreground" />
         </div>
 
-        <h1 className="mt-2 line-clamp-1 text-lg font-semibold">
-          {post.title}
-        </h1>
-        {/* <div className="mb-3 flex items-center space-x-2">
-          <Badge>{post.tags[0]}</Badge>
-          {post.tags.slice(1).map((tag, idx) => (
+        <div className="mt-2 mb-2 flex items-center space-x-2">
+          <Badge className="capitalize">{post.category}</Badge>
+          {post.tags.map((tag, idx) => (
             <Badge key={idx} className="text-secondary-foreground bg-white/20">
-              {tag}
+              {tag.label}
             </Badge>
           ))}
-        </div> */}
+        </div>
+        <h1 className="mb-2 text-xl font-semibold">{post?.title}</h1>
         {post.type === "text" && (
           <p className="text-muted-foreground line-clamp-2 text-sm">
             {post.content}

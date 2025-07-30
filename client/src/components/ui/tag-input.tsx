@@ -15,8 +15,8 @@ export function TagInput({
   ...props
 }: {
   options?: { label: string; value: string }[];
-  selected?: { value: string; label: string }[];
-  onChange: (tags: { value: string; label: string }[]) => void;
+  selected?: string[];
+  onChange: (value: string[]) => void;
   className?: string;
   placeholder?: string;
   hideLabel?: boolean;
@@ -28,7 +28,7 @@ export function TagInput({
 
   const filteredOptions = options.filter(
     (opt) =>
-      !selected.map((tag) => tag.value).includes(opt.value) &&
+      !selected.includes(opt.value) &&
       opt.label.toLowerCase().includes(input.toLowerCase()),
   );
 
@@ -36,14 +36,14 @@ export function TagInput({
     setShowOptions(true);
   };
 
-  const handleSelect = (tag: { label: string; value: string }) => {
-    onChange?.([...selected, tag]);
+  const handleSelect = (value: string) => {
+    onChange?.([...selected, value]);
     setInput("");
     setShowOptions(false);
   };
 
-  const handleRemove = (tag: { label: string; value: string }) => {
-    onChange?.(selected.filter((t) => t.value !== tag.value));
+  const handleRemove = (value: string) => {
+    onChange?.(selected.filter((t) => t !== value));
   };
 
   useEffect(() => {
@@ -95,9 +95,9 @@ export function TagInput({
           className="scrollbar-none flex w-full items-center gap-2 overflow-x-auto px-3 whitespace-nowrap"
           onClick={handleFocus}
         >
-          {selected.map((tag) => (
+          {selected.map((value) => (
             <button
-              key={tag.value}
+              key={value}
               type="button"
               data-remove-tag
               onMouseDown={(e) => {
@@ -105,12 +105,12 @@ export function TagInput({
               }}
               onClick={(e) => {
                 e.stopPropagation();
-                handleRemove(tag);
+                handleRemove(value);
               }}
               className="cursor-pointer"
             >
               <Badge className="flex items-center gap-1">
-                {tag.label}
+                {options.find((opt) => opt.value === value)?.label}
                 <X size={12} />
               </Badge>
             </button>
@@ -144,7 +144,7 @@ export function TagInput({
                 <div
                   key={opt.value}
                   className="rounded-xxs px-2 py-1.5 text-xs hover:bg-white/10"
-                  onClick={() => handleSelect(opt)}
+                  onClick={() => handleSelect(opt.value)}
                 >
                   {opt.label}
                 </div>

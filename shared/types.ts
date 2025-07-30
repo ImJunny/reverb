@@ -53,6 +53,8 @@ export type CreatePost = {
   type: "text" | "track_id" | "playlist_id";
   content: string;
   allow_suggestions: boolean;
+  category?: CategoryValue;
+  tags: Tag["value"][];
 };
 
 export type CreateView = {
@@ -69,6 +71,8 @@ export type Post = {
   created_at: string | null;
   user_id: string | null;
   user_image_url: string | null;
+  category: CategoryValue;
+  tags: Tag[];
 };
 
 export type Track = {
@@ -135,6 +139,5 @@ export const tags = [
   { value: "rock", label: "Rock" },
   { value: "soul", label: "Soul" },
   { value: "soundtrack", label: "Soundtrack" },
-  { value: "world", label: "World" },
 ] as const;
 export type Tag = (typeof tags)[number];
